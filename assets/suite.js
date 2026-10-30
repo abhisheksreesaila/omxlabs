@@ -39,38 +39,61 @@ const GH = "https://github.com/abhisheksreesaila";
     while (w.nextNode()) if (/omx(labs|plorer|code|core|qua|console)/.test(w.currentNode.data) && !w.currentNode.parentElement.closest(".nm")) hits.push(w.currentNode);
     hits.forEach(t => { const f = document.createElement("span"); f.innerHTML = t.data.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/omx(labs|plorer|code|core|qua|console)/g, '<span class="nm">$&</span>'); t.replaceWith(...f.childNodes); });
   });
-  // walkthroughs: zoom the video to each step's region, caption it, and let the step buttons jump (styled in suite.css .walk)
+  // walkthroughs: a recording told as a guided tour (styled in suite.css .walk). Each step plays its stretch of the video slowly,
+  // zoomed gently to the part that matters, then holds with its caption so it can be read; after the last step a closing card
+  // (<template class="finale">) says what it all means. The step markers sit above the video; tap one to go there.
   document.querySelectorAll(".walk").forEach(w => {
-    const v = w.querySelector("video"), steps = JSON.parse(w.querySelector("script[type='application/json']").textContent);
-    const stage = w.querySelector(".stage");
-    stage.insertAdjacentHTML("beforeend", '<div class="cap2"><span class="k"></span><h3></h3><p></p></div><div class="bar2"><i></i></div>');
-    const cap = stage.querySelector(".cap2"), fill = stage.querySelector(".bar2 i");
+    const v = w.querySelector("video"), stage = w.querySelector(".stage");
+    const steps = JSON.parse(w.querySelector("script[type='application/json']").textContent);
+    const rate = +(w.dataset.rate || 0.6), hold = +(w.dataset.hold || 3200), maxZoom = +(w.dataset.zoom || 1.8);
+    const fin = w.querySelector("template.finale");
+    stage.insertAdjacentHTML("beforeend", '<div class="cap2"><span class="k"></span><h3></h3><p></p></div><div class="fin"></div>');
+    const cap = stage.querySelector(".cap2"), finEl = stage.querySelector(".fin");
+    if (fin) finEl.appendChild(fin.content.cloneNode(true));
     const rail = document.createElement("div"); rail.className = "steps";
-    rail.innerHTML = steps.map((s, i) => `<button><b>${i + 1}</b>${s.title}</button>`).join("");
-    w.appendChild(rail);
+    rail.innerHTML = steps.map((s, i) => `<button><b>${i + 1}</b>${s.title}<i></i></button>`).join("") + (fin ? '<button class="end"><b>✓</b>Why<i></i></button>' : "");
+    w.insertBefore(rail, stage);
     const btns = [...rail.children];
-    btns.forEach((b, i) => b.onclick = () => { v.currentTime = steps[i].t + 0.05; v.play(); });
-    let cur = -1;
-    const show = i => {
-      if (i === cur) return; cur = i; const s = steps[i];
-      // fit the region in the frame, never past its edges: point p lands at t + k*p
+    let cur = -1, timer = 0, onScreen = false, holding = false;
+    const zoom = s => {
+      const kx = 1 / (s.x1 - s.x0), ky = 1 / (s.y1 - s.y0), z = Math.max(1, Math.min(maxZoom, kx, ky));
       const cx = (s.x0 + s.x1) / 2, cy = (s.y0 + s.y1) / 2;
-      const kx = Math.min(2.6, 1 / (s.x1 - s.x0)), ky = Math.min(2.6, 1 / (s.y1 - s.y0)), z = Math.max(1, Math.min(kx, ky));
       const tx = Math.min(0, Math.max(1 - z, 0.5 - z * cx)), ty = Math.min(0, Math.max(1 - z, 0.5 - z * cy));
       v.style.transform = `translate(${tx * 100}%, ${ty * 100}%) scale(${z})`;
-      cap.classList.add("swap");
-      setTimeout(() => { cap.querySelector(".k").textContent = `Step ${i + 1} of ${steps.length}`; cap.querySelector("h3").textContent = s.title; cap.querySelector("p").textContent = s.text; cap.classList.remove("swap"); }, 220);
-      btns.forEach((b, j) => b.classList.toggle("on", j === i));
     };
-    const from = +(w.dataset.from || 0);   // skip a recording's empty first seconds
+    const mark = i => btns.forEach((b, j) => { b.classList.toggle("on", j === i); b.classList.toggle("done", j < i); });
+    const go = i => {
+      clearTimeout(timer); holding = false; cur = i; mark(i);
+      if (i >= steps.length) {                         // the closing card
+        w.classList.add("finished"); v.pause(); v.style.transform = "";
+        timer = setTimeout(() => onScreen && go(0), 14000); return;
+      }
+      w.classList.remove("finished");
+      const s = steps[i]; zoom(s);
+      cap.classList.add("swap");
+      setTimeout(() => { cap.querySelector(".k").textContent = `Step ${i + 1} of ${steps.length}`; cap.querySelector("h3").textContent = s.long || s.title; cap.querySelector("p").textContent = s.text; cap.classList.remove("swap"); }, 250);
+      v.currentTime = s.t; v.playbackRate = s.rate || rate;
+      if (onScreen) v.play().catch(() => {});
+    };
     v.addEventListener("timeupdate", () => {
-      if (v.currentTime < from) { v.currentTime = from; return; }
-      const t = v.currentTime; let i = steps.findIndex(s => t >= s.t && t < s.end); if (i < 0) i = steps.length - 1;
-      show(i); fill.style.width = (t / (v.duration || 1) * 100) + "%";
+      if (cur < 0 || cur >= steps.length || holding) return;
+      const s = steps[cur], f = Math.min(1, (v.currentTime - s.t) / (s.end - s.t));
+      btns[cur].style.setProperty("--f", f);
+      if (v.currentTime >= s.end - 0.05) {             // the stretch is done: hold the frame so the caption can be read
+        holding = true; v.pause();
+        timer = setTimeout(() => onScreen && go(cur + 1), s.hold || hold);
+      }
     });
-    show(0);
-    // play only while it's on screen
-    new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: .35 }).observe(stage);
+    btns.forEach((b, i) => b.onclick = () => go(i));
+    finEl.addEventListener("click", e => { if (e.target.closest("[data-replay]")) go(0); });
+    go(0);
+    // the tour runs only while it's on screen
+    new IntersectionObserver(es => es.forEach(e => {
+      onScreen = e.isIntersecting;
+      if (!onScreen) { v.pause(); clearTimeout(timer); }
+      else if (cur < steps.length) { if (holding) timer = setTimeout(() => go(cur + 1), 1200); else v.play().catch(() => {}); }
+      else timer = setTimeout(() => go(0), 14000);
+    }), { threshold: .5 }).observe(stage);
   });
   // sections rise as they enter; hero words rise once
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .15 });

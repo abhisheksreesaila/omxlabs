@@ -9,6 +9,15 @@
 <link rel="stylesheet" href="assets/omxqua/src/components.css"><link rel="stylesheet" href="assets/suite.css">
 <style>
 /* the homepage is omxplorer's, told as its three pillars: GPU native, agent native, multimodal */
+.finale { max-width: 860px; color: #fff; text-align: left; }
+.finale .k { font: 600 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--px); }
+.finale h3 { margin: 8px 0 20px; font: 800 clamp(26px, 3.4vw, 46px)/1.05 var(--sans); letter-spacing: -.04em; }
+.finale .fcols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
+.finale .fcols > div { padding: 18px 20px; border-radius: 18px; background: rgb(255 255 255 / .05); box-shadow: 0 0 0 1px rgb(255 255 255 / .1); }
+.finale .fcols .us { box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 55%, transparent); }
+.finale .fcols b { font: 650 16px var(--sans); } .finale .fcols .us b { color: var(--px); }
+.finale .fcols p { margin: 6px 0 0; color: rgb(255 255 255 / .78); font-size: 15px; }
+@media (max-width: 900px) { .finale .fcols { grid-template-columns: 1fr; } .finale .fcols p { font-size: 13.5px; } .finale h3 { margin-bottom: 12px; } }
 .phrases > span { white-space: nowrap; }
 .pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
 .pills a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); color: var(--ink); font: 600 15px var(--sans); text-decoration: none; transition: transform var(--oq-spring-fast-dur) var(--oq-island-spring), box-shadow .2s; }
@@ -168,19 +177,30 @@
     <figure class="ours"><span class="who">omxplorer</span><!-- iso:multi-ours --><svg class="iso" viewBox="-189 -113 474 384" role="img" aria-label="omxplorer: telemetry, video, a detection model, a chart and a map on one sheet, on one GPU, joined on time"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" class="ahp"/></marker></defs><g class="pxs"><polygon class="l" points="-171.5,99.0 95.3,253.0 95.3,235.4 -171.5,81.4"/><polygon class="r" points="266.7,154.0 95.3,253.0 95.3,235.4 266.7,136.4"/><polygon class="t" points="0.0,-17.6 266.7,136.4 95.3,235.4 -171.5,81.4"/></g><text class="lb lp" x="-144.8" y="136.4">omxplorer · one GPU</text><g class="px"><polygon class="l" points="-57.2,37.4 11.4,77.0 11.4,72.2 -57.2,32.6"/><polygon class="r" points="68.6,44.0 11.4,77.0 11.4,72.2 68.6,39.2"/><polygon class="t" points="0.0,-0.4 68.6,39.2 11.4,72.2 -57.2,32.6"/></g><g class="px"><polygon class="l" points="-57.2,30.4 11.4,70.0 11.4,65.1 -57.2,25.5"/><polygon class="r" points="68.6,37.0 11.4,70.0 11.4,65.1 68.6,32.1"/><polygon class="t" points="0.0,-7.5 68.6,32.1 11.4,65.1 -57.2,25.5"/></g><g class="px"><polygon class="l" points="-57.2,23.3 11.4,62.9 11.4,58.1 -57.2,18.5"/><polygon class="r" points="68.6,29.9 11.4,62.9 11.4,58.1 68.6,25.1"/><polygon class="t" points="0.0,-14.5 68.6,25.1 11.4,58.1 -57.2,18.5"/></g><g class="px"><polygon class="l" points="-57.2,16.3 11.4,55.9 11.4,51.0 -57.2,11.4"/><polygon class="r" points="68.6,22.9 11.4,55.9 11.4,51.0 68.6,18.0"/><polygon class="t" points="0.0,-21.6 68.6,18.0 11.4,51.0 -57.2,11.4"/></g><text class="lb" x="5.7" y="6.1">telemetry</text><text class="sb" x="5.7" y="24.1">100M rows</text><g class="px2"><polygon class="l" points="38.1,92.4 106.7,132.0 106.7,96.8 38.1,57.2"/><polygon class="r" points="163.9,99.0 106.7,132.0 106.7,96.8 163.9,63.8"/><polygon class="t" points="95.3,24.2 163.9,63.8 106.7,96.8 38.1,57.2"/></g><text class="lb" x="101.0" y="54.5">video</text><text class="sb" x="101.0" y="72.5">frames → rows</text><g class="px3"><polygon class="l" points="121.9,140.8 175.3,171.6 175.3,145.2 121.9,114.4"/><polygon class="r" points="232.4,138.6 175.3,171.6 175.3,145.2 232.4,112.2"/><polygon class="t" points="179.1,81.4 232.4,112.2 175.3,145.2 121.9,114.4"/></g><text class="lb" x="177.2" y="107.3">model</text><text class="sb" x="177.2" y="125.3">next</text><g class="px2"><polygon class="l" points="-121.9,88.0 -57.2,125.4 -57.2,105.6 -121.9,68.2"/><polygon class="r" points="-7.6,96.8 -57.2,125.4 -57.2,105.6 -7.6,77.0"/><polygon class="t" points="-72.4,39.6 -7.6,77.0 -57.2,105.6 -121.9,68.2"/></g><text class="lb" x="-64.8" y="76.6">chart</text><g class="px3"><polygon class="l" points="-15.2,149.6 49.5,187.0 49.5,173.8 -15.2,136.4"/><polygon class="r" points="99.1,158.4 49.5,187.0 49.5,173.8 99.1,145.2"/><polygon class="t" points="34.3,107.8 99.1,145.2 49.5,173.8 -15.2,136.4"/></g><text class="lb" x="41.9" y="144.8">map</text><line class="ar ok" x1="40.0" y1="47.3" x2="66.7" y2="62.7" marker-end="url(#ah)"/><line class="ar ok" x1="135.3" y1="102.3" x2="150.5" y2="111.1" marker-end="url(#ah)"/><line class="ar ok" x1="-22.9" y1="52.8" x2="-41.9" y2="72.6" marker-end="url(#ah)"/><line class="ar ok" x1="72.4" y1="107.8" x2="61.0" y2="132.0" marker-end="url(#ah)"/><g class="bub good"><rect x="-58.3" y="-84.3" width="250.0" height="30" rx="15"/><text x="66.7" y="-64.3">🤩 joined on time, one afternoon</text></g></svg><!-- /iso:multi-ours --><figcaption>Numbers and video on one sheet, with models next. <b>A video's frames are just more rows.</b></figcaption></figure>
   </div>
   <div class="sub">One example, step by step: a warehouse video</div>
-  <div class="walk" data-from="1.9">
-    <div class="stage"><video src="assets/img/clip-warehouse.mp4" muted loop playsinline preload="auto" poster="assets/img/clip-warehouse.jpg" aria-label="omxplorer turns a warehouse video into rows, joins it with shipments, makes a reel of damaged pallets with faces blurred, and edits it on a timeline"></video></div>
+  <div class="walk" data-rate="0.6" data-hold="3200" data-zoom="1.8">
+    <div class="stage"><video src="assets/img/clip-warehouse.mp4" muted playsinline preload="auto" poster="assets/img/clip-warehouse.jpg" aria-label="omxplorer turns a warehouse video into rows, joins it with shipments, makes a reel of damaged pallets with faces blurred, and edits it on a timeline"></video></div>
     <script type="application/json">[
-      {"t": 0,  "end": 4,  "x0": 0.0,  "y0": 0.14, "x1": 0.52, "y1": 0.76, "title": "Open a video", "text": "warehouse.mp4 lands on the sheet as a card, like any CSV."},
-      {"t": 4,  "end": 5,  "x0": 0.0,  "y0": 0.12, "x1": 0.78, "y1": 0.78, "title": "Analyze", "text": "Every frame is read on the GPU. 1,140 frames become 6,845 rows: each pallet, code and face, frame by frame, in 3.3 s."},
-      {"t": 5,  "end": 6,  "x0": 0.0,  "y0": 0.50, "x1": 0.50, "y1": 0.97, "title": "Add the shipments", "text": "A plain CSV opens next to the video's rows. Now they can be joined."},
-      {"t": 6,  "end": 8,  "x0": 0.0,  "y0": 0.0,  "x1": 0.38, "y1": 0.40, "title": "Ask for a reel", "text": "Keep the frames where a pallet is damaged, caption each with its shipment, blur every face."},
-      {"t": 8,  "end": 12, "x0": 0.56, "y0": 0.0,  "x1": 1.0,  "y1": 0.26, "title": "Render it", "text": "623 frames are cut, blurred and captioned on the GPU. The chip counts them as they go."},
-      {"t": 12, "end": 20, "x0": 0.0,  "y0": 0.30, "x1": 0.44, "y1": 0.90, "title": "The reel", "text": "20.8 s of damaged pallets, faces blurred, shipment ID burned in. Made on the GPU, from the rows."},
-      {"t": 20, "end": 25, "x0": 0.18, "y0": 0.0,  "x1": 0.82, "y1": 0.66, "title": "Edit it", "text": "A timeline with a lane per column: pallets, damage, faces. Split, trim, undo."},
-      {"t": 25, "end": 28, "x0": 0.0,  "y0": 0.54, "x1": 0.62, "y1": 0.98, "title": "Cut it by its sentence", "text": "“Reel of damaged pallets, faces blurred.” Tap Cut it, and the rows cut the timeline into 3 clips."},
-      {"t": 28, "end": 34, "x0": 0.18, "y0": 0.0,  "x1": 0.82, "y1": 0.60, "title": "Play the cut", "text": "Every step you just watched is also an agent tool. An agent made this recording."}
+      {"t": 2,  "end": 4,  "x0": 0.0,  "y0": 0.08, "x1": 0.62, "y1": 0.80, "title": "Open a video", "text": "First, warehouse.mp4 lands on the sheet as a card, the same way a CSV would."},
+      {"t": 4,  "end": 5,  "x0": 0.0,  "y0": 0.06, "x1": 0.80, "y1": 0.80, "title": "Analyze", "text": "Then every frame is read on the GPU: 1,140 frames become 6,845 rows, one per pallet, code and face, in 3.3 s.", "hold": 4200},
+      {"t": 5,  "end": 6,  "x0": 0.0,  "y0": 0.44, "x1": 0.60, "y1": 1.0,  "title": "Add shipments", "long": "Add the shipments", "text": "A plain CSV of shipments opens next to the video's rows. Now video and spreadsheet can be joined."},
+      {"t": 6,  "end": 8,  "x0": 0.0,  "y0": 0.0,  "x1": 0.56, "y1": 0.52, "title": "Ask for a reel", "text": "Keep only the frames where a pallet is damaged, caption each with its shipment, and blur every face."},
+      {"t": 8,  "end": 12, "x0": 0.44, "y0": 0.0,  "x1": 1.0,  "y1": 0.50, "title": "Render", "text": "623 frames are cut, blurred and captioned on the GPU. The chip at the top counts them."},
+      {"t": 12, "end": 18, "x0": 0.0,  "y0": 0.24, "x1": 0.56, "y1": 0.96, "title": "The reel", "text": "20.8 s of damaged pallets, faces blurred, shipment ID burned in, made from the rows.", "rate": 1},
+      {"t": 20, "end": 24, "x0": 0.10, "y0": 0.0,  "x1": 0.90, "y1": 0.72, "title": "Edit", "text": "Open it in the editor: a timeline with a lane per column (pallets, damage, faces). Split, trim, undo.", "rate": 1},
+      {"t": 25, "end": 28, "x0": 0.0,  "y0": 0.42, "x1": 0.66, "y1": 1.0,  "title": "Cut it", "long": "Cut it by its sentence", "text": "“Reel of damaged pallets, faces blurred.” Tap Cut it, and the rows cut the timeline into 3 clips."},
+      {"t": 28, "end": 32, "x0": 0.10, "y0": 0.0,  "x1": 0.90, "y1": 0.66, "title": "Play the cut", "text": "Finally, the cut plays. Every step you just watched is also an agent tool: an agent made this recording.", "rate": 1}
     ]</script>
+    <template class="finale">
+      <div class="finale">
+        <div class="k">Why it matters</div>
+        <h3>All of that happened <span class="ac">on one GPU.</span></h3>
+        <div class="fcols">
+          <div><b>Anywhere else</b><p>The video sits in an editor, the rows in a database, the model in a notebook, the shipments in a spreadsheet. Every step is an export, an upload or a copy, and you wait for each one.</p></div>
+          <div class="us"><b>In omxplorer</b><p>The frames, the rows they become, the shipments they join and the reel they cut all live in one process, on your GPU. Nothing moves between apps, so each step takes seconds, not an afternoon of exports.</p></div>
+        </div>
+        <button class="cta" data-replay>↺ Watch again</button>
+      </div>
+    </template>
   </div>
   <p class="srcline">A real recording of omxplorer driven by its agent tools (goal 39), on a branch that isn't released yet. The footage is generated, so we know the truth of every frame. The same works for a drone's flight: telemetry, video and map follow each other. <a href="omxplorer/#rows">See it on omxplorer's page</a></p>
   <div class="sub">Every kind of data</div>

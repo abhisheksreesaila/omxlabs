@@ -238,8 +238,8 @@ footer { padding: 34px 24px 90px; }
 .chapters button { min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; }
 .cmd button { min-height: 36px; min-width: 56px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; position: relative; }
 .cmd button::after { content: ""; position: absolute; inset: -6px; }
-/* the omxlabs flask is alive: liquid that cycles through the five product colours, bubbles of each colour popping out of its mouth.
-   suite.js adds <i class="liq"> and <b class="fizz"> to every .mark; hover the logo and it fizzes faster. */
+/* the omxlabs flask brews when you point at it (hover or keyboard focus): liquid that cycles through the five product colours, bubbles of each colour popping out of its mouth.
+   suite.js adds <i class="liq"> and <b class="fizz"> to every .mark; at rest it holds still. */
 .mark { position: relative; overflow: visible; }
 .mark .liq { position: absolute; inset: 19%; background: var(--ox-plorer); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7.9 14H16.1L19.28 20.55A1 1 0 0 1 18.38 22H5.62A1 1 0 0 1 4.72 20.55Z'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7.9 14H16.1L19.28 20.55A1 1 0 0 1 18.38 22H5.62A1 1 0 0 1 4.72 20.55Z'/%3E%3C/svg%3E") center / contain no-repeat; animation: brew 10s linear infinite; }
 .mark .fizz { position: absolute; left: 50%; top: 22%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--c); opacity: 0; pointer-events: none;
@@ -249,8 +249,10 @@ footer { padding: 34px 24px 90px; }
 .mark .fizz:nth-of-type(3) { --c: var(--ox-code);   --d: 1.05s; --x: -3px; }
 .mark .fizz:nth-of-type(4) { --c: var(--ox-qua);    --d: 1.55s; --x: 8px;  }
 .mark .fizz:nth-of-type(5) { --c: var(--ox-console);--d: 2.1s;  --x: -9px; }
-.trail:hover .mark .fizz, .mark:hover .fizz { --t: 1.1s; }
-.trail:hover .mark .liq { animation-duration: 3s; }
+.mark .liq, .mark .fizz { animation-play-state: paused; }
+.mark .fizz { visibility: hidden; }
+.trail:hover .mark .liq, .trail:focus-within .mark .liq, .mark:hover .liq { animation-play-state: running; animation-duration: 3s; }
+.trail:hover .mark .fizz, .trail:focus-within .mark .fizz, .mark:hover .fizz { animation-play-state: running; visibility: visible; --t: 1.4s; }
 @keyframes fizz { 0% { opacity: 0; transform: translate(0, 0) scale(.4); } 15% { opacity: 1; } 70% { opacity: .9; }
   100% { opacity: 0; transform: translate(var(--x), -16px) scale(1.25); } }
 @keyframes brew { 0%, 100% { background: var(--ox-plorer); } 20% { background: var(--ox-core); } 40% { background: var(--ox-code); } 60% { background: var(--ox-qua); } 80% { background: var(--ox-console); } }

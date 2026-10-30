@@ -283,3 +283,35 @@ footer { padding: 34px 24px 90px; }
 .walk.finished video { filter: blur(3px) saturate(.6); }
 @media (max-width: 900px) { .walk { width: 100%; } .walk .stage { aspect-ratio: 4 / 3; } .walk .cap2 { left: 10px; bottom: 10px; padding: 12px 14px; } .walk .cap2 p { display: none; } .walk .steps button { font-size: 0; padding: 0 7px; gap: 0; } .walk .steps button.on { font-size: 13px; padding-right: 13px; gap: 8px; } }
 @media (prefers-reduced-motion: reduce) { .walk video { transition: none; } }
+/* two lanes: the UI thread decides, worker threads do the slow work, and "done" comes back to update() as an event.
+   Sized in em, so a cover sets a small font-size and a deck a large one. Used by omxcode's cover and deck. */
+.lanes { display: grid; grid-template-columns: 9.5em 1fr 2.2em 1fr 2.2em 1fr 2.2em 1fr 2.2em 1.35fr; grid-template-rows: auto 3.2em auto; align-items: center; row-gap: 0; text-align: left; }
+.lanes .ln { font: 650 1em/1.2 var(--sans); color: var(--ink); padding-right: 1em; }
+.lanes .ln small { display: block; font: 500 .8em var(--mono); color: var(--ink2); margin-top: .3em; }
+.lanes .ui .ln, .lanes .ln.ui { color: var(--oq-accent); }
+.lanes .c { padding: .75em .9em; border-radius: .9em; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); font: 600 .95em/1.25 var(--sans); color: var(--ink); }
+.lanes .c code { font: 600 1em var(--mono); }
+.lanes .c small { display: block; font: 500 .78em var(--mono); color: var(--ink2); margin-top: .25em; }
+.lanes .c.hot { box-shadow: 0 0 0 2px var(--oq-accent); background: color-mix(in srgb, var(--oq-accent) 10%, var(--oq-surface-1)); }
+.lanes .c.wk { background: var(--oq-surface-2); }
+.lanes .c.ev { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--oq-ok) 70%, transparent); background: color-mix(in srgb, var(--oq-ok) 10%, var(--oq-surface-1)); }
+.lanes .to, .lanes .fro { justify-self: center; width: 70%; height: 2px; background: var(--oq-accent); position: relative; }
+.lanes .to::after { content: ""; position: absolute; right: -2px; top: -5px; border: 6px solid transparent; border-left: 9px solid var(--oq-accent); border-right: 0; }
+.lanes .fro { background: var(--oq-ok); } .lanes .fro::after { content: ""; position: absolute; left: -2px; top: -5px; border: 6px solid transparent; border-right: 9px solid var(--oq-ok); border-left: 0; }
+.lanes .up { justify-self: center; width: 2px; height: 100%; background: var(--oq-ok); position: relative; }
+.lanes .up::after { content: ""; position: absolute; top: -2px; left: -5px; border: 6px solid transparent; border-bottom: 9px solid var(--oq-ok); border-top: 0; }
+.lanes .dn { justify-self: center; width: 0; height: 100%; border-left: 2px dashed color-mix(in srgb, var(--oq-accent) 60%, transparent); }
+.lanes .note { grid-column: 6 / -1; font: 500 .78em var(--mono); color: var(--ink2); align-self: center; }
+@media (max-width: 900px) { .lanes { grid-template-columns: 1fr; grid-template-rows: none; row-gap: .5em; } .lanes > * { grid-column: auto !important; grid-row: auto !important; }
+  .lanes .to, .lanes .fro, .lanes .up, .lanes .dn, .lanes .note { display: none; } .lanes .ln { margin-top: .8em; } }
+/* frame strips: one tick per frame a window drew during a job; the longest gap bracketed */
+.fstrips { display: grid; gap: 1.1em; text-align: left; }
+.fstrip { display: grid; grid-template-columns: 14em 1fr 8.5em; gap: 1em; align-items: center; }
+.fstrip .who { font: 600 .95em/1.25 var(--sans); color: var(--ink); } .fstrip .who small { display: block; font: 500 .78em var(--mono); color: var(--ink2); margin-top: .2em; }
+.fstrip .trk { position: relative; height: 2.6em; border-radius: .6em; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); overflow: hidden; }
+.fstrip .trk i { position: absolute; top: .45em; bottom: .45em; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--oq-ok); }
+.fstrip .gap { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--oq-warn) 28%, transparent) 0 6px, transparent 6px 12px); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--oq-warn) 60%, transparent); }
+.fstrip .gap span { position: absolute; left: .7em; top: 50%; translate: 0 -50%; font: 600 .82em var(--mono); color: var(--oq-warn); white-space: nowrap; }
+.fstrip .res { font: 700 1.05em var(--sans); color: var(--ink); } .fstrip .res small { display: block; font: 500 .76em var(--mono); color: var(--ink2); }
+.fstrip.bad .res { color: var(--oq-warn); } .fstrip.good .res { color: var(--oq-ok); }
+@media (max-width: 900px) { .fstrip { grid-template-columns: 1fr; gap: .4em; } }

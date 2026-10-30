@@ -29,6 +29,23 @@
 .steps .cmd { justify-self: start; max-width: 100%; overflow-x: auto; }
 .steps .out { font: 12.5px/1.6 var(--mono); color: var(--ink2); white-space: pre-wrap; margin: 0; }
 .steps .out .ok { color: var(--oq-ok); }
+#threads .lanes-wrap { margin-top: 44px; padding: 26px 24px 22px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); font-size: 14.5px; overflow-x: auto; }
+#threads .lanes .c { background: var(--oq-surface-2); } #threads .lanes .c.wk { background: var(--oq-surface-3); }
+#threads .tfacts, #threads .prac { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; text-align: left; }
+#threads .prac { grid-template-columns: repeat(5, 1fr); }
+#threads .tfacts > div, #threads .prac > div { padding: 18px 18px 16px; border-radius: 20px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); }
+#threads .tfacts b, #threads .prac b { font: 650 16px var(--sans); color: var(--ink); }
+#threads .tfacts p, #threads .prac p { margin: 6px 0 0; color: var(--ink2); font-size: 14.5px; }
+#threads .tfacts p b { font-size: inherit; }
+#threads code { font: 600 .92em var(--mono); color: var(--oq-accent); }
+#threads .sub2 { margin-top: 44px; font: 600 11.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); text-align: left; }
+#threads .strips-wrap { margin-top: 14px; padding: 22px 24px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); font-size: 15px; }
+#threads .fstrip .trk { background: var(--oq-surface-2); }
+#threads .plat { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+#threads .edge { max-width: 860px; margin: 18px auto 0; color: var(--ink2); font-size: 15.5px; }
+#threads .edge b { color: var(--ink); }
+@media (max-width: 1100px) { #threads .prac { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 900px) { #threads .tfacts, #threads .prac { grid-template-columns: 1fr; } }
 @media (max-width: 900px) {
   .hosts .bdg { display: none; }
   .hosts { gap: 6px; padding: 6px; }
@@ -90,7 +107,7 @@
   <p class="lede">Click the slides, then use the arrow keys. Code steps line by line; the architecture moves as a tap runs.</p>
   <div class="deck"><div class="bar"><span class="dot"></span><span>omxcode · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
     <iframe src="deck.html" title="omxcode, the slides" loading="lazy" allowfullscreen></iframe></div>
-  <div class="chapters"><button data-slide="1">Why</button><button data-slide="2">An app</button><button data-slide="3">Architecture</button><button data-slide="5">A tap</button><button data-slide="7">Build it</button><button data-slide="8">The GPU</button><button data-slide="9">Speed</button><button data-slide="11">Agents</button><button data-slide="13">Honest edges</button><button data-slide="14">Roadmap</button></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="2">An app</button><button data-slide="3">Architecture</button><button data-slide="5">A tap</button><button data-slide="7">Never freezes</button><button data-slide="10">Build it</button><button data-slide="11">The GPU</button><button data-slide="12">Speed</button><button data-slide="14">Agents</button><button data-slide="16">Honest edges</button><button data-slide="17">Roadmap</button></div>
 </div></section>
 
 <!-- the code -->
@@ -129,6 +146,51 @@
   </div>
 </div></section>
 
+<!-- never freezes: the UI thread decides, worker threads do the slow work (mojo-ui-omxcode docs/ui-threads.md, docs/component-practices.md) -->
+<section id="threads"><div class="wrap center rv">
+  <div class="eyebrow">Built right, underneath</div>
+  <h2>The window never waits. <span class="two">Slow work runs elsewhere.</span></h2>
+  <p class="lede">Every platform draws on one thread, the UI thread, with about 16 ms per frame. omxcode splits every app in two: <code>update()</code> and <code>view()</code> run on the UI thread and only decide what to show. Network calls, file imports, queries and sorts run on threads of their own, and their answer comes back to <code>update()</code> as an ordinary event.</p>
+  <div class="lanes-wrap"><div class="lanes">
+  <span class="ln" style="grid-row:1;grid-column:1">UI thread<small>16 ms a frame at 60 Hz</small></span>
+  <span class="c" style="grid-row:1;grid-column:2">input<small>a tap, a key</small></span><i class="to" style="grid-row:1;grid-column:3"></i>
+  <span class="c hot" style="grid-row:1;grid-column:4"><code>update()</code><small>changes state</small></span><i class="to" style="grid-row:1;grid-column:5"></i>
+  <span class="c" style="grid-row:1;grid-column:6"><code>view()</code><small>describes the screen</small></span><i class="to" style="grid-row:1;grid-column:7"></i>
+  <span class="c" style="grid-row:1;grid-column:8">diff<small>old vs new</small></span><i class="to" style="grid-row:1;grid-column:9"></i>
+  <span class="c" style="grid-row:1;grid-column:10">patch native widgets<small>only what changed</small></span>
+  <i class="up" style="grid-row:2;grid-column:4"></i><span class="note" style="grid-row:2">update() starts the slow work and never waits for it</span>
+  <span class="ln" style="grid-row:3;grid-column:1">Worker threads<small>as long as it takes</small></span>
+  <span class="c ev" style="grid-row:3;grid-column:4">“done” event<small>back on the UI thread</small></span><i class="fro" style="grid-row:3;grid-column:5"></i>
+  <span class="c wk" style="grid-row:3;grid-column:6 / -1">Slow work, each on its own thread<small>HTTP requests · timers · data jobs: query, import, sort</small></span>
+</div></div>
+  <div class="tfacts">
+    <div><b>No locks, no races.</b><p>App state is only ever touched on the UI thread, so the app's code never asks which thread it's on.</p></div>
+    <div><b>Nothing to learn.</b><p>An app author, or an agent writing the app, doesn't think about threads. A slow job is one line: <code>start_ui_job(...)</code>.</p></div>
+    <div><b>Back at once.</b><p>A finished job reaches <code>update()</code> in <b>0.02–0.05 ms</b> (Linux, median), not a frame later.</p></div>
+  </div>
+  <div class="sub2">Measured: one 1.5-second data job. Each tick is a frame the window drew while it ran.</div>
+  <div class="strips-wrap"><div class="fstrips"><div class="fstrip bad"><span class="who">Mac, before<small>the job on the UI thread</small></span><div class="trk"><b class="gap" style="left:0.60%;width:99.40%"><span>1.5 s without a frame: frozen</span></b><i style="left:0.60%"></i></div><span class="res">1 frame<small>1,516–1,527 ms gap</small></span></div><div class="fstrip good"><span class="who">Mac, after<small>the job on its own thread</small></span><div class="trk"><b class="gap" style="left:49.42%;width:5.53%"></b><i style="left:0.67%"></i><i style="left:3.71%"></i><i style="left:6.76%"></i><i style="left:9.81%"></i><i style="left:12.86%"></i><i style="left:15.90%"></i><i style="left:18.95%"></i><i style="left:22.00%"></i><i style="left:25.05%"></i><i style="left:28.09%"></i><i style="left:31.14%"></i><i style="left:34.19%"></i><i style="left:37.23%"></i><i style="left:40.28%"></i><i style="left:43.33%"></i><i style="left:46.38%"></i><i style="left:49.42%"></i><i style="left:54.96%"></i><i style="left:58.00%"></i><i style="left:61.05%"></i><i style="left:64.10%"></i><i style="left:67.15%"></i><i style="left:70.19%"></i><i style="left:73.24%"></i><i style="left:76.29%"></i><i style="left:79.34%"></i><i style="left:82.38%"></i><i style="left:85.43%"></i><i style="left:88.48%"></i><i style="left:91.52%"></i><i style="left:94.57%"></i><i style="left:97.62%"></i></div><span class="res">28–38 frames<small>longest gap 71–83 ms</small></span></div><div class="fstrip good"><span class="who">Linux<small>the job on its own thread</small></span><div class="trk"><b class="gap" style="left:51.22%;width:1.13%"></b><i style="left:0.67%"></i><i style="left:1.79%"></i><i style="left:2.91%"></i><i style="left:4.04%"></i><i style="left:5.16%"></i><i style="left:6.28%"></i><i style="left:7.41%"></i><i style="left:8.53%"></i><i style="left:9.65%"></i><i style="left:10.78%"></i><i style="left:11.90%"></i><i style="left:13.02%"></i><i style="left:14.15%"></i><i style="left:15.27%"></i><i style="left:16.40%"></i><i style="left:17.52%"></i><i style="left:18.64%"></i><i style="left:19.77%"></i><i style="left:20.89%"></i><i style="left:22.01%"></i><i style="left:23.14%"></i><i style="left:24.26%"></i><i style="left:25.38%"></i><i style="left:26.51%"></i><i style="left:27.63%"></i><i style="left:28.75%"></i><i style="left:29.88%"></i><i style="left:31.00%"></i><i style="left:32.12%"></i><i style="left:33.25%"></i><i style="left:34.37%"></i><i style="left:35.49%"></i><i style="left:36.62%"></i><i style="left:37.74%"></i><i style="left:38.87%"></i><i style="left:39.99%"></i><i style="left:41.11%"></i><i style="left:42.24%"></i><i style="left:43.36%"></i><i style="left:44.48%"></i><i style="left:45.61%"></i><i style="left:46.73%"></i><i style="left:47.85%"></i><i style="left:48.98%"></i><i style="left:50.10%"></i><i style="left:51.22%"></i><i style="left:52.36%"></i><i style="left:53.48%"></i><i style="left:54.60%"></i><i style="left:55.73%"></i><i style="left:56.85%"></i><i style="left:57.97%"></i><i style="left:59.10%"></i><i style="left:60.22%"></i><i style="left:61.34%"></i><i style="left:62.47%"></i><i style="left:63.59%"></i><i style="left:64.72%"></i><i style="left:65.84%"></i><i style="left:66.96%"></i><i style="left:68.09%"></i><i style="left:69.21%"></i><i style="left:70.33%"></i><i style="left:71.46%"></i><i style="left:72.58%"></i><i style="left:73.70%"></i><i style="left:74.83%"></i><i style="left:75.95%"></i><i style="left:77.07%"></i><i style="left:78.20%"></i><i style="left:79.32%"></i><i style="left:80.44%"></i><i style="left:81.57%"></i><i style="left:82.69%"></i><i style="left:83.81%"></i><i style="left:84.94%"></i><i style="left:86.06%"></i><i style="left:87.18%"></i><i style="left:88.31%"></i><i style="left:89.43%"></i><i style="left:90.56%"></i><i style="left:91.68%"></i><i style="left:92.80%"></i><i style="left:93.93%"></i><i style="left:95.05%"></i><i style="left:96.17%"></i><i style="left:97.30%"></i><i style="left:98.42%"></i><i style="left:99.54%"></i></div><span class="res">90 frames<small>longest gap 17 ms</small></span></div></div></div>
+  <p class="srcline">examples/jobwake · the Mac: GitHub's macOS 15 and 26 runners, virtual Macs with no GPU that draw about 20 frames a second, using the CPU build (the GPU build hasn't run with job threads yet) · frame counts and longest gaps measured; ticks spaced evenly to draw them</p>
+  <div class="plat">
+    <span class="tag live"><i></i>Linux</span><span class="tag live"><i></i>Web</span><span class="tag live"><i></i>Mac</span><span class="tag prog"><i></i>iPhone: next (jobs still on the main thread)</span><span class="tag plan"><i></i>Android: not measured</span>
+  </div>
+  <p class="edge"><b>The honest limit:</b> slow code written straight into <code>update()</code> still freezes, in omxcode as in SwiftUI, Jetpack Compose and React. Next, a debug build names any <code>update()</code> that takes longer than a frame, so the author sees it before a user does.</p>
+  <div class="sub2">The other practices, each checked by running it</div>
+  <div class="prac">
+    <div><b>Native widgets.</b><p>Real typing, spell-check and screen readers, from the platform itself.</p></div>
+    <div><b>Data flows one way.</b><p>State → <code>view()</code> → diff → patches. Never backwards.</p></div>
+    <div><b>Messages are numbers.</b><p>Not closures, so nothing leaks and nothing goes stale.</p></div>
+    <div><b>No widget dies mid-click.</b><p>A widget is never destroyed inside its own click; rebuilds wait.</p></div>
+    <div><b>Keyed diffing.</b><p>Focus, cursor and scroll position stay put when the screen changes.</p></div>
+    <div><b>Only what's on screen.</b><p>Lists and grids draw what you see: 1M rows, 0.8 ms a scroll frame (p95).</p></div>
+    <div><b>Idle means idle.</b><p>An app with nothing moving uses no CPU.</p></div>
+    <div><b>One naming rule.</b><p>Every control gets a screen-reader name from one rule, checked against GTK's and Chromium's own accessibility trees.</p></div>
+    <div><b>Behaviour apart from looks.</b><p>Themes change how it looks, never how it works.</p></div>
+    <div><b>Familiar rules.</b><p>The same rules as SwiftUI, Jetpack Compose and React, on five platforms from one Mojo file.</p></div>
+  </div>
+  <p class="srcline">docs/component-practices.md: each practice with its rule, the code and the check that proves it, plus an honest list of gaps</p>
+</div></section>
+
 <!-- built with it -->
 <section id="apps"><div class="wrap center rv">
   <h2>Real apps, <span class="two">built with it.</span></h2>
@@ -149,7 +211,7 @@
   <h2>Runs today, <span class="two">and what's next.</span></h2>
   <div class="road">
     <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Linux, the web, Android (emulator)</li><li>Mac: omxplorer runs on GitHub's Macs</li><li>GPU kernels in the same file (NVIDIA)</li><li>The agent host: <code>scripts/agent.sh</code></li><li>AG-UI and validated generated UI</li></ul></div>
-    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>iPhone on a real phone</b> <span class="two">(builds and signs today)</span></li><li>Android's newer components</li><li>Apple GPUs (a Metal build ran on GitHub's Mac)</li><li>Mac checks counted in the component matrix</li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>iPhone on a real phone</b> <span class="two">(builds and signs today)</span></li><li>Android's newer components</li><li>Apple GPUs (a Metal build ran on GitHub's Mac)</li><li>Mac checks counted in the component matrix</li><li>A debug warning when <code>update()</code> takes longer than a frame</li><li>Job threads on the iPhone</li></ul></div>
     <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>A coding agent writes an app from one sentence</li><li>Drop a Mojo app into a FastHTML site</li><li>Windows, once Mojo ships for it</li></ul></div>
   </div>
 </div></section>

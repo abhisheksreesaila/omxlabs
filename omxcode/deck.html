@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>omxcode · the slides</title>
-<meta name="description" content="omxcode in sixteen slides: why, a whole app line by line, how it's built, building for every platform, the GPU in the same file, the speed, agents, the honest edges and the roadmap.">
+<meta name="description" content="omxcode in nineteen slides: why, a whole app line by line, how it's built, why it never freezes, building for every platform, the GPU in the same file, the speed, agents, the honest edges and the roadmap.">
 <link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
 <link rel="stylesheet" href="../assets/omxqua/src/components.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
@@ -36,6 +36,11 @@
 .genui ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; font-size: 22px; }
 .genui li::before { content: "✕ "; color: var(--oq-err, var(--oq-warn)); font-weight: 700; }
 .reveal .card.px-core h3, .reveal .card.px-code h3, .reveal .card.px-console h3, .reveal .card.px-qua h3, .reveal .card.px-plorer h3 { color: var(--px); }
+.dk-lanes { font-size: 21px; padding: 26px 26px 22px; border-radius: 26px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); }
+.dk-lanes .c { background: var(--oq-surface-2); } .dk-lanes .c.wk { background: var(--oq-surface-3); }
+.dk-strips { font-size: 22px; text-align: left; }
+.reveal .cols p code, .reveal .card p code { font-size: .9em; }
+.prac .card { padding: 22px 24px; } .prac .card h3 { font-size: 25px; margin: 0 0 8px; } .prac .card p { font-size: 20px; }
 </style>
 </head>
 <body>
@@ -158,6 +163,61 @@ struct Main(App):
     <p class="fragment rise"><b>Small edits stay small.</b> In omxplorer's open sheet, an edit builds at most 15 widgets.</p>
   </div>
   <p class="note" style="margin-top:8px">docs/architecture.md · docs/goals/25-report.md</p>
+</section>
+
+<!-- 8 · never freezes: two lanes -->
+<section>
+  <div class="eyebrow">Never freezes · 1 of 3</div>
+  <h2 style="font-size:58px">The window never waits. <span class="two">Slow work runs elsewhere.</span></h2>
+  <div class="dk-lanes" style="margin-top:34px"><div class="lanes">
+  <span class="ln" style="grid-row:1;grid-column:1">UI thread<small>16 ms a frame at 60 Hz</small></span>
+  <span class="c" style="grid-row:1;grid-column:2">input<small>a tap, a key</small></span><i class="to" style="grid-row:1;grid-column:3"></i>
+  <span class="c hot" style="grid-row:1;grid-column:4"><code>update()</code><small>changes state</small></span><i class="to" style="grid-row:1;grid-column:5"></i>
+  <span class="c" style="grid-row:1;grid-column:6"><code>view()</code><small>describes the screen</small></span><i class="to" style="grid-row:1;grid-column:7"></i>
+  <span class="c" style="grid-row:1;grid-column:8">diff<small>old vs new</small></span><i class="to" style="grid-row:1;grid-column:9"></i>
+  <span class="c" style="grid-row:1;grid-column:10">patch native widgets<small>only what changed</small></span>
+  <i class="up" style="grid-row:2;grid-column:4"></i><span class="note" style="grid-row:2">update() starts the slow work and never waits for it</span>
+  <span class="ln" style="grid-row:3;grid-column:1">Worker threads<small>as long as it takes</small></span>
+  <span class="c ev" style="grid-row:3;grid-column:4">“done” event<small>back on the UI thread</small></span><i class="fro" style="grid-row:3;grid-column:5"></i>
+  <span class="c wk" style="grid-row:3;grid-column:6 / -1">Slow work, each on its own thread<small>HTTP requests · timers · data jobs: query, import, sort</small></span>
+</div></div>
+  <div class="cols r3" style="margin-top:34px">
+    <p class="fragment rise"><b><code>update()</code> and <code>view()</code> only decide.</b> They run on the UI thread, inside its 16 ms.</p>
+    <p class="fragment rise"><b>Slow work is a request, a timer or a job.</b> Its answer comes back as an ordinary event.</p>
+    <p class="fragment rise"><b>No locks, no races.</b> App state is only touched on the UI thread. The author never thinks about threads.</p>
+  </div>
+  <p class="note" style="margin-top:10px">docs/ui-threads.md · mojoui/effects.mojo · mojoui/jobs.mojo</p>
+</section>
+
+<!-- 9 · never freezes: measured -->
+<section>
+  <div class="eyebrow">Never freezes · 2 of 3</div>
+  <h2 style="font-size:58px">A 1.5 s job, <span class="two">before and after.</span></h2>
+  <p style="font-size:24px;color:var(--oq-ink-2);margin:10px 0 0">Each tick is a frame the window drew while the job ran.</p>
+  <div class="dk-strips" style="margin-top:30px"><div class="fstrips"><div class="fstrip bad"><span class="who">Mac, before<small>the job on the UI thread</small></span><div class="trk"><b class="gap" style="left:0.60%;width:99.40%"><span>1.5 s without a frame: frozen</span></b><i style="left:0.60%"></i></div><span class="res">1 frame<small>1,516–1,527 ms gap</small></span></div><div class="fstrip good"><span class="who">Mac, after<small>the job on its own thread</small></span><div class="trk"><b class="gap" style="left:49.42%;width:5.53%"></b><i style="left:0.67%"></i><i style="left:3.71%"></i><i style="left:6.76%"></i><i style="left:9.81%"></i><i style="left:12.86%"></i><i style="left:15.90%"></i><i style="left:18.95%"></i><i style="left:22.00%"></i><i style="left:25.05%"></i><i style="left:28.09%"></i><i style="left:31.14%"></i><i style="left:34.19%"></i><i style="left:37.23%"></i><i style="left:40.28%"></i><i style="left:43.33%"></i><i style="left:46.38%"></i><i style="left:49.42%"></i><i style="left:54.96%"></i><i style="left:58.00%"></i><i style="left:61.05%"></i><i style="left:64.10%"></i><i style="left:67.15%"></i><i style="left:70.19%"></i><i style="left:73.24%"></i><i style="left:76.29%"></i><i style="left:79.34%"></i><i style="left:82.38%"></i><i style="left:85.43%"></i><i style="left:88.48%"></i><i style="left:91.52%"></i><i style="left:94.57%"></i><i style="left:97.62%"></i></div><span class="res">28–38 frames<small>longest gap 71–83 ms</small></span></div><div class="fstrip good"><span class="who">Linux<small>the job on its own thread</small></span><div class="trk"><b class="gap" style="left:51.22%;width:1.13%"></b><i style="left:0.67%"></i><i style="left:1.79%"></i><i style="left:2.91%"></i><i style="left:4.04%"></i><i style="left:5.16%"></i><i style="left:6.28%"></i><i style="left:7.41%"></i><i style="left:8.53%"></i><i style="left:9.65%"></i><i style="left:10.78%"></i><i style="left:11.90%"></i><i style="left:13.02%"></i><i style="left:14.15%"></i><i style="left:15.27%"></i><i style="left:16.40%"></i><i style="left:17.52%"></i><i style="left:18.64%"></i><i style="left:19.77%"></i><i style="left:20.89%"></i><i style="left:22.01%"></i><i style="left:23.14%"></i><i style="left:24.26%"></i><i style="left:25.38%"></i><i style="left:26.51%"></i><i style="left:27.63%"></i><i style="left:28.75%"></i><i style="left:29.88%"></i><i style="left:31.00%"></i><i style="left:32.12%"></i><i style="left:33.25%"></i><i style="left:34.37%"></i><i style="left:35.49%"></i><i style="left:36.62%"></i><i style="left:37.74%"></i><i style="left:38.87%"></i><i style="left:39.99%"></i><i style="left:41.11%"></i><i style="left:42.24%"></i><i style="left:43.36%"></i><i style="left:44.48%"></i><i style="left:45.61%"></i><i style="left:46.73%"></i><i style="left:47.85%"></i><i style="left:48.98%"></i><i style="left:50.10%"></i><i style="left:51.22%"></i><i style="left:52.36%"></i><i style="left:53.48%"></i><i style="left:54.60%"></i><i style="left:55.73%"></i><i style="left:56.85%"></i><i style="left:57.97%"></i><i style="left:59.10%"></i><i style="left:60.22%"></i><i style="left:61.34%"></i><i style="left:62.47%"></i><i style="left:63.59%"></i><i style="left:64.72%"></i><i style="left:65.84%"></i><i style="left:66.96%"></i><i style="left:68.09%"></i><i style="left:69.21%"></i><i style="left:70.33%"></i><i style="left:71.46%"></i><i style="left:72.58%"></i><i style="left:73.70%"></i><i style="left:74.83%"></i><i style="left:75.95%"></i><i style="left:77.07%"></i><i style="left:78.20%"></i><i style="left:79.32%"></i><i style="left:80.44%"></i><i style="left:81.57%"></i><i style="left:82.69%"></i><i style="left:83.81%"></i><i style="left:84.94%"></i><i style="left:86.06%"></i><i style="left:87.18%"></i><i style="left:88.31%"></i><i style="left:89.43%"></i><i style="left:90.56%"></i><i style="left:91.68%"></i><i style="left:92.80%"></i><i style="left:93.93%"></i><i style="left:95.05%"></i><i style="left:96.17%"></i><i style="left:97.30%"></i><i style="left:98.42%"></i><i style="left:99.54%"></i></div><span class="res">90 frames<small>longest gap 17 ms</small></span></div></div></div>
+  <div class="cols r3" style="margin-top:30px">
+    <div class="fragment rise"><div class="num" style="font-size:84px">0.05<small>ms</small></div><p>a finished job reaches <code>update()</code> (Linux, median 0.02–0.05)</p></div>
+    <p class="fragment rise"><b>Linux, web and Mac today.</b> The iPhone is next: its jobs still run on the main thread. Android isn't measured.</p>
+    <p class="fragment rise"><b>The honest limit.</b> Slow code written straight into <code>update()</code> still freezes, as in every framework. Next: a debug build that names it.</p>
+  </div>
+  <p class="note" style="margin-top:8px">examples/jobwake · Mac: GitHub's macOS 15 and 26 runners, no GPU, ~20 frames a second, CPU build · ticks spaced evenly; counts and gaps measured</p>
+</section>
+
+<!-- 10 · built like the best -->
+<section>
+  <div class="eyebrow">Never freezes · 3 of 3</div>
+  <h2 style="font-size:58px">Built like SwiftUI, <span class="two">Compose and React.</span></h2>
+  <div class="cols r4 prac" style="margin-top:30px">
+    <div class="card fragment rise"><h3>Native widgets</h3><p>Real typing, spell-check and screen readers from the platform.</p></div>
+    <div class="card fragment rise"><h3>One-way data</h3><p>State → view() → diff → patches.</p></div>
+    <div class="card fragment rise"><h3>Messages are numbers</h3><p>Not closures: nothing leaks.</p></div>
+    <div class="card fragment rise"><h3>Safe clicks</h3><p>A widget is never destroyed inside its own click.</p></div>
+    <div class="card fragment rise"><h3>Keyed diffing</h3><p>Focus and scroll stay put.</p></div>
+    <div class="card fragment rise"><h3>Only what's on screen</h3><p>1M rows, 0.8 ms a scroll frame (p95).</p></div>
+    <div class="card fragment rise"><h3>Idle is idle</h3><p>Nothing moving, no CPU used.</p></div>
+    <div class="card fragment rise"><h3>One naming rule</h3><p>Screen-reader names, checked against GTK's and Chromium's trees.</p></div>
+  </div>
+  <p class="note" style="margin-top:14px">docs/component-practices.md: 12 practices, each with its rule, its code and the check that proves it, and the gaps</p>
 </section>
 
 <!-- 8 · build it everywhere -->

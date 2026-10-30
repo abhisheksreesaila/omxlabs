@@ -13,6 +13,12 @@
     plugins: [RevealHighlight, RevealNotes],
   });
 
+  // product names are always lowercase: wrap them inside labels the styles uppercase
+  document.querySelectorAll(".eyebrow, .who, .role, .tag, .sub, .n, .note, .kicker").forEach(el => {
+    const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), hits = [];
+    while (w.nextNode()) if (/omx(labs|plorer|code|core|qua|console)/.test(w.currentNode.data) && !w.currentNode.parentElement.closest(".nm")) hits.push(w.currentNode);
+    hits.forEach(t => { const f = document.createElement("span"); f.innerHTML = t.data.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/omx(labs|plorer|code|core|qua|console)/g, '<span class="nm">$&</span>'); t.replaceWith(...f.childNodes); });
+  });
   // terminals type their lines once, the first time their slide arrives: <div class="term" data-type> with one line per child (a typed command: class "tc")
   const typed = new WeakSet();
   function type(slide) {

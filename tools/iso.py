@@ -90,13 +90,13 @@ def gpu_ours():
     d.label(0.4, 7, 0.0, "your GPU", cls="lb lp", dy=20)
     d.box(1, 1, 0.8, 11, 5, 0.25, "pxf")
     d.label(1.3, 1.2, 1.05, "one Mojo process", cls="lb lp", dy=-6)
-    for i, (n, s) in enumerate([("data", "stays here"), ("kernels", "compute"), ("drawing", "charts, video")]):
+    for i, (n, s) in enumerate([("data", "stays here"), ("kernels", "compute"), ("screen", "same process")]):
         d.box(1.8 + i * 3.6, 2.2, 1.05, 2.8, 3, 1.1, "px", n, s)
     d.plane_xz(8.4, -2.6, 3.6, 4.6, 2.8, "win")
     d.label(10.7, -2.6, 6.4, "the window", cls="lb", dy=-6)
-    d.arrow((10.4, 2.6, 2.3), (10.6, -2.4, 3.7), cls="ar ok", text="frames, no copy", side=1)
+    d.arrow((10.4, 2.6, 2.3), (10.6, -2.4, 3.7), cls="ar ok", text="only the answer", side=1)
     d.chip(0.5, -1.5, 3.6, "😎 nothing copied, nothing serialized", "bub good", w=270)
-    return d.svg("omxplorer: data, kernels and drawing all live in one Mojo process on your GPU, and frames go straight to the window")
+    return d.svg("omxplorer: the data and the kernels live on your GPU inside one Mojo process with the screen; only the answer travels to the window")
 
 
 def agent_today():
@@ -151,7 +151,7 @@ def multi_ours():
         d.box(1, 1, 0.8 + k * 0.32, 3.6, 3, 0.22, "px")
     d.label(2.8, 2.5, 2.1, "telemetry", "100M rows")
     d.box(6, 1, 0.8, 3.6, 3, 1.6, "px2", "video", "frames → rows")
-    d.box(10.4, 1, 0.8, 2.8, 3, 1.2, "px3", "model", "detects")
+    d.box(10.4, 1, 0.8, 2.8, 3, 1.2, "px3", "model", "next")
     d.box(1.6, 5.4, 0.8, 3.4, 2.6, 0.9, "px2", "chart")
     d.box(7.2, 5.4, 0.8, 3.4, 2.6, 0.6, "px3", "map")
     for a, b in [((4.6, 2.5, 1.4), (6.0, 2.5, 1.4)), ((9.6, 2.5, 1.4), (10.4, 2.5, 1.4)), ((2.8, 4.0, 1.0), (3.2, 5.4, 1.0)), ((7.8, 4.0, 1.0), (8.6, 5.4, 1.0))]:

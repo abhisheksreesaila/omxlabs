@@ -134,13 +134,14 @@
       <li><b>Video becomes rows on the GPU</b>, about 400 frames a second: every pallet, code and face, frame by frame.</li>
       <li><b>The reel:</b> the frames where a column is true, faces blurred, the shipment ID burned in.</li>
       <li><b>SQL joins video rows with a CSV:</b> the delivered shipments whose label never shows is one query.</li>
-      <li><b>Find more like this:</b> tap one example and OWLv2 finds the rest, in process. Recall 1.000, precision 0.886 on our footage; the warehouse scan takes 8.4 s.</li>
+      
       <li><b>The drone:</b> two inspection flights become a table of every asset and defect on the map; which got worse since last time is one tap, and the answer becomes the next flight plan.</li>
       <li><b>Every step is an agent tool,</b> both clips included.</li></ul></div>
     <div class="nx"><h3><span class="tag prog"><i></i>Not yet</span></h3><ul>
       <li><b>The footage is generated</b> (so we know the truth of every frame). Real-world footage hasn't been tried.</li>
       <li><b>The models (OWLv2, SAM 2.1) run on Linux with NVIDIA only.</b></li>
       <li><b>The defect severity scale is calibrated to how our footage was drawn.</b> On real footage it would need calibrating again.</li>
+      <li><b>Models inside omxplorer.</b> Find more like this (OWLv2, from one tapped example) runs in process in the framework's tests: recall 1.000, precision 0.886 on our footage. omxplorer itself still uses classic vision.</li>
       <li><b>Audio.</b></li></ul></div>
   </div>
 </div></section>

@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="assets/omxqua/src/components.css"><link rel="stylesheet" href="assets/suite.css">
 <style>
 /* the homepage is omxplorer's, told as its three pillars: GPU native, agent native, multimodal */
+.phrases > span { white-space: nowrap; }
 .pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
 .pills a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); color: var(--ink); font: 600 15px var(--sans); text-decoration: none; transition: transform var(--oq-spring-fast-dur) var(--oq-island-spring), box-shadow .2s; }
 .pills a:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 60%, var(--line)), var(--oq-shadow-2); }
@@ -100,11 +101,11 @@
 
 <!-- hero: the mission, then the product straight away -->
 <section class="hero px-plorer"><div class="wrap center">
-  <div class="eyebrow">omxlabs presents <span style="color:var(--px)">omxplorer</span></div>
-  <h1 class="rise"><span>GPU</span> <span>native.</span> <span>Agent</span> <span>native.</span> <span class="two">Multimodal.</span></h1>
+  <div class="eyebrow" style="text-transform:none;letter-spacing:.02em">omxlabs presents <span style="color:var(--px)">omxplorer</span></div>
+  <h1 class="rise phrases"><span>GPU native.</span> <span>Agent native.</span> <span class="two">Multimodal.</span></h1>
   <p class="lede">One workspace for a 100-million-row sheet, a video and a picture, and the models that read them. It runs on <b>your own GPU</b>, and you can work in it <b>by talking to an agent</b>.</p>
   <div class="pills"><a href="#gpu"><span class="ic i-zap" style="--s:18px"></span>GPU native</a><a href="#agent"><span class="ic i-bot" style="--s:18px"></span>Agent native</a><a href="#multi"><span class="ic i-film" style="--s:18px"></span>Multimodal</a></div>
-  <div class="ctas"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="#slides">▶ Watch the 2-minute slides</a></div>
+  <div class="ctas"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="omxplorer/#slides">▶ Watch the 2-minute slides</a></div>
   <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxplorer · orders_1m.csv · 1,000,000 rows</span></div>
     <video src="assets/img/clip-sentence-web.mp4" autoplay muted loop playsinline poster="assets/img/omxplorer-sentence-web.jpg"></video>
     <span class="bdg">median per group, 1M rows: <b>6.4 ms</b> · RTX 3090</span></figure>
@@ -200,21 +201,11 @@
   <div class="sub">Bring your own model</div>
   <div class="pipe">
     <div><span class="ic i-package"></span><h3>Pick a model</h3><p>A vision or audio model from Hugging Face. Not a chatbot: a detector, a segmenter, a classifier.</p></div>
-    <div><span class="ic i-convert"></span><h3>Convert it to MAX</h3><p>Modular's MAX runs it fast on your GPU. <span class="pm px-console" style="--s:18px"></span> omxconsole will do the converting.</p><span class="tag plan"><i></i>Planned</span></div>
+    <div><span class="pm px-console" style="--s:30px"></span><h3>Convert it to MAX</h3><p>Modular's MAX runs it fast on your GPU. omxconsole will do the converting.</p><span class="tag plan"><i></i>Planned</span></div>
     <div><span class="ic i-layers"></span><h3>It runs inside omxplorer</h3><p>In the same process as your data. No server, no upload.</p><span class="tag prog"><i></i>In progress</span></div>
     <div><span class="ic i-rows"></span><h3>Its answers are rows</h3><p>Boxes and masks land in a table you can join, chart and ask.</p><span class="tag prog"><i></i>In progress</span></div>
   </div>
   <p class="pipe-note"><b>Where it stands:</b> OWLv2 (find more like this, from one tapped example) and SAM 2.1 (outlines) already run in process in the framework's own tests, through PyTorch, on Linux with NVIDIA, and their answers come back as rows. <b>Next:</b> wire them into omxplorer, then any Hugging Face model, converted to MAX.</p>
-</div></section>
-
-<!-- slides: omxplorer's deck -->
-<section id="slides" class="px-plorer" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">The slides · about two minutes</div>
-  <h2>omxplorer, <span class="two">the why, the how and the code.</span></h2>
-  <p class="lede">Click the slides, then use the arrow keys.</p>
-  <div class="deck"><div class="bar"><span class="dot"></span><span>omxplorer · the slides</span><span class="sp"></span><a href="omxplorer/deck.html" target="_blank">Full screen ↗</a></div>
-    <iframe src="omxplorer/deck.html" title="omxplorer, the slides" loading="lazy" allowfullscreen></iframe></div>
-  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">The sentence</button><button data-slide="5">How it works</button><button data-slide="9">Speed</button><button data-slide="11">Agents</button><button data-slide="12">Every screen</button><button data-slide="13">Next</button></div>
 </div></section>
 
 <!-- now · next · later -->
@@ -242,7 +233,7 @@
   <p class="lede">omxlabs builds GPU-native, agent-native software in Mojo, on Modular's MAX platform. omxplorer is our first product.</p>
 </div></section>
 
-<div class="band"><h2>Every kind of data. <span class="two">One GPU. Ask it anything.</span></h2><div class="ctas" style="justify-content:center"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="#slides">Watch the slides</a></div></div>
+<div class="band"><h2>Every kind of data. <span class="two">One GPU. Ask it anything.</span></h2><div class="ctas" style="justify-content:center"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="omxplorer/#slides">Watch the slides</a></div></div>
 <footer><div class="wrap fine"><span>omxlabs · <a href="https://github.com/abhisheksreesaila/omxcode">GitHub</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a> · <a href="#" class="tbd">X [link]</a></span><span>built in Mojo · drawn in omxqua</span></div></footer>
 <script src="assets/suite.js"></script>
 </body></html>

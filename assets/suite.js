@@ -31,6 +31,8 @@ const GH = "https://github.com/abhisheksreesaila";
     }).join("");
   });
 
+  // the omxlabs flask brews: liquid and five bubbles, one per product colour (styled in suite.css)
+  document.querySelectorAll(".mark").forEach(m => { if (!m.querySelector(".liq")) m.innerHTML = '<i class="liq"></i>' + '<b class="fizz"></b>'.repeat(5); });
   // product names are always lowercase: wrap them inside labels the styles uppercase
   document.querySelectorAll(".eyebrow, .who, .role, .tag, .sub, .n, .note, .kicker").forEach(el => {
     const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), hits = [];

@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-core">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxcore · the slides</title>
+<meta name="description" content="omxcore in sixteen slides: why, how a query runs, how you write one (mx sql, Python, Mojo), the numbers, the honest edges and the roadmap.">
+<link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="../assets/omxqua/src/components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+<link rel="stylesheet" href="../assets/suite.css"><link rel="stylesheet" href="../assets/deck.css">
+<style>
+/* omxcore's own: a small device table, feature tiles, the honest-edges list */
+.dev { width: 100%; border-collapse: collapse; font-size: 24px; margin-top: 34px; }
+.dev th { text-align: left; font: 600 16px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--oq-ink-2); padding: 0 18px 12px; }
+.dev td { padding: 14px 18px; border-top: 1px solid var(--oq-line); color: var(--oq-ink-2); font-family: var(--mono); }
+.dev td.win { color: var(--oq-accent); font-weight: 650; }
+.feat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+.reveal .feat .card { padding: 24px 24px; }
+.reveal .feat h3 { font-size: 25px; margin-bottom: 8px; }
+.reveal .feat p { font-size: 19px; line-height: 1.45; }
+.reveal .feat .em { font-size: 34px; margin-bottom: 10px; }
+.edges { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px 26px; }
+.edges li { padding: 20px 24px; border-radius: 20px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); font-size: 22px; line-height: 1.45; }
+.edges li b { display: block; font-size: 25px; margin-bottom: 6px; }
+.edges .tag { margin-left: 8px; font-size: 13px; padding: 5px 10px; }
+.reveal .term { font-size: 20px; min-height: 0; }
+.reveal .wins p { font-size: 25px; }
+.reveal .card.dim { opacity: .62; }
+/* embedded in the cover, reveal sizes to .reveal, which has no height of its own (shared fix suggested for deck.css) */
+html, body { height: 100%; } .reveal { height: 100%; }
+</style>
+</head>
+<body>
+<a class="dk-brand" href="./"><span class="mark"></span><span>omxlabs ›</span> omxcore</a>
+<div class="reveal"><div class="slides">
+
+<!-- 1 · title -->
+<section>
+  <div class="eyebrow">omxcore · by omxlabs · built in Mojo</div>
+  <h1>SQL on your CPU <span class="ac">and your GPU.</span></h1>
+  <p class="lede fragment rise">The data engine for the agent era: one native library, no Python inside, over the CSV and Parquet files you already have.</p>
+  <p class="note fragment rise">arrow keys, space or swipe · 16 slides, about three minutes</p>
+</section>
+
+<!-- 2 · why -->
+<section>
+  <div class="eyebrow">Why</div>
+  <h2>Data tools were built <span class="two">for a person at a keyboard.</span></h2>
+  <div class="cols r3" style="margin-top:40px">
+    <div class="card fragment rise"><span class="em">💤</span><h3>Your GPU naps.</h3><p>Most workstations have one. Analytics engines run on the CPU and leave it idle.</p></div>
+    <div class="card fragment rise"><span class="em">📂</span><h3>Your data is in files.</h3><p>CSV and Parquet. Most tools want you to import them first, into their own format.</p></div>
+    <div class="card fragment rise"><span class="em">🤖</span><h3>Agents can't squint.</h3><p>An agent needs exact answers, and errors it can fix in one round.</p></div>
+  </div>
+</section>
+
+<!-- 3 · what it is -->
+<section>
+  <div class="eyebrow">What it is</div>
+  <div class="cols" style="grid-template-columns:1.45fr 1fr;align-items:center">
+    <div class="shot"><img src="../assets/img/omxcore-benchmarks.png" alt="omxcore's benchmarks page: TPC-H SF10 totals for omxcore, DuckDB and Polars"></div>
+    <div>
+      <h2 style="font-size:54px">A library, <span class="ac">like SQLite.</span></h2>
+      <p class="fragment rise">Not a server, not a database. It links into your app, or runs as one small program.</p>
+      <p class="fragment rise">Three ways in: <b>mx</b> in a terminal, <b>Python</b>, or <b>Mojo</b>.</p>
+      <p class="note fragment rise">the real benchmarks page · every number computed from docs/bench/</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · architecture: the stack -->
+<section data-auto-animate>
+  <div class="eyebrow">How it's built</div>
+  <h2 data-id="h">One language, <span class="two">top to bottom.</span></h2>
+  <div class="cols" style="grid-template-columns:1.5fr 1fr;gap:34px;align-items:center;margin-top:20px">
+    <div class="layers">
+      <div class="box" data-id="a0">mx · Python · your Mojo app <small>three ways in</small></div>
+      <div class="box" data-id="a1">Parser and binder <small>sql.mojo · bind.mojo</small></div>
+      <div class="box" data-id="a2">Planner <small>planner.mojo · from statistics</small></div>
+      <div class="box" data-id="a3">Kernels <small>CPU, every core · GPU</small></div>
+      <div class="box" data-id="a4">Your files <small>CSV · Parquet, read in place</small></div>
+    </div>
+    <div class="card dim fragment rise"><h3>A typical GPU data stack</h3><p>Python on top, a C++ or Rust planner, CUDA kernels. Three languages and glue between them.</p><p class="note" style="margin-top:16px">omxcore: all Mojo, compiled ahead of time</p></div>
+  </div>
+</section>
+
+<!-- 5 · architecture: a query travels -->
+<section data-auto-animate>
+  <div class="eyebrow">A query, as it runs</div>
+  <h2 data-id="h">One statement, <span class="two">one kernel program.</span></h2>
+  <div class="flow" style="margin-top:40px">
+    <div class="box hot" data-id="a4">File<small>only the columns it needs</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="a1">Parse, bind<small>types and scales</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="a2">Plan<small>dense or hashed groups</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="a3">Kernel<small>runs over chunks</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="a0">Answer<small>rows + notes</small></div>
+  </div>
+  <div class="cols r3" style="margin-top:44px">
+    <p class="fragment rise"><b>Reads less.</b> “columns read: 3 of 16” is in the notes.</p>
+    <p class="fragment rise"><b>Streams.</b> A big file is one chunk per row group, so it never has to fit.</p>
+    <p class="fragment rise"><b>Shows its work.</b> Every answer carries what the planner decided.</p>
+  </div>
+</section>
+
+<!-- 6 · architecture: CPU or GPU -->
+<section data-auto-animate>
+  <div class="eyebrow">CPU or GPU</div>
+  <h2 data-id="h">AUTO picks the device, <span class="two">and says why.</span></h2>
+  <div class="flow" style="margin-top:34px">
+    <div class="box dim" data-id="a1">Parse, bind<small>as before</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="a2">AUTO<small>prices CPU, and GPU + copy</small></div><span class="arrow"></span>
+    <div class="box" data-id="a3">CPU or GPU<small>whichever is faster</small></div><span class="arrow"></span>
+    <div class="box" data-id="a0">Answer<small>device + reason</small></div>
+  </div>
+  <table class="dev fragment rise">
+    <tr><th>A 20M-row streamed query</th><th>CPU</th><th>GPU</th><th>AUTO picks</th></tr>
+    <tr><td>12 cores, light plan</td><td class="win">0.109 s</td><td>0.132 s</td><td class="win">CPU</td></tr>
+    <tr><td>4 cores, heavy plan</td><td>0.366 s</td><td class="win">0.178 s</td><td class="win">GPU</td></tr>
+    <tr><td>2 cores, heavy plan</td><td>0.597 s</td><td class="win">0.220 s</td><td class="win">GPU · 2.7x</td></tr>
+  </table>
+  <p class="note" style="margin-top:22px">informal · RTX 3090, a shared Ryzen · docs/site/bench/engine-informal.json (gpu) · NVIDIA today</p>
+</section>
+
+<!-- 7 · write a query: the terminal -->
+<section>
+  <div class="eyebrow">How you'd write a query · 1 of 3</div>
+  <h2 style="font-size:54px">In a terminal: <span class="ac">mx sql.</span> <span class="two">JSON out.</span></h2>
+  <div class="term" data-type><div class="c"># a 6M-row Parquet file, asked directly. No Python, no server.</div><div class="tc"><span class="p">$</span> mx sql "SELECT l_returnflag, sum(l_extendedprice) AS revenue, count(*) AS n FROM 'lineitem.parquet' WHERE l_quantity &lt; 24 GROUP BY l_returnflag ORDER BY l_returnflag"</div><div>{"rows":[["A",12224287320.55…,678980],["N",25204210351.21…,1400122],["R",12231597354.54…,679720]], "row_count":3, "ms":6.91, "device":"cpu", "notes":[…]}</div><div class="c">  notes: group: dense, 1 key l_returnflag 3 = 3 slots · columns read: l_quantity, l_extendedprice, l_returnflag (3 of 16)</div><div class="c" style="margin-top:16px"># a typo comes back as something an agent can fix</div><div class="tc"><span class="p">$</span> mx sql "SELECT l_retrunflag FROM 'lineitem.parquet'"</div><div>{"error":{"message":"column `l_retrunflag` not found in table …", "line":1, "column":8, <span class="ok">"hint":"did you mean `l_returnflag`?"</span>}}</div></div>
+  <p class="note" style="margin-top:16px">a real run of build/mx on TPC-H SF1, 2026-10-29 · paths and long numbers shortened · the flags: docs/omxcore-mojo-api.md, “The mx command line”</p>
+</section>
+
+<!-- 8 · write a query: Python -->
+<section>
+  <div class="eyebrow">How you'd write a query · 2 of 3</div>
+  <h2 style="font-size:52px">In Python: <span class="ac">lazy, then compute.</span></h2>
+  <div class="file">docs/reference.md · run by tests/test_readme_api.py · lines rewrapped</div>
+  <pre><code class="language-python" data-trim data-line-numbers="1|3|4-7|8-9|11-13">import omxcore as mx        # 0.6.0 on PyPI: import mxframe as mx
+
+lf = mx.scan_parquet("lineitem.parquet")
+out = (lf.filter(mx.col("l_quantity") < 24)
+         .groupby("l_returnflag")
+         .agg(mx.col("l_extendedprice").sum().alias("revenue"))
+         .sort("l_returnflag")
+         .compute(device="cpu"))    # nothing runs until here; a pyarrow Table
+print(out.to_pandas())
+
+# or plain SQL over named tables
+t = mx.scan_parquet("t.parquet").compute()
+print(mx.sql("SELECT dept, SUM(x) AS s FROM t GROUP BY dept", t=t).compute())</code></pre>
+  <p class="note" style="margin-top:16px">device: "auto" (the default), "cpu" or "gpu" · .explain() prints the optimized plan</p>
+</section>
+
+<!-- 9 · write a query: Mojo builder -->
+<section>
+  <div class="eyebrow">How you'd write a query · 3 of 3</div>
+  <h2 style="font-size:52px">In Mojo: <span class="ac">no Python at all.</span></h2>
+  <div class="file">mojo/tools/readme_example.mojo · checked by pixi run mojo-test · trimmed</div>
+  <pre class="small"><code class="language-python" data-trim data-line-numbers="1|3-5|7-11|13-15">from omxcore import read_csv, CsvOptions, Query, Frame, col, sum, count, AUTO
+
+var csv = read_csv(path, CsvOptions())        # parallel, typed, with an import report
+var orders = csv.take_table().share()
+var region = orders.column("region")
+
+var out = (Query(orders)
+           .where(col("qty") > 2)
+           .group_by(col("region"), groups=len(orders.dictionary(region)))
+           .agg(sum(col("revenue")), count())
+           .compute(AUTO))                    # CPU or GPU; out.device says which
+
+var f = Frame(orders)                         # edits on top of shared data, no copy
+f.set_text(f.column("revenue"), 0, "99.00")
+f.formula("net = revenue - qty")              # decimals stay exact scaled integers</code></pre>
+  <p class="note" style="margin-top:16px">this is how omxplorer links the engine: one package, build/omxcore.mojoc</p>
+</section>
+
+<!-- 10 · write a query: SQL from Mojo -->
+<section>
+  <div class="eyebrow">Or SQL, from Mojo</div>
+  <h2 style="font-size:52px">A catalog, a string, <span class="ac">an answer with notes.</span></h2>
+  <div class="file">docs/omxcore-mojo-api.md · §8 and the F-159 section · trimmed</div>
+  <pre class="small"><code class="language-python" data-trim data-line-numbers="1-3|4-6|7|8-10">var cat = Catalog()
+cat.add_table("orders", orders)               # a table in memory
+cat.add_scan("big", scan_parquet(path))       # a file, read a row group at a time
+var r = sql(cat, "SELECT region, sum(revenue) AS total FROM orders "
+                 "WHERE qty > 2 GROUP BY region "
+                 "ORDER BY total DESC LIMIT 10")
+r.table; r.notes; r.ms; r.device               # the answer, and how it ran
+var f = sql(cat, "SELECT region, qty FROM orders QUALIFY row_number() "
+                 "OVER (PARTITION BY region ORDER BY qty DESC) = 1")
+cat.view("big_orders", "SELECT region, qty FROM orders WHERE qty >= 5")</code></pre>
+  <p class="note" style="margin-top:16px">new in stable 834ef9a: WITH, subqueries, UNION / INTERSECT / EXCEPT, QUALIFY, views</p>
+</section>
+
+<!-- 11 · the numbers -->
+<section>
+  <div class="eyebrow">The numbers</div>
+  <h2>All 22 TPC-H queries, <span class="ac">scale factor 10.</span></h2>
+  <div class="bars">
+    <div class="bar"><span class="name">omxcore</span><div class="track"><div class="fill me" style="--w:22%"></div></div><span class="val">3.15 s</span></div>
+    <div class="bar"><span class="name">DuckDB</span><div class="track"><div class="fill" style="--w:35%"></div></div><span class="val">5.08 s</span></div>
+    <div class="bar"><span class="name">Polars</span><div class="track"><div class="fill" style="--w:100%"></div></div><span class="val">14.40 s</span></div>
+  </div>
+  <p class="note" style="margin-top:30px">v0.6.0 release run · query time only, a fresh process per query · docs/bench/m2s-engine.csv, first_ms summed · every omxcore answer equal to DuckDB's · Polars' Q1 is wrong</p>
+  <p class="fragment rise" style="margin-top:10px"><b>Honestly:</b> Q21 carries the lead. Without it, DuckDB's total is lower: 2.27 s against 2.41 s.</p>
+</section>
+
+<!-- 12 · per query -->
+<section>
+  <div class="eyebrow">Query by query</div>
+  <div class="cols" style="grid-template-columns:1.5fr 1fr;align-items:center;gap:34px">
+    <div class="shot"><img src="../assets/img/omxcore-per-query.png" alt="first-run time per TPC-H query at SF10 for omxcore, DuckDB and Polars, log scale"></div>
+    <div class="wins">
+      <h2 style="font-size:50px">Faster in total. <span class="two">Not on every query.</span></h2>
+      <p class="fragment rise"><b>DuckDB is faster on 12 of 22,</b> mostly the join-heavy ones.</p>
+      <p class="fragment rise"><b>omxcore's big wins:</b> Q21 0.74 s vs 2.81 s, Q13 94 vs 235 ms, Q1 65 vs 138 ms.</p>
+      <p class="note">docs/bench/m2s-engine.md · SF10, engine-only</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · features -->
+<section>
+  <div class="eyebrow">What's in the stable build · 834ef9a</div>
+  <h2 style="font-size:58px">Real SQL. <span class="two">21 of 22 TPC-H through mx equal DuckDB.</span></h2>
+  <div class="feat">
+    <div class="card"><span class="em">🧩</span><h3>CTEs, subqueries</h3><p>WITH, IN / EXISTS, correlated ones made into joins, UNION / INTERSECT / EXCEPT.</p></div>
+    <div class="card"><span class="em">🪟</span><h3>Windows, QUALIFY</h3><p>row_number, rank, lag, lead, running totals and moving averages.</p></div>
+    <div class="card"><span class="em">🔗</span><h3>Joins</h3><p>Inner, left, semi, anti; 3 to 9 tables with a planner.</p></div>
+    <div class="card"><span class="em">💾</span><h3>Bigger than memory</h3><p>A 1.6 GB file through 72 MB. Sorts spill to disk.</p></div>
+    <div class="card"><span class="em">🎯</span><h3>Exact decimals</h3><p>Money is a scaled integer. Sums match to the cent.</p></div>
+    <div class="card"><span class="em">🩹</span><h3>Fixable errors</h3><p>Line, column and a “did you mean” hint, as JSON.</p></div>
+    <div class="card"><span class="em">🔎</span><h3>EXPLAIN</h3><p>Every planner decision, in the notes of every answer.</p></div>
+    <div class="card"><span class="em">✏️</span><h3>Edits and undo</h3><p>A Frame over a file: change cells, undo, save back to Parquet.</p></div>
+  </div>
+  <p class="note" style="margin-top:22px">STABLE.md · 72 MB: docs/site/bench/engine-informal.json (memory), informal</p>
+</section>
+
+<!-- 14 · honest edges -->
+<section>
+  <div class="eyebrow">The honest edges</div>
+  <h2 style="font-size:58px">What it doesn't do <span class="two">yet.</span></h2>
+  <ul class="edges">
+    <li class="fragment rise"><b>mx sql runs on the CPU <span class="tag prog"><i></i>F-191</span></b>--device gpu is accepted; the notes say it ran on the CPU. The GPU is there from Python and the Mojo builder.</li>
+    <li class="fragment rise"><b>TPC-H Q11 <span class="tag prog"><i></i>F-192</span></b>A DECIMAL × DECIMAL sum passes int64. 128-bit totals come next, then 22 of 22.</li>
+    <li class="fragment rise"><b>Some joins are slower</b>TPC-H SF1, informal: Q7 72 ms vs DuckDB 16, Q5 41 vs 13. A star-aware planner is next (F-161).</li>
+    <li class="fragment rise"><b>NVIDIA only</b>The GPU path is validated on NVIDIA. Float columns run on the CPU. AMD and Apple come later.</li>
+    <li class="fragment rise"><b>Refused, by name</b>WITH RECURSIVE, LATERAL, correlated NOT IN. Each step of a compound query is held in memory.</li>
+    <li class="fragment rise"><b>Not re-measured yet</b>The quiet-night scoreboard through mx (F-162) hasn't run. Most engine numbers are informal.</li>
+  </ul>
+  <p class="note" style="margin-top:18px">STABLE.md · docs/plan.md · docs/site/bench/engine-informal.json (multiway) · docs/reference.md</p>
+</section>
+
+<!-- 15 · roadmap -->
+<section>
+  <div class="eyebrow">Where it's going</div>
+  <h2>From a fast engine <span class="ac">to the agent's data tool.</span></h2>
+  <div class="road3">
+    <div><span class="tag live"><i></i>Now</span><ul><li>Stable 834ef9a: CTEs, subqueries, QUALIFY</li><li>Joins, windows, streamed files</li><li>mx, Python 0.6.0, Mojo package</li><li>Linked into omxplorer</li></ul></div>
+    <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>Q11: 128-bit sums, 22 of 22</li><li>SQL on the GPU and AUTO</li><li>The quiet-night scoreboard</li><li>0.7.0 with an MCP server</li></ul></div>
+    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Vector search on the GPU</li><li>Agent search and memory</li><li>AMD and Apple GPUs</li></ul></div>
+  </div>
+  <p class="note" style="margin-top:22px">docs/plan.md · docs/briefs/positioning.md</p>
+</section>
+
+<!-- 16 · the lab + read on -->
+<section>
+  <div class="eyebrow">omxlabs</div>
+  <h2>The engine <span class="two">under the suite.</span></h2>
+  <div class="cols r4" style="margin-top:30px">
+    <div class="card px-plorer"><h3 style="color:var(--px)">omxplorer</h3><p>the flagship app it powers</p></div>
+    <div class="card px-code"><h3 style="color:var(--px)">omxcode</h3><p>write once, native everywhere</p></div>
+    <div class="card px-console"><h3 style="color:var(--px)">omxconsole</h3><p>local AI, on the same GPU</p></div>
+    <div class="card px-qua"><h3 style="color:var(--px)">omxqua</h3><p>the design language</p></div>
+  </div>
+  <p class="lede" style="margin-top:40px;font-size:30px">Read on: <a href="https://github.com/abhisheksreesaila/omxcore" target="_top">GitHub</a> · <a href="https://abhisheksreesaila.github.io/omxcore/benchmarks.html" target="_top">every query</a> · <a href="https://github.com/abhisheksreesaila/omxcore/blob/main/docs/omxcore-mojo-api.md" target="_top">the Mojo API</a> · <a href="../" target="_top">omxlabs</a></p>
+</section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/notes/notes.js"></script>
+<script src="../assets/deck.js"></script>
+</body></html>

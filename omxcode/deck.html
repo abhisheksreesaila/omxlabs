@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-code">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxcode · the slides</title>
+<meta name="description" content="omxcode in sixteen slides: why, a whole app line by line, how it's built, building for every platform, the GPU in the same file, the speed, agents, the honest edges and the roadmap.">
+<link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="../assets/omxqua/src/components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+<link rel="stylesheet" href="../assets/suite.css"><link rel="stylesheet" href="../assets/deck.css">
+<style>
+/* omxcode's own: one file fanning out to the hosts, and a tap's round trip as a loop */
+.fan { display: grid; grid-template-columns: 1fr 1.25fr; gap: 40px; align-items: center; margin-top: 26px; }
+.fan .layers .box { font-size: 24px; }
+.hostl { display: flex; flex-direction: column; gap: 12px; }
+.hrow { display: flex; align-items: center; gap: 16px; }
+.hrow .box { flex: 1; padding: 14px 22px; font-size: 24px; }
+.hrow .box .tag { margin-left: auto; }
+.hrow .box small { margin-left: 14px; }
+.reveal .flow .box { font-size: 23px; padding: 18px 20px; }
+.reveal .flow .box small { font-size: 16px; }
+.loop { display: grid; grid-template-columns: 1fr 46px 1fr 46px 1fr; grid-template-rows: auto 70px auto; gap: 0 16px; align-items: center; margin-top: 30px; }
+.loop .box { flex-direction: column; align-items: flex-start; gap: 6px; font-size: 23px; padding: 18px 22px; }
+.loop .box small { font-size: 16px; }
+.loop .back { width: 46px; height: 3px; background: var(--oq-accent); position: relative; border-radius: 2px; }
+.loop .back::after { content: ""; position: absolute; left: -2px; top: -6px; border: 7.5px solid transparent; border-right: 11px solid var(--oq-accent); border-left: 0; }
+.loop .dn { grid-column: 5; justify-self: center; width: 3px; height: 54px; background: var(--oq-accent); position: relative; border-radius: 2px; }
+.loop .dn::after { content: ""; position: absolute; bottom: -2px; left: -6px; border: 7.5px solid transparent; border-top: 11px solid var(--oq-accent); border-bottom: 0; }
+.reveal pre.code18 { font-size: 18px; padding: 20px 28px; } .reveal pre.code17 { font-size: 17px; padding: 20px 28px; }
+.reveal pre.code18 code, .reveal pre.code17 code { line-height: 1.5; max-height: 720px; }
+.reveal pre.code18 .hljs:not(:first-child).fragment, .reveal pre.code17 .hljs:not(:first-child).fragment { padding: 20px 28px; }
+.reveal pre.small code { max-height: 700px; }
+.reveal .term.tight { font-size: 21px; line-height: 1.55; min-height: 0; }
+.edges .card h3 { font-size: 27px; } .edges .card p { font-size: 21px; } .edges .em { font-size: 40px; margin-bottom: 10px; }
+.genui { display: grid; grid-template-columns: 1.1fr 1fr; gap: 30px; align-items: start; margin-top: 10px; }
+.genui ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; font-size: 22px; }
+.genui li::before { content: "✕ "; color: var(--oq-err, var(--oq-warn)); font-weight: 700; }
+.reveal .card.px-core h3, .reveal .card.px-code h3, .reveal .card.px-console h3, .reveal .card.px-qua h3, .reveal .card.px-plorer h3 { color: var(--px); }
+</style>
+</head>
+<body>
+<a class="dk-brand" href="./"><span class="mark"></span><span>omxlabs ›</span> omxcode</a>
+<div class="reveal"><div class="slides">
+
+<!-- 1 · title -->
+<section>
+  <div class="eyebrow">omxcode · by omxlabs · built in Mojo</div>
+  <h1>Write it once. <span class="ac">Open it everywhere.</span></h1>
+  <p class="lede fragment rise">A Mojo app framework. Two functions open as a native app on Linux, the web, Android and Mac. The GPU code sits in the same file, and an AI agent can drive every app.</p>
+  <p class="note fragment rise">arrow keys, space or swipe · 16 slides, about three minutes</p>
+</section>
+
+<!-- 2 · why -->
+<section>
+  <div class="eyebrow">Why</div>
+  <h2>One app today means <span class="two">three languages and a guessing agent.</span></h2>
+  <div class="cols r3" style="margin-top:40px">
+    <div class="card fragment rise"><span class="em">📚</span><h3>A codebase per screen.</h3><p>Swift for the Mac, Kotlin for Android, JavaScript for the web. Or one toolkit that imitates them all.</p></div>
+    <div class="card fragment rise"><span class="em">🔀</span><h3>Speed means a second language.</h3><p>The UI in one language, the GPU work in CUDA or shaders, glued with hand-packed buffers.</p></div>
+    <div class="card fragment rise"><span class="em">🖱️</span><h3>Agents squint.</h3><p>AI agents drive apps through screenshots and pixel coordinates. It's slow, and it breaks.</p></div>
+  </div>
+</section>
+
+<!-- 3 · the code: hello -->
+<section>
+  <div class="eyebrow">How you'd write one</div>
+  <h2 style="font-size:50px;margin-bottom:18px">An app is a struct: <span class="ac">state, update, view.</span></h2>
+  <div class="file">examples/hello/app.mojo · the whole app; title() and blank lines left out</div>
+  <pre class="code18"><code class="language-python" data-trim data-line-numbers="1-2|3-8|10-12|14-21">from mojoui import App, Event, View, VStack, Text, Button, TITLE, CAPTION, PROMINENT
+comptime GREET = 1          # a message is just a number
+struct Main(App):
+    var name: String
+    var clicks: Int
+    def __init__(out self):
+        self.name = "Ada"
+        self.clicks = 0
+
+    def update(mut self, event: Event):
+        if event.message == GREET:
+            self.clicks += 1
+
+    def view(self) -> View:
+        var greeting = "Tap Greet" if self.clicks == 0 else "Hello, " + self.name + "! (click " + String(self.clicks) + ")"
+        return VStack(
+            Text(greeting, style=TITLE),
+            Button("Greet", on_tap=GREET, style=PROMINENT),
+            Text("Every line of this app is Mojo.", style=CAPTION),
+            spacing=20,
+        )</code></pre>
+</section>
+
+<!-- 4 · architecture: one language -->
+<section data-auto-animate>
+  <div class="eyebrow">How it's built</div>
+  <h2 data-id="h">One language, <span class="two">from the button to the GPU kernel.</span></h2>
+  <div class="layers" style="margin-top:34px">
+    <div class="box hot" data-id="app">app.mojo <small>struct Main(App) · update() · view()</small></div>
+    <div class="box" data-id="ui">mojoui <small>components · diff · themes as plugins</small></div>
+    <div class="box" data-id="gpu">GPU kernels <small>plain Mojo functions · MAX · NVIDIA today</small></div>
+  </div>
+  <p class="note fragment rise" style="margin-top:26px">all Mojo: Mojo calls C and Objective-C directly, with no binding generator (docs/architecture.md)</p>
+</section>
+
+<!-- 5 · architecture: one file, five hosts -->
+<section data-auto-animate>
+  <div class="eyebrow">One file, six hosts</div>
+  <h2 data-id="h">The same view tree, <span class="two">drawn by each platform.</span></h2>
+  <div class="fan">
+    <div class="layers">
+      <div class="box hot" data-id="app">app.mojo <small>view()</small></div>
+      <div class="box" data-id="ui">mojoui <small>the view tree</small></div>
+      <div class="box" data-id="gpu">GPU kernels <small>same file</small></div>
+    </div>
+    <div class="hostl">
+      <div class="hrow"><span class="arrow"></span><div class="box">Linux <small>GTK 4</small><span class="tag live"><i></i>runs</span></div></div>
+      <div class="hrow"><span class="arrow"></span><div class="box">Web <small>FastHTML · HTMX</small><span class="tag live"><i></i>runs</span></div></div>
+      <div class="hrow"><span class="arrow"></span><div class="box">Android <small>views over JNI</small><span class="tag live"><i></i>emulator</span></div></div>
+      <div class="hrow"><span class="arrow"></span><div class="box">Mac <small>AppKit</small><span class="tag live"><i></i>GitHub's Macs</span></div></div>
+      <div class="hrow"><span class="arrow"></span><div class="box">iPhone <small>UIKit</small><span class="tag builds"><i></i>builds</span></div></div>
+      <div class="hrow"><span class="arrow"></span><div class="box hot">Agent <small>MCP tools</small><span class="tag live"><i></i>runs</span></div></div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:22px">a button is a GtkButton, a &lt;button&gt;, an android.widget.Button, an NSButton · iPhone compiles and signs, hasn't run on a phone</p>
+</section>
+
+<!-- 6 · a tap: in -->
+<section data-auto-animate>
+  <div class="eyebrow">A tap, as it runs · 1 of 2</div>
+  <h2 data-id="h">You tap “Greet”. <span class="two">The event goes in.</span></h2>
+  <div class="flow" style="margin-top:44px">
+    <div class="box hot" data-id="t1">Native widget<small>GtkButton · NSButton</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="t2">Host<small>C callback into Mojo</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="t3">update(event)<small>clicks += 1</small></div><span class="arrow"></span>
+    <div class="box dim" data-id="t4">view()<small>the new screen</small></div><span class="arrow"></span>
+    <div class="box dim" data-id="t5">diff<small>old vs new</small></div>
+  </div>
+  <div class="cols r2" style="margin-top:44px">
+    <p class="fragment rise"><b>Messages are numbers.</b> A widget holds no closure; the host looks the message up in the current screen.</p>
+    <p class="fragment rise"><b>Same path everywhere.</b> GTK, the web, Android and AppKit all call the same <code>update()</code>.</p>
+  </div>
+</section>
+
+<!-- 7 · a tap: back out -->
+<section data-auto-animate>
+  <div class="eyebrow">A tap, as it runs · 2 of 2</div>
+  <h2 data-id="h">One patch <span class="two">comes back out.</span></h2>
+  <div class="loop">
+    <div class="box dim" data-id="t1">Native widget<small>GtkButton · NSButton</small></div><span class="arrow"></span>
+    <div class="box dim" data-id="t2">Host<small>C callback into Mojo</small></div><span class="arrow"></span>
+    <div class="box dim" data-id="t3">update(event)<small>clicks += 1</small></div>
+    <span></span><span></span><span></span><span></span><span class="dn"></span>
+    <div class="box hot" data-id="t6">Label patched<small>“Hello, Ada! (click 1)”</small></div><span class="back"></span>
+    <div class="box hot" data-id="t5">diff<small>same shape → set text</small></div><span class="back"></span>
+    <div class="box hot" data-id="t4">view()<small>the new screen</small></div>
+  </div>
+  <div class="cols r2" style="margin-top:40px">
+    <p class="fragment rise"><b>Patch, don't rebuild.</b> Same shape: set a text or a value. A new shape: rebuild, at the next idle moment.</p>
+    <p class="fragment rise"><b>Small edits stay small.</b> In omxplorer's open sheet, an edit builds at most 15 widgets.</p>
+  </div>
+  <p class="note" style="margin-top:8px">docs/architecture.md · docs/goals/25-report.md</p>
+</section>
+
+<!-- 8 · build it everywhere -->
+<section>
+  <div class="eyebrow">Build it</div>
+  <h2 style="font-size:56px">One command, <span class="ac">every platform.</span></h2>
+  <div class="cols" style="grid-template-columns:1.45fr 1fr;align-items:start;margin-top:14px">
+    <div class="term tight" data-type><div class="tc"><span class="p">$</span> scripts/build.sh hello all</div><div class="c">== Linux (hello): GTK4 + libadwaita</div><div class="ok">   build/hello/linux/hello</div><div class="c">== Web (hello): Mojo Python module for FastHTML</div><div class="ok">   build/hello/web/mojoui_app.so</div><div class="c">== Mac (hello): AppKit, arm64 macOS 14+</div><div class="ok">   build/hello/mac/HelloMojo.app</div><div class="c">== iPhone (hello): UIKit, arm64 iOS 17+</div><div class="ok">   build/hello/ios/HelloMojo.ipa</div><div class="tc"><span class="p">$</span> scripts/build.sh hello android</div><div class="ok">   build/hello/android/HelloMojo.apk</div></div>
+    <div>
+      <p class="fragment rise"><b>Cross-built on Linux.</b> The Mac and iPhone apps are linked and signed here, on Linux.</p>
+      <p class="fragment rise"><b>Each one native.</b> A GTK binary, a module the FastHTML server loads, an .app, an .ipa and a signed APK.</p>
+      <p class="fragment rise"><b>Picky apps say so.</b> A <code>platforms</code> file lists where an app builds (the GPU example: linux web).</p>
+      <p class="note">lines as scripts/build.sh prints them, output trimmed · the build tree exists in the repo</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · the GPU, same file -->
+<section>
+  <div class="eyebrow">The GPU, in the same file</div>
+  <h2 style="font-size:50px;margin-bottom:18px">A Mojo function <span class="ac">becomes a GPU kernel.</span></h2>
+  <div class="file">examples/gpu/app.mojo · real code, trimmed</div>
+  <pre class="code17"><code class="language-python" data-trim data-line-numbers="1-13|14-18|19-24">def mandelbrot(x: Int, y: Int, w: Int, h: Int, p: Params) -> UInt32:
+    """Colour of one pixel. p = (scale, centre x, centre y, max iterations)."""
+    var cx = p[1] + (Float32(x) - Float32(w) / 2) * p[0] / Float32(h)
+    var cy = p[2] + (Float32(y) - Float32(h) / 2) * p[0] / Float32(h)
+    var zx = Float32(0)
+    var zy = Float32(0)
+    var i = 0
+    var limit = Int(p[3])
+    while i < limit and zx * zx + zy * zy < 4.0:
+        var t = zx * zx - zy * zy + cx
+        zy = 2.0 * zx * zy + cy
+        zx = t
+        i += 1          # … colour from i, returned as one pixel
+    def render(mut self, check: Bool):
+        var gpu = self.gpu.render[mandelbrot](WIDTH, HEIGHT, self.params())   # one GPU thread per pixel
+        self.pixels = gpu.pixels.copy()
+        if check:   # the same function on the CPU: the pixels must match
+            var cpu = render_on_cpu[mandelbrot](WIDTH, HEIGHT, self.params())
+    def view(self) -> View:
+        return VStack(
+            Image(self.pixels, WIDTH, HEIGHT),
+            HStack(Text("Zoom"), Slider(self.zoom, on_change=ZOOM), spacing=12),
+            Button("Run on GPU", on_tap=RUN, style=PROMINENT),
+        )</code></pre>
+  <p class="note" style="margin-top:14px">mojoui/gpu.mojo launches it as _pixels_kernel[f] in 16 × 16 blocks · no CUDA, no shader language</p>
+</section>
+
+<!-- 10 · speed -->
+<section>
+  <div class="eyebrow">The numbers</div>
+  <h2>Native speed, <span class="two">measured.</span></h2>
+  <div class="cols r4" style="margin-top:40px">
+    <div class="fragment rise"><div class="num">1.5<small>ms</small></div><p>20M points counted and coloured, one 1080p frame (CPU: 132 ms)</p></div>
+    <div class="fragment rise"><div class="num">0.8<small>ms</small></div><p>a frame, scrolling a 1M-row grid (p95)</p></div>
+    <div class="fragment rise"><div class="num">0.6<small>ms</small></div><p>a chart over 1M rows (sum by group, 0.5–0.7)</p></div>
+    <div class="fragment rise"><div class="num">6.4<small>ms</small></div><p>a median per group over 1M rows</p></div>
+  </div>
+  <p class="note" style="margin-top:30px">RTX 3090 · goals/06-report.md · goals/26-report.md · README · goals/29-report.md · also: a 20M-row dashboard re-aggregates in 6–9 ms a click (goals/08-report.md); keeping a picture on the GPU instead of copying it saves 2.6–3.2 ms a frame (docs/benchmarks.md)</p>
+</section>
+
+<!-- 11 · benchmark -->
+<section>
+  <div class="eyebrow">One app, five stacks</div>
+  <h2>20M particles: <span class="ac">one file, WebGPU speed.</span></h2>
+  <div class="bars">
+    <div class="bar"><span class="name">JS + WebGPU</span><div class="track"><div class="fill" style="--w:5%"></div></div><span class="val">3.01 ms</span></div>
+    <div class="bar"><span class="name">omxcode</span><div class="track"><div class="fill me" style="--w:5.2%"></div></div><span class="val">3.13 ms</span></div>
+    <div class="bar"><span class="name">Rust + wgpu</span><div class="track"><div class="fill" style="--w:10%"></div></div><span class="val">5.99 ms</span></div>
+    <div class="bar"><span class="name">JS + Rust/wasm</span><div class="track"><div class="fill" style="--w:89%"></div></div><span class="val">53.45 ms</span></div>
+    <div class="bar"><span class="name">Plain JS</span><div class="track"><div class="fill" style="--w:100%"></div></div><span class="val">217.70 ms</span></div>
+  </div>
+  <p class="note" style="margin-top:30px">a frame, lower is better, bars capped at 60 ms · files · languages: omxcode 1 · 1, JS + WebGPU 8 · 5, Rust native 6 · 3 · Rust native (offscreen) wins at 1M: 0.34 vs 1.23 ms · docs/benchmarks.md</p>
+</section>
+
+<!-- 12 · agents -->
+<section>
+  <div class="eyebrow">Give it to an agent</div>
+  <h2>Every app <span class="ac">is an MCP server.</span></h2>
+  <div class="cols" style="grid-template-columns:1.15fr 1fr;align-items:start;margin-top:20px">
+    <div class="term" data-type><div class="tc"><span class="p">$</span> scripts/agent.sh hello</div><div class="c">claude mcp add hello -- pixi run python …/agent.py …/build/hello/web</div><div><span class="p">→</span> screen</div><div class="c">← "Tap Greet" · Button "Greet" → greet</div><div><span class="p">→</span> greet</div><div class="ok">← Did greet. Now: Hello, Ada! (click 1)</div>
+    </div>
+    <div>
+      <p class="fragment rise"><b>No per-app work.</b> A button's tag, or its title, names its tool. Tapping it and calling it are the same.</p>
+      <p class="fragment rise"><b>The screen is the permission model.</b> A disabled button is no tool. A dialog's buttons exist only while it's open.</p>
+      <p class="fragment rise"><b>It answers in words.</b> Each call returns what changed, not a screenshot to compare.</p>
+      <p class="note">a real run on build/hello/web · docs/agent.md · 31 components proven through the agent (docs/components.md)</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · genui -->
+<section>
+  <div class="eyebrow">Agents build UI · AG-UI</div>
+  <h2 style="font-size:56px">UI as data, <span class="ac">checked, then drawn natively.</span></h2>
+  <div class="genui">
+    <div>
+      <div class="file">render_ui, from docs/agui.md</div>
+      <pre class="small"><code class="language-json" data-trim>{"ui": {"component": "Card", "title": "Signup", "children": [
+  {"component": "TextField", "placeholder": "Your name",
+   "bind": "/form/name"},
+  {"component": "Toggle", "label": "Subscribe",
+   "bind": "/form/subscribe"},
+  {"component": "Button", "label": "Submit",
+   "action": "submit", "style": "prominent"}]}}</code></pre>
+      <ul>
+        <li class="fragment rise">an unknown component: Script, WebFrame</li>
+        <li class="fragment rise">a bad prop, or a bind that isn't a state path</li>
+        <li class="fragment rise">over 8 levels, 200 components or 32 KB</li>
+      </ul>
+    </div>
+    <div class="shot fragment rise" style="max-width:600px;justify-self:end"><img src="../assets/img/omxcode-agentchat.png" alt="Agent chat: the agent answered with a card, a segmented control, a sparkline and a table"></div>
+  </div>
+  <p class="note" style="margin-top:16px">13 catalogued components · refused with a reason the agent can read · examples/agentchat · scripts/agentchat.sh</p>
+</section>
+
+<!-- 14 · honest edges -->
+<section>
+  <div class="eyebrow">The honest edges</div>
+  <h2>What it can't do <span class="two">yet.</span></h2>
+  <div class="cols r3 edges" style="margin-top:24px">
+    <div class="card fragment rise"><span class="em">🌱</span><h3>Mojo is young.</h3><p>Version 1.1, a small ecosystem, no Windows release. Flutter and React Native are far ahead on maturity.</p></div>
+    <div class="card fragment rise"><span class="em">📱</span><h3>iPhone only builds.</h3><p>It compiles and signs, with two hand-written runtime functions. It hasn't run on a phone.</p></div>
+    <div class="card fragment rise"><span class="em">🤖</span><h3>Android is partial.</h3><p>19 components run on the emulator; the newer ones are still to come.</p></div>
+    <div class="card fragment rise"><span class="em">🍎</span><h3>The Mac is on loan.</h3><p>omxplorer runs on GitHub's Macs. The matrix still counts Mac components as “builds”.</p></div>
+    <div class="card fragment rise"><span class="em">🎮</span><h3>NVIDIA first.</h3><p>The GPU path is NVIDIA. Apple and phones run the same functions on the CPU.</p></div>
+    <div class="card fragment rise"><span class="em">🦀</span><h3>Not always fastest.</h3><p>Native Rust wins at 1M particles, cold start and memory.</p></div>
+  </div>
+  <p class="note" style="margin-top:18px">README · docs/components.md · docs/benchmarks.md</p>
+</section>
+
+<!-- 15 · roadmap -->
+<section>
+  <div class="eyebrow">Where it's going</div>
+  <h2>From five hosts <span class="ac">to every screen.</span></h2>
+  <div class="road3">
+    <div><span class="tag live"><i></i>Now</span><ul><li>Linux, web, Android, Mac</li><li>GPU kernels, same file</li><li>Agent host (MCP)</li><li>AG-UI, generated UI</li></ul></div>
+    <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>iPhone on a real phone</li><li>Android's newer components</li><li>Apple GPUs</li><li>Mac in the matrix</li></ul></div>
+    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>An agent writes an app from one sentence</li><li>A Mojo app inside a FastHTML site</li><li>Windows, once Mojo ships it</li></ul></div>
+  </div>
+</section>
+
+<!-- 16 · the lab + read on -->
+<section>
+  <div class="eyebrow">omxlabs</div>
+  <h2>The framework <span class="two">under every app.</span></h2>
+  <div class="cols r4" style="margin-top:30px">
+    <div class="card px-plorer"><h3>omxplorer</h3><p>built with it: the flagship data app</p></div>
+    <div class="card px-core"><h3>omxcore</h3><p>the GPU engine its data apps link in</p></div>
+    <div class="card px-console"><h3>omxconsole</h3><p>local AI; its console is an omxcode app</p></div>
+    <div class="card px-qua"><h3>omxqua</h3><p>the design language its themes wear</p></div>
+  </div>
+  <p class="lede" style="margin-top:40px;font-size:30px">Read on: <a href="https://github.com/abhisheksreesaila/omxcode" target="_top">GitHub</a> · <a href="https://github.com/abhisheksreesaila/omxcode/blob/main/docs/reference.md" target="_top">the reference</a> · <a href="https://github.com/abhisheksreesaila/omxcode/blob/main/docs/agent.md" target="_top">the agent docs</a> · <a href="../" target="_top">omxlabs</a></p>
+</section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/notes/notes.js"></script>
+<script src="../assets/deck.js"></script>
+</body></html>

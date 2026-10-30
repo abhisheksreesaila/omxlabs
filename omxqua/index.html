@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-qua" data-here="qua" data-root="..">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxqua · the best of Apple and Google · omxlabs</title>
+<meta name="description" content="omxqua is a touch-first design language: Google's solid surfaces and one soft shadow, Apple's springs. Four families, four skins, three files and a skill your agent reads. By omxlabs.">
+<meta property="og:title" content="omxqua · The best of Apple and Google, and the taste to choose.">
+<link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="../assets/omxqua/src/components.css"><link rel="stylesheet" href="../assets/suite.css">
+<style>
+/* omxqua's own: the families strip; images keep their ratio; the hero badge sits low so it doesn't cover the Beacon */
+.frame > img { height: auto; }
+.hero .frame .bdg { top: auto; bottom: 14px; }
+.strip { margin: 52px auto 0; max-width: 1100px; }
+.strip .frame { margin: 0; }
+.legend { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; text-align: left; }
+.legend div { padding: 16px 18px; border-radius: 18px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); }
+.legend b { display: flex; align-items: center; gap: 8px; font: 650 16px var(--sans); color: var(--ink); }
+.legend b i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.legend span { display: block; color: var(--ink2); font-size: 14.5px; margin-top: 4px; }
+@media (max-width: 900px) { .legend { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body id="top">
+<!-- The cover template (same on every product): top · hero · numbers · five things · slides · families · agents · now/next/later · the suite · band · footer -->
+<nav class="top" data-cta="Hand it to your agent" data-cta-href="#agents" data-gh="https://github.com/abhisheksreesaila/omxqua"></nav>
+
+<!-- hero -->
+<section class="hero"><div class="wrap center">
+  <div class="eyebrow"><span class="px">omxqua</span> · the design language <span class="tag live"><i></i>v0.1.5 live</span></div>
+  <h1 class="rise"><span>The</span> <span>best</span> <span>of</span> <span>Apple</span> <span>and</span> <span>Google,</span> <span class="ac">and</span> <span class="ac">the</span> <span class="ac">taste</span> <span class="ac">to</span> <span class="ac">choose.</span></h1>
+  <p class="lede"><b>Google's solid surfaces and one soft shadow. Apple's springs and motion with weight.</b> A touch-first design language for every app, phone and web, shipped as three files and a skill your agent reads.</p>
+  <div class="ctas"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://abhisheksreesaila.github.io/omxqua/docs/showcase.html">Open the showcase</a><a class="more" href="https://github.com/abhisheksreesaila/omxqua">GitHub</a></div>
+  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxqua · showcase · Contoso · Money · Ledger · night · web 1280</span></div>
+    <img src="../assets/img/omxqua-showcase.png" alt="Contoso's home screen in omxqua's Ledger family, night: top islands, the Beacon, an Up next card, stats and two cards" width="1600" height="1000">
+    <span class="bdg">one markup · <b>4 families</b> · night and light</span></figure>
+  <p class="cap">A real screenshot of the showcase: a made-up trip planner, drawn only with omxqua's parts.</p>
+</div></section>
+
+<!-- numbers -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <h2>Small enough <span class="two">to read in an afternoon.</span></h2>
+  <div class="nums">
+    <div><b>4</b><span>families: dev, travel, kids, money</span></div>
+    <div><b>4</b><span>skins: Azulejo, Golden hour, Sticker, Crayon</span></div>
+    <div><b>51</b><span>checks pass: contrast in every family and skin, CSP</span></div>
+    <div><b>19<small>KB</small></b><span>gzipped: tokens, components, fonts.css and the JS</span></div>
+  </div>
+  <p class="srcline">src/tokens.css (families and skins) · node --test tests/ → 51 pass, 0 fail · gzip -9 of src/*.css + src/omxqua.js = 19,187 bytes, fonts not included · v0.1.5, CHANGELOG.md</p>
+</div></section>
+
+<!-- five things -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <h2>Five things <span class="two">it does on purpose.</span></h2>
+  <div class="five">
+    <div><span class="em">🧱</span><h3>Solid, not glass.</h3><p>Opaque tonal surfaces and <b>one soft shadow scale</b>, from Google. Only the nav pill is frosted; every card, menu and dialog stays solid and readable.</p></div>
+    <div><span class="em">🌀</span><h3>Springs with weight.</h3><p>Every tap squashes and springs back, from Apple. <b>The more often a thing happens, the less it moves</b>: panels settle, menus ease, live data doesn't move.</p></div>
+    <div><span class="em">🎨</span><h3>Families and skins.</h3><p>Dev, travel, kids and money. One root class repaints everything, and every pair clears 4.5:1.</p></div>
+    <div><span class="em">🤖</span><h3>Agents read it.</h3><p>A skill and a Claude Code plugin. Ask for <b>“a trip planner in omxqua”</b> and it uses the real parts.</p></div>
+    <div><span class="em">📦</span><h3>Three files, no build.</h3><p><code>tokens.css</code>, <code>components.css</code>, <code>omxqua.js</code>. Plain HTML, CSS and JS.</p></div>
+  </div>
+</div></section>
+
+<!-- slides -->
+<section id="slides" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">The slides · 16 · a few you can press</div>
+  <h2>The why, the how, <span class="two">and the feel.</span></h2>
+  <p class="lede">Click the slides, then use the arrow keys. Code steps line by line, the architecture moves, and the buttons, switches and Beacon are the real thing.</p>
+  <div class="deck"><div class="bar"><span class="dot"></span><span>omxqua · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
+    <iframe src="deck.html" title="omxqua, the slides" loading="lazy" allowfullscreen></iframe></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">Architecture</button><button data-slide="6">How to use it</button><button data-slide="9">Feel it</button><button data-slide="10">Families</button><button data-slide="11">Agents</button><button data-slide="13">Honest edges</button><button data-slide="14">Roadmap</button></div>
+</div></section>
+
+<!-- families -->
+<section id="families"><div class="wrap center rv">
+  <h2>One feel. <span class="two">Four personalities.</span></h2>
+  <p class="lede">The same Contoso screen, the same markup. Only the root class changes.</p>
+  <div class="strip">
+    <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>showcase · Home · phone 390 · four families</span></div><img src="../assets/img/omxqua-families.png" alt="the same phone screen in four families: Graphite night, Azulejo light, Playground night, Ledger night" width="1600" height="815"></figure>
+    <div class="legend">
+      <div style="--c:#ededef"><b><i></i>Developer · Graphite</b><span>tools and consoles · 34 px · mono numbers</span></div>
+      <div style="--c:#1f4f8f"><b><i></i>Travel · Azulejo</b><span>trips and places · Fraunces display</span></div>
+      <div style="--c:#ffad66"><b><i></i>Kids · Playground</b><span>children's apps · 48 px targets</span></div>
+      <div style="--c:#b8aaff"><b><i></i>Money · Ledger</b><span>accounts and budgets · amounts in mono</span></div>
+    </div>
+  </div>
+  <p class="srcline">showcase.html?bare=1&amp;size=phone&amp;screen=home · accents from AGENTS.md §2</p>
+</div></section>
+
+<!-- agents -->
+<section id="agents"><div class="wrap center rv">
+  <h2>You describe the screen. <span class="ac">Your agent builds it.</span></h2>
+  <p class="lede">omxqua ships a skill. It makes the agent read the reference, pick a family, use the real parts and check the page at phone width. By hand, it's four links and one line of classes.</p>
+  <div class="pair">
+    <div class="pane"><div class="bar">By hand · README.md</div><pre><span class="c">&lt;!-- four links, in this order --&gt;</span>
+<span class="k">&lt;link</span> rel=<span class="s">"stylesheet"</span> href=<span class="s">"omxqua/src/fonts.css"</span><span class="k">&gt;</span>
+<span class="k">&lt;link</span> rel=<span class="s">"stylesheet"</span> href=<span class="s">"omxqua/src/tokens.css"</span><span class="k">&gt;</span>
+<span class="k">&lt;link</span> rel=<span class="s">"stylesheet"</span> href=<span class="s">"omxqua/src/components.css"</span><span class="k">&gt;</span>
+<span class="k">&lt;script</span> src=<span class="s">"omxqua/src/omxqua.js"</span> defer<span class="k">&gt;&lt;/script&gt;</span>
+
+<span class="c">&lt;!-- theme · family · accent · shell --&gt;</span>
+<span class="k">&lt;html</span> class=<span class="s">"oq-root oq-night oq-family-dev oq-app-violet oq-top"</span><span class="k">&gt;</span></pre></div>
+    <div class="pane" style="display:grid;align-content:center;gap:16px;padding:24px"><b style="font-size:18px">Give it to Claude Code in one line:</b>
+      <span class="cmd" style="flex-wrap:wrap">/plugin install omxqua --marketplace abhisheksreesaila/omxqua<button data-copy="/plugin install omxqua --marketplace abhisheksreesaila/omxqua">Copy</button></span>
+      <span style="color:var(--ink2);font-size:15.5px">Codex, Cursor or any agent with a skills folder: copy <code style="font:600 13.5px var(--mono);color:var(--oq-accent)">skills/omxqua/</code>. Shipping: <code style="font:600 13.5px var(--mono);color:var(--oq-accent)">bin/omxqua-sync static/</code> vendors it.</span>
+      <a class="more" href="https://github.com/abhisheksreesaila/omxqua/blob/main/AGENTS.md">Read AGENTS.md, the reference</a>
+      <div class="srcline" style="margin:0">README.md · skills/omxqua/SKILL.md</div></div>
+  </div>
+</div></section>
+
+<!-- now · next · later -->
+<section id="try"><div class="wrap center rv">
+  <h2>Live now, <span class="two">and what's next.</span></h2>
+  <div class="road">
+    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>4 families, 4 skins, <b>v0.1.5</b></li><li>tokens, components, <code>omxqua.js</code></li><li>The skill and the Claude Code plugin</li><li>The omxlabs site, drawn in it</li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li>v0.1.6: the new cover, chips, coloured icons</li><li>The Notes family into tokens.css</li><li>Dialog and sheet glue packaged</li></ul></div>
+    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>A Health family</li><li>omxplorer drawn in omxqua</li><li>omxcode apps on the same tokens (an idea)</li></ul></div>
+  </div>
+</div></section>
+
+<!-- the suite -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">omxlabs</div>
+  <h2>The lab's look, <span class="two">written down.</span></h2>
+  <div class="fam"></div>
+</div></section>
+
+<div class="band"><h2>Press a button <span class="two">and feel it press back.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://abhisheksreesaila.github.io/omxqua/">Try the live site</a></div></div>
+<footer><div class="wrap fine"><span>omxqua by <a href="../">omxlabs</a> · <a href="https://github.com/abhisheksreesaila/omxqua">GitHub</a> · <a href="https://abhisheksreesaila.github.io/omxqua/docs/showcase.html">showcase</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a></span><span>MIT licensed · fonts SIL OFL 1.1</span></div></footer>
+<script src="../assets/suite.js"></script>
+</body></html>

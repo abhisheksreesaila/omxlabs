@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-console">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxconsole · the slides</title>
+<meta name="description" content="omxconsole in sixteen slides: why local AI, the one command, calling it, how a request travels, the console built with omxcode, porting, the honest edges and the roadmap.">
+<link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="../assets/omxqua/src/components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+<link rel="stylesheet" href="../assets/suite.css"><link rel="stylesheet" href="../assets/deck.css">
+<style>
+/* omxconsole's own: the model list that wakes and sleeps, the port's five steps, the edges list */
+.models { display: grid; gap: 12px; margin-top: 8px; }
+.models .box { font-size: 24px; padding: 16px 24px; }
+.st { font: 600 17px var(--mono); padding: 5px 12px; border-radius: 999px; background: var(--oq-surface-3); color: var(--oq-ink-2); }
+.st.on { color: #0b0b0d; background: var(--oq-accent); }
+.steps5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 26px; }
+.steps5 .card { padding: 24px 22px; }
+.steps5 .card b { display: block; font-size: 27px; margin: 8px 0 8px; }
+.steps5 .card p { font-size: 20px; }
+.steps5 .n { font: 600 18px var(--mono); color: var(--oq-accent); }
+.edges { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 18px 40px; font-size: 25px; }
+.edges li { padding-left: 46px; position: relative; }
+.edges li .em { position: absolute; left: 0; top: 0; font-size: 30px; margin: 0; }
+.reveal .term { font-size: 21px; line-height: 1.55; white-space: normal; } /* the shared pre-wrap turns the newlines between lines into blank lines */
+.reveal .term > div { white-space: pre-wrap; min-height: 1.55em; }
+.mono { font-family: var(--mono); letter-spacing: -.02em; }
+.reveal .term .k { color: var(--oq-accent); }
+.split { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+</style>
+</head>
+<body>
+<a class="dk-brand" href="./"><span class="mark"></span><span>omxlabs ›</span> omxconsole</a>
+<div class="reveal"><div class="slides">
+
+<!-- 1 · title -->
+<section>
+  <div class="eyebrow">omxconsole · by omxlabs · built on Modular MAX</div>
+  <h1>Your GPU, <span class="ac">as a private model server.</span></h1>
+  <p class="lede fragment rise">One command gives you an OpenAI-compatible endpoint on your own NVIDIA GPU. Models load when they're called and sleep when idle.</p>
+  <p class="note fragment rise">arrow keys, space or swipe · 16 slides, about three minutes</p>
+</section>
+
+<!-- 2 · why -->
+<section>
+  <div class="eyebrow">Why</div>
+  <h2>Cloud AI sends a bill. <span class="two">Local AI hogs the GPU.</span></h2>
+  <div class="cols r3" style="margin-top:40px">
+    <div class="card fragment rise"><span class="em">🧾</span><h3>A meter on every word.</h3><p>Cloud APIs bill per token, and every prompt, with your data in it, leaves the building.</p></div>
+    <div class="card fragment rise"><span class="em">🧱</span><h3>One server per model.</h3><p>The usual local setup is one port per model, each holding GPU memory all day, used or not.</p></div>
+    <div class="card fragment rise"><span class="em">🚫</span><h3>"Not supported."</h3><p>A fast engine like MAX runs many architectures, not all. The model you want may not be one.</p></div>
+  </div>
+</section>
+
+<!-- 3 · who it's for -->
+<section>
+  <div class="eyebrow">Who it's for</div>
+  <h2>When the model should live <span class="ac">next to your data.</span></h2>
+  <div class="cols r4" style="margin-top:40px">
+    <div class="card fragment rise"><span class="em">🔒</span><h3>Private</h3><p>Prompts and answers stay on this machine.</p></div>
+    <div class="card fragment rise"><span class="em">✈️</span><h3>Offline</h3><p>Weights come from Hugging Face once. Then no network.</p></div>
+    <div class="card fragment rise"><span class="em">🧾</span><h3>No meter</h3><p>The GPU you own does the work. No per-token bill.</p></div>
+    <div class="card fragment rise"><span class="em">🤖</span><h3>An agent's brain</h3><p>Anything that speaks the OpenAI API can call it.</p></div>
+  </div>
+  <p class="note fragment rise" style="margin-top:34px">what needs the cloud: serving none · weights Hugging Face, once · porting your Claude account · docs/site FAQ</p>
+</section>
+
+<!-- 4 · what it is -->
+<section>
+  <div class="eyebrow">What it is</div>
+  <div class="cols" style="grid-template-columns:1.5fr 1fr;align-items:center">
+    <div class="shot"><img src="../assets/img/omxconsole-home-dark.png" alt="omxconsole's My models page"></div>
+    <div>
+      <h2 style="font-size:54px">A small server, <span class="ac">and a console.</span></h2>
+      <p class="fragment rise"><b>mxc</b>, a command line, runs a daemon in front of MAX.</p>
+      <p class="fragment rise">The console shows every model: its state, memory, speed, logs and a notebook.</p>
+      <p class="note fragment rise">the real console on a test install · mxstudio README</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · the command, typed -->
+<section>
+  <div class="eyebrow">How you'd write a command</div>
+  <h2 style="font-size:54px">One line. <span class="two">It prints how to call it.</span></h2>
+  <div class="term" data-type>
+    <div class="tc"><span class="p">$</span> pixi run mxc serve qwen2.5-0.5b</div>
+    <div class="c">pulled qwen2.5-0.5b (Qwen/Qwen2.5-0.5B-Instruct@…)</div>
+    <div class="c">started the omxconsole daemon</div>
+    <div class="c">loading qwen2.5-0.5b (the first load compiles the model and can take a minute)…</div>
+    <div class="ok">qwen2.5-0.5b is ready</div>
+    <div> </div>
+    <div>endpoint  <span class="k">http://127.0.0.1:11435/v1</span>   (API reference: …/docs)</div>
+    <div>key       mst-…   <span class="c">(app 'default'; shown once, keep it)</span></div>
+    <div class="c">… then a curl line and a Python snippet (next two slides)</div>
+  </div>
+  <p class="note" style="margin-top:18px">the lines mxconsole/cli.py serve_model and serve.py usage() print · options: --pin, --keep-alive 10m, --no-wait (docs/CLI.md)</p>
+</section>
+
+<!-- 6 · curl, stepped -->
+<section>
+  <div class="eyebrow">Call it · curl</div>
+  <h2 style="font-size:52px">The curl line it prints, <span class="ac">step by step.</span></h2>
+  <div class="file">the console's "Call it" line · chat_curl() in examples/console/api.mojo (same call mxc serve prints)</div>
+  <pre><code class="language-bash" data-trim data-line-numbers="1|2|3|4-7">curl http://127.0.0.1:11435/v1/chat/completions \
+  -H "Authorization: Bearer $MXC_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5-0.5b",
+       "messages": [
+         {"role": "user", "content": "Hello"}
+       ]}'</code></pre>
+  <div class="cols r4" style="margin-top:22px;font-size:22px">
+    <p class="fragment rise"><b>1</b> your machine, your port</p>
+    <p class="fragment rise"><b>2</b> one key per app, revocable</p>
+    <p class="fragment rise"><b>3</b> plain JSON, OpenAI's shape</p>
+    <p class="fragment rise"><b>4</b> the model is picked by name</p>
+  </div>
+</section>
+
+<!-- 7 · OpenAI client, stepped -->
+<section>
+  <div class="eyebrow">Call it · any OpenAI client</div>
+  <h2 style="font-size:52px">Change one URL. <span class="two">Keep your code.</span></h2>
+  <div class="file">the snippet mxc serve prints (mxconsole/serve.py usage()), with the key read from the environment</div>
+  <pre><code class="language-python" data-trim data-line-numbers="1-2|4-7|8-11|12">import os
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://127.0.0.1:11435/v1",
+    api_key=os.environ["MXC_API_KEY"],   # the mst-… key mxc printed
+)
+reply = client.chat.completions.create(
+    model="qwen2.5-0.5b",
+    messages=[{"role": "user", "content": "Hello"}],
+)
+print(reply.choices[0].message.content)</code></pre>
+  <p class="note" style="margin-top:18px">also: stream: true (server-sent events), /v1/completions, /v1/embeddings, /v1/models · docs/API.md</p>
+</section>
+
+<!-- 8 · architecture: the stack -->
+<section data-auto-animate>
+  <div class="eyebrow">How it's built</div>
+  <h2 data-id="h">Four layers, <span class="two">one URL on top.</span></h2>
+  <div class="layers" style="margin-top:30px">
+    <div class="box" data-id="apps">Your apps and agents <small>scripts · notebooks · the console · any OpenAI client</small></div>
+    <div class="box" data-id="api">OpenAI-compatible API <small>/v1 on 127.0.0.1:11435</small></div>
+    <div class="box" data-id="daemon">omxconsole daemon <small>keys · route by model · start on demand · unload when idle</small></div>
+    <div class="box" data-id="max">max serve <small>Modular MAX · one per loaded model</small></div>
+    <div class="box" data-id="gpu">Your GPU <small>NVIDIA · Linux</small></div>
+  </div>
+  <p class="note fragment rise" style="margin-top:22px">docs/ARCHITECTURE.md · mxconsole/gateway.py, supervisor.py</p>
+</section>
+
+<!-- 9 · architecture: a request travels -->
+<section data-auto-animate>
+  <div class="eyebrow">A request, as it runs</div>
+  <h2 data-id="h">A call for a sleeping model <span class="two">wakes it, then answers.</span></h2>
+  <div class="flow" style="margin-top:34px">
+    <div class="box hot" data-id="apps">Your app<small>POST /v1/chat/completions</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="daemon">daemon<small>checks the key, reads "model"</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="max">max serve<small>cold → starts it</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="gpu">GPU<small>tokens stream back</small></div>
+  </div>
+  <div class="cols r3" style="margin-top:40px">
+    <p class="fragment rise"><b>One start.</b> Callers that arrive together share it.</p>
+    <p class="fragment rise"><b>Never mid-answer.</b> A model unloads only when nothing is in flight.</p>
+    <p class="fragment rise"><b>Honest errors.</b> Fields MAX would refuse are dropped and named in a reply header.</p>
+  </div>
+</section>
+
+<!-- 10 · architecture: models sleep, LAN -->
+<section data-auto-animate>
+  <div class="eyebrow">Sharing it</div>
+  <h2 data-id="h">Idle models sleep. <span class="two">The LAN sees four routes.</span></h2>
+  <div class="cols r2" style="margin-top:26px;align-items:start">
+    <div class="models">
+      <div class="box hot" data-id="m1">qwen2.5-0.5b <span class="st on">ready · pinned</span></div>
+      <div class="box dim" data-id="m2">smollm2-1.7b <span class="st">cold</span></div>
+      <div class="box dim" data-id="m3">all-minilm-l6 <span class="st">cold</span></div>
+      <p class="note" style="margin-top:8px">unloads after 5 idle minutes by default</p>
+    </div>
+    <div class="layers">
+      <div class="box" data-id="apps">Phone, laptop <small>on your network</small></div>
+      <div class="box hot" data-id="api">Caddy, HTTPS :8443 <small>its own CA · key check</small></div>
+      <div class="box" data-id="daemon">daemon <small>/v1 only: models, chat, completions, embeddings</small></div>
+      <div class="box dim" data-id="max">/console and /admin <small>this machine only</small></div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:20px">mxc expose · docs/USER_GUIDE.md, docs/ARCHITECTURE.md (LiteLLM removed in F-063: Caddy goes straight to the daemon)</p>
+</section>
+
+<!-- 11 · the console is an omxcode app -->
+<section>
+  <div class="eyebrow">The console</div>
+  <div class="split">
+    <div class="shot"><img src="../assets/img/omxconsole-gtk.png" alt="the omxcode console drawn natively on GTK"></div>
+    <div>
+      <h2 style="font-size:54px">Rebuilt <span class="ac">in omxcode.</span></h2>
+      <p class="fragment rise"><b>Native</b> on Linux (GTK) and the Mac, a page on the web, from one Mojo app.</p>
+      <p class="fragment rise"><b>99.2 %</b> of pixels match the original, on every one of 20 web screens.</p>
+      <p class="fragment rise"><b>Checked live:</b> load a model, make a key, /v1 says 200, revoke it, 401.</p>
+      <p class="note fragment rise">docs/goals/33-report.md (omxcode) · live run used a fake max · the server still ships its JS console</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · how the console talks to it, stepped -->
+<section>
+  <div class="eyebrow">How the console talks to it</div>
+  <h2 style="font-size:52px">Just HTTP. <span class="two">Replies come back as events.</span></h2>
+  <div class="file">examples/console/api.mojo and app.mojo · real code, trimmed</div>
+  <pre class="small"><code class="language-python" data-trim data-line-numbers="1-4|6-9|11-12|14-16">struct Api(Movable):
+    def __init__(out self):
+        self.http = Http()
+        self.base = environment("MXC_URL", DEFAULT_URL)   # e.g. http://127.0.0.1:11435
+
+    def admin(self, var r: Request) -> Request:           # the console's own routes
+        if environment("MXC_ADMIN_KEY") != "":
+            return r^.header_from_env("X-Mst-Admin", "MXC_ADMIN_KEY").timeout(15000)
+        return r^.header("X-Mst-Admin", "1").timeout(15000)
+
+def every(self) -> List[Every]:                           # poll: every 3 s and 5 s
+    return [Every(3000, POLL_CORE), Every(5000, POLL_SYSTEM), Every(3000, POLL_JOBS)]
+
+# on POLL_CORE, update() sends the requests; each reply arrives as an Event
+self.api.get(GOT_MODELS, "/admin/models")
+self.api.get(GOT_METRICS, "/admin/metrics")</code></pre>
+  <p class="note" style="margin-top:14px">/admin answers only on this machine; your apps use /v1 with their own key</p>
+</section>
+
+<!-- 13 · porting -->
+<section>
+  <div class="eyebrow">MAX can't run it? Port it.</div>
+  <h2 style="font-size:52px"><span class="ac mono">mxc port &lt;repo&gt; --auto</span></h2>
+  <div class="steps5">
+    <div class="card fragment rise"><span class="n">01</span><b>Workspace</b><p>Read the config; pick the closest architecture MAX has.</p></div>
+    <div class="card fragment rise"><span class="n">02</span><b>Generate</b><p>Claude Code writes the port in a bubblewrap sandbox.</p></div>
+    <div class="card fragment rise"><span class="n">03</span><b>Try</b><p>Compile, serve, compare with Hugging Face. Up to 4 tries.</p></div>
+    <div class="card fragment rise"><span class="n">04</span><b>Check</b><p>omxconsole re-runs the comparison on its own.</p></div>
+    <div class="card fragment rise"><span class="n">05</span><b>Serve</b><p>Registered at a pinned revision, and started.</p></div>
+  </div>
+  <div class="cols r4" style="margin-top:30px;font-size:23px">
+    <div><div class="num" style="font-size:96px">8</div><p>architectures ported: GPT-2, Pythia, Phi-2, StarCoder2, StableLM 2, SmolLM3, Granite MoE, OLMoE</p></div>
+    <div><div class="num" style="font-size:96px">7–40<small>min</small></div><p>per port, mostly weights and compile</p></div>
+    <div><div class="num" style="font-size:96px">$2–5</div><p>of your Claude usage per model</p></div>
+    <div><div class="num" style="font-size:96px">3</div><p>attempts by default; stops on the same failure twice</p></div>
+  </div>
+  <p class="note" style="margin-top:6px">docs/PORTING.md · 2× RTX 3090, MAX 26.7 · text LLMs only · never starts on its own</p>
+</section>
+
+<!-- 14 · honest edges -->
+<section>
+  <div class="eyebrow">The honest edges</div>
+  <h2>What it <span class="ac">doesn't</span> do yet.</h2>
+  <ul class="edges">
+    <li class="fragment rise"><span class="em">🐧</span><b>Linux + NVIDIA only.</b> Whether MAX serves these models on Apple silicon is still being checked.</li>
+    <li class="fragment rise"><span class="em">🧪</span><b>Public alpha</b> on a MAX nightly (26.7).</li>
+    <li class="fragment rise"><span class="em">📝</span><b>Porting is text-only.</b> Vision and embedding models haven't been tried.</li>
+    <li class="fragment rise"><span class="em">🔐</span><b>Porting needs Claude Code</b> and bubblewrap, and can fail after spending.</li>
+    <li class="fragment rise"><span class="em">🧩</span><b>Parked models:</b> remote code (EXAONE) and ALiBi (BLOOM) don't port.</li>
+    <li class="fragment rise"><span class="em">🖥️</span><b>The Mojo console</b> isn't the one the server ships yet; that's still JavaScript.</li>
+  </ul>
+  <p class="note" style="margin-top:26px">docs/site FAQ · docs/PORTING.md · mxstudio README badges · omxcode docs/goals/33-report.md</p>
+</section>
+
+<!-- 15 · roadmap -->
+<section>
+  <div class="eyebrow">Where it's going</div>
+  <h2>From one GPU <span class="ac">to every app on it.</span></h2>
+  <div class="road3">
+    <div><span class="tag live"><i></i>Now</span><ul><li>mxc serve, one endpoint</li><li>Idle unload, pin</li><li>Keys, HTTPS on your LAN</li><li>Porting text models</li><li>The console</li></ul></div>
+    <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>The Mac app (in review)</li><li>A catalog of finished ports</li><li>A swappable porting agent</li><li>omxplorer's Ask, on your GPU</li></ul></div>
+    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Our own router, if ever needed</li><li>Porting vision and embedding models</li></ul></div>
+  </div>
+  <p class="note" style="margin-top:24px">docs/site FAQ "What's next?" · docs/plan.md F-064 · omxplorer's roadmap</p>
+</section>
+
+<!-- 16 · the lab + read on -->
+<section>
+  <div class="eyebrow">omxlabs</div>
+  <h2>Local AI, <span class="two">next to the rest of the lab.</span></h2>
+  <div class="cols r4" style="margin-top:30px">
+    <div class="card px-plorer"><h3 style="color:var(--px)">omxplorer</h3><p>will ask it questions about your data</p></div>
+    <div class="card px-code"><h3 style="color:var(--px)">omxcode</h3><p>builds its console: write once, native everywhere</p></div>
+    <div class="card px-core"><h3 style="color:var(--px)">omxcore</h3><p>the GPU engine, on the same card</p></div>
+    <div class="card px-qua"><h3 style="color:var(--px)">omxqua</h3><p>the look: springs and solid surfaces (this site; omxplorer next)</p></div>
+  </div>
+  <p class="lede" style="margin-top:40px;font-size:30px">Read on: <a href="https://github.com/abhisheksreesaila/mxstudio" target="_top">GitHub</a> · <a href="https://github.com/abhisheksreesaila/mxstudio/blob/main/docs/USER_GUIDE.md" target="_top">the user guide</a> · <a href="https://abhisheksreesaila.github.io/mxstudio/site/console.html" target="_top">the console tour</a> · <a href="../" target="_top">omxlabs</a></p>
+</section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/notes/notes.js"></script>
+<script src="../assets/deck.js"></script>
+</body></html>

@@ -1,0 +1,98 @@
+/* omxlabs suite · the slides. One reveal.js template for every product (after the omxcore deck), night, 1600 × 900.
+   The accent is the product's (suite.css). Motion: things settle (fade + 12 px rise), code steps line by line,
+   diagrams move between slides with auto-animate, terminals type once, bars grow once. Reduced motion is still. */
+html, body, .reveal-viewport { background: #000; }
+html, body, .reveal { height: 100%; }  /* inside a cover's iframe .reveal otherwise measures 0 px and draws every slide tiny */
+body { margin: 0; }
+.reveal { font-family: var(--sans); font-size: 30px; color: var(--oq-ink-2); }
+.reveal .slides { text-align: left; }
+.reveal h1, .reveal h2, .reveal h3 { font-family: var(--sans); color: var(--oq-ink); text-transform: none; letter-spacing: -.045em; line-height: 1; margin: 0 0 26px; text-wrap: balance; }
+.reveal h1 { font-size: 116px; font-weight: 800; letter-spacing: -.055em; }
+.reveal h2 { font-size: 66px; font-weight: 800; }
+.reveal h3 { font-size: 32px; font-weight: 650; letter-spacing: -.015em; margin-bottom: 10px; }
+.reveal .ac { color: var(--oq-accent); }
+.reveal .two { color: var(--oq-ink-2); }
+.reveal p { margin: 0 0 18px; line-height: 1.5; }
+.reveal b { color: var(--oq-ink); font-weight: 600; }
+.reveal a { color: var(--oq-ink); text-decoration-color: var(--oq-accent); text-underline-offset: 5px; }
+.reveal .eyebrow { font: 600 19px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--oq-accent); margin-bottom: 24px; display: flex; gap: 14px; align-items: center; }
+.reveal .lede { font-size: 38px; line-height: 1.4; max-width: 1200px; color: var(--oq-ink-2); }
+.reveal .note { font: 19px/1.6 var(--mono); color: var(--oq-ink-2); }
+.reveal .note::before { content: "↳ "; opacity: .6; }
+.reveal .em { font-size: 52px; line-height: 1; display: block; margin-bottom: 14px; }
+.cols { display: grid; gap: 26px; } .r2 { grid-template-columns: 1fr 1fr; } .r3 { grid-template-columns: repeat(3, 1fr); } .r4 { grid-template-columns: repeat(4, 1fr); }
+.reveal .card { padding: 30px 32px; border-radius: 26px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); }
+.reveal .card p { font-size: 25px; margin: 0; }
+.reveal .card.hot { box-shadow: 0 0 0 2px var(--oq-accent); }
+.reveal .tag { font-size: 15px; padding: 7px 13px; vertical-align: middle; }
+
+/* fragments settle in */
+.reveal .slides section .fragment { transition: opacity .3s var(--oq-ease-in), transform .3s var(--oq-ease-in); }
+.reveal .slides section .fragment.rise { transform: translateY(12px); }
+.reveal .slides section .fragment.rise.visible { transform: none; }
+
+/* code: an omxqua surface; reveal steps through highlighted lines (data-line-numbers="1|3-5") */
+.reveal pre { box-sizing: border-box; width: 100%; margin: 0; border-radius: 22px; font-size: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); padding: 24px 30px; }
+.reveal pre code, .reveal pre code.hljs { background: transparent; color: var(--oq-ink); padding: 0; font-family: var(--mono); line-height: 1.6; max-height: 640px; overflow: hidden; }
+.reveal .hljs-ln-numbers { color: var(--oq-ink-2); opacity: .55; padding-right: 20px !important; user-select: none; }
+.reveal pre code td, .reveal pre code tr { background: transparent; border: 0; }
+.reveal .hljs.has-highlights tr:not(.highlight-line) { opacity: .28; }
+.hljs-keyword, .hljs-built_in, .hljs-selector-tag { color: var(--oq-accent); } .hljs-string { color: var(--oq-data-3); } .hljs-number, .hljs-literal { color: var(--oq-warn); }
+.hljs-comment { color: var(--oq-ink-2); font-style: italic; } .hljs-attr, .hljs-title, .hljs-function { color: var(--oq-info); }
+.reveal .file { font: 500 17px var(--mono); color: var(--oq-ink-2); margin: 0 0 10px 6px; }
+
+/* a terminal that types its lines once when the slide arrives (deck.js) */
+.term { box-sizing: border-box; background: var(--oq-surface-1); color: var(--oq-ink); border-radius: 22px; padding: 26px 32px; font: 23px/1.65 var(--mono); box-shadow: 0 0 0 1px var(--oq-line); white-space: normal; min-height: 360px; }
+.term > div { white-space: pre-wrap; }
+.term .p { color: var(--oq-accent); } .term .c { color: var(--oq-ink-2); } .term .s { color: var(--oq-data-3); } .term .ok { color: var(--oq-ok); }
+.caret { display: inline-block; width: .55em; height: 1.05em; vertical-align: -.15em; background: var(--oq-accent); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* architecture: boxes and wires. Give boxes a data-id and repeat the slide with data-auto-animate to move them. */
+.arch { position: relative; display: grid; gap: 18px; margin-top: 20px; }
+.box { padding: 20px 26px; border-radius: 20px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); color: var(--oq-ink); font-size: 26px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+.box small { font: 500 18px var(--mono); color: var(--oq-ink-2); font-weight: 500; }
+.box.hot { box-shadow: 0 0 0 2px var(--oq-accent); background: color-mix(in srgb, var(--oq-accent) 9%, var(--oq-surface-1)); }
+.box.dim { opacity: .35; }
+.layers { display: flex; flex-direction: column; gap: 12px; }
+.flow { display: flex; align-items: center; gap: 16px; }
+.flow .box { flex: 1; flex-direction: column; align-items: flex-start; gap: 6px; }
+.arrow { flex: none; width: 46px; height: 3px; background: var(--oq-accent); position: relative; border-radius: 2px; }
+.arrow::after { content: ""; position: absolute; right: -2px; top: -6px; border: 7.5px solid transparent; border-left: 11px solid var(--oq-accent); border-right: 0; }
+.down { width: 3px; height: 34px; margin: 0 auto; background: var(--oq-accent); border-radius: 2px; }
+
+/* numbers and bars that grow once */
+.num { font: 800 132px/1 var(--sans); color: var(--oq-accent); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.num small { font-size: 46px; color: var(--oq-ink-2); margin-left: 8px; letter-spacing: -.02em; }
+.bars { display: flex; flex-direction: column; gap: 24px; margin-top: 24px; }
+.bar { display: grid; grid-template-columns: 260px 1fr 170px; align-items: center; gap: 22px; font-size: 27px; }
+.bar .name { color: var(--oq-ink); font-weight: 650; }
+.bar .track { height: 38px; background: var(--oq-surface-1); border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px var(--oq-line); }
+.bar .fill { height: 100%; width: 0; border-radius: 10px; background: var(--oq-ink-2); transition: width 1.4s var(--oq-ease-in); }
+.bar .fill.me { background: var(--oq-accent); }
+.present .bar .fill { width: var(--w); }
+.bar .val { font: 650 30px var(--mono); color: var(--oq-ink); text-align: right; }
+.shot { border-radius: 22px; overflow: hidden; box-shadow: 0 0 0 1px var(--oq-line), var(--oq-shadow-3); }
+.shot img, .shot video { display: block; width: 100%; margin: 0; }
+
+/* the road: three columns, now · next · later */
+.road3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 20px; }
+.road3 > div { padding: 28px 30px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); }
+.road3 ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; font-size: 24px; }
+.road3 li { padding-left: 24px; position: relative; } .road3 li::before { content: ""; position: absolute; left: 0; top: .5em; width: 10px; height: 10px; border-radius: 50%; background: var(--c, var(--oq-ok)); }
+.road3 .nx li { --c: var(--oq-warn); } .road3 .lt li { --c: var(--oq-ink-2); }
+
+/* chrome: progress and slide number in the accent; the brand chip only when the deck stands alone */
+.reveal .progress { color: var(--oq-accent); height: 4px; }
+.reveal .controls { color: var(--oq-accent); }
+.reveal .slide-number { right: auto; left: 24px; bottom: 16px; background: transparent; color: var(--oq-ink-2); font: 16px var(--mono); }
+.dk-brand { position: fixed; top: 16px; left: 18px; z-index: 30; height: 42px; padding: 0 16px 0 10px; border-radius: 999px; background: var(--oq-surface-2); box-shadow: var(--oq-shadow-2); display: flex; align-items: center; gap: 10px; font: 650 15px var(--sans); letter-spacing: -.02em; color: var(--oq-ink); text-decoration: none; }
+.dk-brand span { color: var(--oq-ink-2); }
+.dk-brand .mark { width: 22px; height: 22px; }
+.embedded .dk-brand { display: none; }
+@media (prefers-reduced-motion: reduce) { .bar .fill, .reveal .slides section .fragment { transition: none; } .caret { animation: none; } }
+
+/* code steps: reveal stacks each highlighted copy over the first; no reveal theme is loaded, so the wrapper is positioned here */
+.reveal pre { position: relative; }
+.reveal pre .hljs:not(:first-child).fragment { position: absolute; top: 0; left: 0; width: 100%; box-sizing: border-box; padding: 24px 30px; background: var(--oq-surface-1); border-radius: 22px; }
+.reveal pre.small { font-size: 20px; }

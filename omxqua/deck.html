@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-qua">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxqua · the slides</title>
+<meta name="description" content="omxqua in sixteen slides: why, how it's built, how you'd use it, live parts to press, families, agents, the honest edges and the roadmap.">
+<link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="../assets/omxqua/src/components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+<link rel="stylesheet" href="../assets/suite.css"><link rel="stylesheet" href="../assets/deck.css">
+<style>
+/* omxqua's own: live omxqua parts inside the slides. Each .live is its own omxqua root (family, theme, accent),
+   zoomed up so a 34 px control reads at slide size. The deck's .card / h3 / p rules are reset inside it. */
+.reveal .oqlive { zoom: 2; font-family: var(--oq-font); font-size: var(--oq-text); color: var(--oq-ink); line-height: 1.45; text-align: left; }
+/* suite.css marks placeholders with a global .fill (warn colour, !important); omxqua's .btn.fill is a filled button */
+.reveal .oqlive .btn.fill { color: var(--oq-on-accent) !important; }
+.reveal .oqlive:not(.fam-tile) { background: transparent; }
+.reveal .oqlive .card { padding: 0; border-radius: var(--oq-radius-card); background: var(--oq-surface-1); box-shadow: var(--oq-shadow-1); }
+.reveal .oqlive h3, .reveal .oqlive h4 { font-size: 1.02em; line-height: 1.25; margin: 0; letter-spacing: -.01em; text-wrap: initial; }
+.reveal .oqlive p { font-size: inherit; margin: 0; line-height: 1.45; }
+.reveal .oqlive b { font-weight: 600; }
+.reveal .oqlive .row-ctl { display: flex; align-items: center; gap: 10px; }
+.reveal .oqlive .bc-open h4 { font-size: 16px; color: #f4f4f5; }
+/* the Beacon normally floats at the top of the app; here it sits in the slide */
+.reveal .oqlive .beacon .bc-open { width: 236px; }
+.reveal .oqlive .beacon.demo { position: relative; top: auto; left: auto; right: auto; transform: none; display: block; z-index: 1; }
+.cardrow > * { min-width: 0; }
+.cardrow { display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; align-items: center; }
+.feel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 36px; }
+.feel .card { display: flex; flex-direction: column; gap: 18px; min-height: 330px; }
+.feel .stage { flex: 1; display: grid; place-items: center; }
+.feel .card > p { font-size: 22px !important; }
+.fams { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 30px; }
+.fams .oqlive { zoom: 1.7; background: var(--oq-surface-0); border-radius: 16px; padding: 16px; box-shadow: 0 0 0 1px var(--oq-line); display: grid; gap: 12px; }
+.fams .oqlive .nm { font: 600 15px var(--oq-font-display); letter-spacing: -.01em; }
+.fams .oqlive .mono { font: 11px var(--oq-font-mono); color: var(--oq-ink-2); }
+.fams .oqlive .wrap-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 36px; }
+.tiers .num { font-size: 112px; }
+.edges { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 26px; margin-top: 28px; }
+.edges .card { padding: 24px 28px; } .edges .card h3 { font-size: 28px; } .edges .card p { font-size: 22px; }
+.took { width: 100%; border-collapse: collapse; font-size: 27px; margin-top: 30px; }
+.took th { text-align: left; font: 600 17px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--oq-ink-2); padding: 0 18px 14px; }
+.took td { padding: 20px 18px; border-top: 1px solid var(--oq-line); color: var(--oq-ink-2); vertical-align: top; }
+.took td:first-child { color: var(--oq-ink); font-weight: 650; white-space: nowrap; }
+.took td:nth-child(2) b { color: var(--oq-accent); font-weight: 600; }
+.apps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.apps .box { flex-direction: column; align-items: flex-start; gap: 10px; min-height: 150px; }
+.base { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+</style>
+</head>
+<body>
+<a class="dk-brand" href="./"><span class="mark"></span><span>omxlabs ›</span> omxqua</a>
+<div class="reveal"><div class="slides">
+
+<!-- 1 · title -->
+<section>
+  <div class="eyebrow">omxqua · by omxlabs · the design language</div>
+  <h1>The best of Apple and Google, <span class="ac">and the taste to choose.</span></h1>
+  <p class="lede fragment rise">Google's solid surfaces and one soft shadow. Apple's springs and motion with weight. Three files and a skill your agent reads.</p>
+  <p class="note fragment rise">arrow keys, space or swipe · 16 slides · some of them you can press</p>
+</section>
+
+<!-- 2 · why -->
+<section>
+  <div class="eyebrow">Why</div>
+  <h2>Most apps feel like forms. <span class="two">Mine should feel like toys that do serious work.</span></h2>
+  <div class="cols r3" style="margin-top:40px">
+    <div class="card fragment rise"><span class="em">📋</span><h3>Forms are dull.</h3><p>A button that doesn't answer your finger feels broken, even when it works.</p></div>
+    <div class="card fragment rise"><span class="em">🫥</span><h3>Glass is hard to read.</h3><p>Blur behind every card costs contrast. Solid tones and one shadow stay clear.</p></div>
+    <div class="card fragment rise"><span class="em">🔁</span><h3>Every app starts over.</h3><p>One language for every app, phone and web, so they feel like one family.</p></div>
+  </div>
+  <p class="note" style="margin-top:28px">the why is the omxqua README's, in its own words</p>
+</section>
+
+<!-- 3 · what we took -->
+<section>
+  <div class="eyebrow">Borrowed honestly, rebuilt from scratch</div>
+  <h2>Take the best. <span class="two">Leave the rest.</span></h2>
+  <table class="took">
+    <tr><th>from</th><th>we took</th><th>we left</th></tr>
+    <tr class="fragment rise"><td>🍎 Apple</td><td><b>springs</b>, motion with weight, a live pill up top</td><td>the glass, the fonts, the names</td></tr>
+    <tr class="fragment rise"><td>🤖 Google</td><td><b>solid tonal surfaces</b>, one soft shadow, floating labels</td><td>the ripples</td></tr>
+    <tr class="fragment rise"><td>💻 the terminal</td><td><b>mono numbers</b>, the command behind each card (dev apps)</td><td>the green-on-black</td></tr>
+  </table>
+  <p class="note" style="margin-top:26px">README.md · our own names: Beacon, Nav island, Settle (LANGUAGE.md)</p>
+</section>
+
+<!-- 4 · architecture: the layers -->
+<section data-auto-animate>
+  <div class="eyebrow">How it's built</div>
+  <h2 data-id="h">Four layers. <span class="two">Each only adds to the one above.</span></h2>
+  <div class="layers" style="margin-top:30px">
+    <div class="box" data-id="l1">tokens.css <small>every --oq-* value: colour, radius, size, spring</small></div>
+    <div class="box" data-id="l2">components.css <small>buttons, cards, fields, the Beacon… scoped under .oq-root</small></div>
+    <div class="box" data-id="l3">families + skins <small>dev · travel · kids · money, and four skins</small></div>
+    <div class="box" data-id="l4">your app <small>one root class line, plus omxqua.js for the motion</small></div>
+  </div>
+  <p class="note fragment rise" style="margin-top:26px">plain HTML, CSS and JS · no framework, no build step</p>
+</section>
+
+<!-- 5 · architecture: one class travels -->
+<section data-auto-animate>
+  <div class="eyebrow">One class, all the way down</div>
+  <h2 data-id="h">Write <span class="ac">oq-family-money</span>. <span class="two">Everything changes.</span></h2>
+  <div class="flow" style="margin-top:40px">
+    <div class="box hot" data-id="l3">family<small>picks surfaces, accent, targets</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="l1">tokens<small>--oq-accent: #b8aaff</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="l2">components<small>read var(--oq-*) only</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="l4">your app<small>violet, 40 px targets, cards 16</small></div>
+  </div>
+  <div class="cols r3" style="margin-top:44px">
+    <p class="fragment rise"><b>No raw values.</b> Components never hard-code a colour, so a family can repaint them all.</p>
+    <p class="fragment rise"><b>No extra specificity.</b> Parts use <code>:where(.oq-root)</code>, so one class of yours overrides one.</p>
+    <p class="fragment rise"><b>Checked.</b> A test reads tokens.css and holds every family and skin to 4.5:1.</p>
+  </div>
+</section>
+
+<!-- 6 · architecture: who's drawn in it -->
+<section data-auto-animate>
+  <div class="eyebrow">Who's drawn in it</div>
+  <h2 data-id="h">One language. <span class="two">Many apps on top.</span></h2>
+  <div class="apps" style="margin-top:30px">
+    <div class="box hot" data-id="l4">omxlabs<small>this deck and every cover</small><span class="tag live"><i></i>uses it</span></div>
+    <div class="box" data-id="a2">Contoso<small>the showcase app, every theme</small><span class="tag live"><i></i>uses it</span></div>
+    <div class="box" data-id="a3">your app<small>an agent with the skill</small><span class="tag live"><i></i>ready</span></div>
+    <div class="box" data-id="a4">omxplorer<small>its own Liquid theme today</small><span class="tag prog"><i></i>next</span></div>
+  </div>
+  <div class="base">
+    <div class="box dim" data-id="l3">families + skins</div>
+    <div class="box dim" data-id="l2">components.css</div>
+    <div class="box dim" data-id="l1">tokens.css</div>
+  </div>
+  <p class="note" style="margin-top:24px">the suite's five accents are omxqua's night app accents (suite.css) · omxplorer's theme: mojo-ui CLAUDE.md</p>
+</section>
+
+<!-- 7 · the code: the root -->
+<section>
+  <div class="eyebrow">How you'd use it · 1</div>
+  <h2 style="font-size:52px">Four links, <span class="ac">then one line of classes.</span></h2>
+  <div class="file">README.md and AGENTS.md §1 · real markup</div>
+  <pre class="small"><code class="language-html" data-trim data-line-numbers="1-4|6|7|8|9|10">&lt;link rel="stylesheet" href="/static/omxqua/src/fonts.css"&gt;
+&lt;link rel="stylesheet" href="/static/omxqua/src/tokens.css"&gt;
+&lt;link rel="stylesheet" href="/static/omxqua/src/components.css"&gt;
+&lt;script src="/static/omxqua/src/omxqua.js" defer&gt;&lt;/script&gt;
+
+&lt;html class="oq-root
+             oq-night
+             oq-family-dev
+             oq-app-violet
+             oq-top"&gt;</code></pre>
+  <div class="cols r3" style="margin-top:18px;font-size:22px">
+    <p><b>oq-root</b> scopes it · <b>oq-night</b> or oq-light</p>
+    <p><b>oq-family-dev</b> · travel · kids · money</p>
+    <p><b>oq-app-violet</b> one accent · <b>oq-top</b> the shell</p>
+  </div>
+</section>
+
+<!-- 8 · the code: a card -->
+<section>
+  <div class="eyebrow">How you'd use it · 2</div>
+  <h2 style="font-size:52px">A card, <span class="ac">in real markup.</span></h2>
+  <div class="cardrow">
+    <div>
+      <div class="file">AGENTS.md §3 · the card and buttons, combined</div>
+      <pre class="small"><code class="language-html" data-trim data-line-numbers="1|2-3|4-7|8-9">&lt;section class="card"&gt;
+  &lt;div class="card-h"&gt;&lt;h3&gt;Downloads&lt;/h3&gt;
+    &lt;span class="sp"&gt;&lt;/span&gt;&lt;span class="badge"&gt;main&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="card-b"&gt;
+    &lt;button class="btn fill"&gt;Publish 0.3.0&lt;/button&gt;
+    &lt;button class="btn tonal"&gt;Preview&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="src"&gt;pypistats recent omxcore
+    &lt;button class="cp"&gt;copy&lt;/button&gt;&lt;/div&gt;
+&lt;/section&gt;</code></pre>
+    </div>
+    <div>
+      <div class="oqlive oq-root oq-night oq-family-dev oq-app-violet" style="background:transparent">
+        <div class="card">
+          <div class="card-h"><h3>Downloads</h3><span class="sp"></span><span class="badge">main</span></div>
+          <div class="card-b" style="display:flex;gap:8px"><button class="btn fill">Publish 0.3.0</button><button class="btn tonal">Preview</button></div>
+          <div class="src">pypistats recent omxcore <button class="cp">copy</button></div>
+        </div>
+      </div>
+      <p class="note" style="margin-top:22px">live: the same markup, press it · one filled button per card, with a verb</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · the code: tokens -->
+<section>
+  <div class="eyebrow">How you'd use it · 3</div>
+  <h2 style="font-size:52px">Your CSS uses tokens. <span class="two">Never a raw value.</span></h2>
+  <div class="file">src/tokens.css · real lines, trimmed · then yours</div>
+  <pre class="small"><code class="language-css" data-trim data-line-numbers="1-5|6|7|9-12">.oq-root {
+  --oq-radius-card: 14px;  /* families set 12 / 16 / 22 */
+  --oq-target: 36px;       /* families set 34 / 40 / 48 */
+  --oq-spring-fast: linear(0, 0.02, 0.071, 0.142, … 1.023, … 1); /* k380 c30 */
+}
+.oq-family-dev.oq-night { --oq-surface-0:#0b0b0d; --oq-surface-1:#151518; --oq-ink:#ededef; … }
+.oq-night.oq-app-violet { --oq-accent: #b39dff; --oq-on-accent: #0b0b0d; }
+
+/* yours: a new part, built only from tokens */
+.receipt { background: var(--oq-surface-1); border-radius: var(--oq-radius-card);
+           box-shadow: var(--oq-shadow-1); min-height: var(--oq-target);
+           transition: transform var(--oq-spring-fast-dur) var(--oq-spring-fast); }</code></pre>
+  <p class="note" style="margin-top:18px">springs are real spring curves written as CSS linear(): stiffness and damping in the comment</p>
+</section>
+
+<!-- 10 · feel it (live) -->
+<section>
+  <div class="eyebrow">Feel it · these are live</div>
+  <h2>Press. Flip. <span class="ac">Tap the pill.</span></h2>
+  <div class="feel">
+    <div class="card"><div class="stage"><div class="oqlive oq-root oq-night oq-family-dev oq-app-violet" style="zoom:2.4"><button class="btn fill">Hold me</button></div></div>
+      <p><b>The press.</b> Squashes on pointer-down, springs back on release. omxqua.js does it for every tappable thing.</p></div>
+    <div class="card"><div class="stage"><div class="oqlive oq-root oq-night oq-family-dev oq-app-violet" style="zoom:2.6"><div class="row-ctl"><button class="switch on" aria-pressed="true" aria-label="Email me on release" data-flip></button>Email me</div></div></div>
+      <p><b>The switch.</b> Hold it: the knob stretches toward where it's going, then slides and settles.</p></div>
+    <div class="card"><div class="stage"><div class="oqlive oq-root oq-night oq-family-dev" style="zoom:1.55">
+        <div class="beacon demo" id="bcn">
+          <div class="bc-compact"><span class="live"></span>tests<span class="mono">51 passed</span></div>
+          <div class="bc-open"><button class="x" aria-label="Close">×</button><h4>node --test tests/</h4><div class="sub2">contrast + csp · every family and skin</div>
+            <div class="big">51 / 51</div><div class="bar2"><i style="width:100%"></i></div>
+            <div class="bacts"><button class="bbtn pri">Open report</button><button class="bbtn">Run again</button></div></div>
+        </div></div></div>
+      <p><b>The Beacon.</b> One live thing in a black pill. Tap: it grows into a card, on a spring that doesn't overshoot.</p></div>
+  </div>
+  <p class="note" style="margin-top:22px">real components.css and omxqua.js · the Beacon's numbers are this repo's own test run · reduced motion turns springs into fades</p>
+</section>
+
+<!-- 11 · families -->
+<section>
+  <div class="eyebrow">Families and skins</div>
+  <h2>One feel. <span class="two">Four personalities.</span></h2>
+  <div class="fams">
+    <div class="oqlive fam-tile oq-root oq-night oq-family-dev oq-app-violet"><span class="nm">Developer · Graphite</span><span class="mono">34 px · cards 12 · mono</span><div class="wrap-row"><button class="btn fill">Publish</button><button class="chip on">linux</button></div><div class="row-ctl"><button class="switch on" data-flip aria-label="toggle"></button>tools, consoles</div></div>
+    <div class="oqlive fam-tile oq-root oq-light oq-family-travel"><span class="nm">Travel · Coast</span><span class="mono">40 px · cards 16 · light</span><div class="wrap-row"><button class="btn fill">New trip</button><button class="chip on">Stays</button></div><div class="row-ctl"><button class="switch on" data-flip aria-label="toggle"></button>trips, places</div></div>
+    <div class="oqlive fam-tile oq-root oq-night oq-family-kids"><span class="nm">Kids · Playground</span><span class="mono">48 px · cards 22</span><div class="wrap-row"><button class="btn fill">I did it!</button><button class="chip on">★ 3</button></div><div class="row-ctl"><button class="switch on" data-flip aria-label="toggle"></button>children's apps</div></div>
+    <div class="oqlive fam-tile oq-root oq-night oq-family-money"><span class="nm">Money · Ledger</span><span class="mono">40 px · amounts in mono</span><div class="wrap-row"><button class="btn fill">Pay €1,840</button><button class="chip on">Food</button></div><div class="row-ctl"><button class="switch on" data-flip aria-label="toggle"></button>accounts, budgets</div></div>
+  </div>
+  <p class="note" style="margin-top:24px">live, each its own root · skins: Azulejo and Golden hour (travel), Sticker and Crayon (kids) · AGENTS.md §2, tokens.css</p>
+</section>
+
+<!-- 12 · agents -->
+<section>
+  <div class="eyebrow">Built for agents</div>
+  <h2>You describe the screen. <span class="ac">Your agent builds it.</span></h2>
+  <div class="cols" style="grid-template-columns:1.25fr 1fr;align-items:start;margin-top:20px">
+    <div class="term" data-type><div class="tc"><span class="p">›</span> /plugin install omxqua --marketplace abhisheksreesaila/omxqua</div><div class="c"># then just ask</div><div class="tc"><span class="p">›</span> a trip planner home screen in omxqua</div><div><span class="p">→</span> read AGENTS.md first, never guess a class</div><div><span class="p">→</span> pick a family: oq-family-travel + oq-skin-azulejo</div><div><span class="p">→</span> link fonts · tokens · components · omxqua.js</div><div class="ok">✓ check at 390 px and desktop, night and light</div></div>
+    <div>
+      <p class="fragment rise"><b>Claude Code:</b> the plugin above, one line.</p>
+      <p class="fragment rise"><b>Codex, Cursor, any skills folder:</b> copy <code>skills/omxqua/</code>.</p>
+      <p class="fragment rise"><b>Shipping:</b> <code>bin/omxqua-sync static/ --ref v0.1.5</code> vendors it, so nothing loads from a third party.</p>
+      <p class="note">the command is the README's · the steps are what skills/omxqua/SKILL.md tells the agent to do</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · motion budget -->
+<section>
+  <div class="eyebrow">The motion budget</div>
+  <h2>The more often it happens, <span class="two">the less it moves.</span></h2>
+  <div class="tiers">
+    <div class="fragment rise"><div class="num">280<small>ms</small></div><p><b>Settle.</b> Panels and sheets: fade and a 12 px rise. No bounce.</p></div>
+    <div class="fragment rise"><div class="num">220<small>ms</small></div><p><b>Gentle.</b> Menus, popovers, toasts: in softly, out in 150 ms.</p></div>
+    <div class="fragment rise"><div class="num">0<small>ms</small></div><p><b>None.</b> Anything repeated many times a minute, live data, the keyboard.</p></div>
+  </div>
+  <p class="lede fragment rise" style="font-size:30px;margin-top:20px">Springs are only for small things under your finger. The press squashes <b>0.90</b> small, <b>0.96</b> medium, <b>0.985</b> large, so it feels the same at every size.</p>
+  <p class="note">AGENTS.md §5 · src/omxqua.js</p>
+</section>
+
+<!-- 14 · honest edges -->
+<section>
+  <div class="eyebrow">The honest edges</div>
+  <h2>What it isn't, <span class="two">yet.</span></h2>
+  <div class="edges">
+    <div class="card fragment rise"><h3>🪟 One bit of glass.</h3><p>The nav pill and tab bar are frosted, so the page shows through. Every card, menu and dialog stays solid.</p></div>
+    <div class="card fragment rise"><h3>🌐 Web only, for now.</h3><p>It's CSS and JS. omxplorer and the other omxcode apps still draw with their own Mojo themes.</p></div>
+    <div class="card fragment rise"><h3>🧩 Some glue is still inline.</h3><p>Dialog and sheet open/close and menu placement live in the showcase, not in omxqua.js.</p></div>
+    <div class="card fragment rise"><h3>🔍 One contrast gap.</h3><p>The field outline is 1.3:1 against its card, below the 3:1 a control's edge should have.</p></div>
+  </div>
+  <p class="note" style="margin-top:22px">LANGUAGE.md (glass, 2026-10-21; Reviews, 2026-10-24) · AGENTS.md §9 · mojo-ui themes/ · pre-1.0: v0.1.5, so pin a tag</p>
+</section>
+
+<!-- 15 · roadmap -->
+<section>
+  <div class="eyebrow">Where it's going</div>
+  <h2>From a language <span class="ac">to every app in the lab.</span></h2>
+  <div class="road3">
+    <div><span class="tag live"><i></i>Now</span><ul><li>4 families, 4 skins, v0.1.5</li><li>tokens, components, omxqua.js</li><li>The skill and Claude Code plugin</li><li>51 checks: contrast and CSP</li></ul></div>
+    <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>v0.1.6: the new cover, chips, coloured icons</li><li>Notes family into tokens.css</li><li>Dialog and sheet glue packaged</li></ul></div>
+    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>A Health family</li><li>omxplorer drawn in omxqua</li><li>omxcode apps on the same tokens (an idea)</li></ul></div>
+  </div>
+  <p class="note" style="margin-top:24px">CHANGELOG.md "Unreleased" · LANGUAGE.md (notes, health) · AGENTS.md §9</p>
+</section>
+
+<!-- 16 · the lab + read on -->
+<section>
+  <div class="eyebrow">omxlabs</div>
+  <h2>The lab's look, <span class="two">written down.</span></h2>
+  <div class="cols r4" style="margin-top:30px">
+    <div class="card px-plorer"><h3 style="color:var(--px)">omxplorer</h3><p>the flagship: ask your data in a sentence</p></div>
+    <div class="card px-core"><h3 style="color:var(--px)">omxcore</h3><p>the GPU engine under it</p></div>
+    <div class="card px-code"><h3 style="color:var(--px)">omxcode</h3><p>write once, native everywhere</p></div>
+    <div class="card px-console"><h3 style="color:var(--px)">omxconsole</h3><p>local AI, on the same GPU</p></div>
+  </div>
+  <p class="lede" style="margin-top:40px;font-size:30px">Read on: <a href="https://github.com/abhisheksreesaila/omxqua" target="_top">GitHub</a> · <a href="https://abhisheksreesaila.github.io/omxqua/docs/showcase.html" target="_top">the showcase</a> · <a href="https://github.com/abhisheksreesaila/omxqua/blob/main/AGENTS.md" target="_top">AGENTS.md</a> · <a href="../" target="_top">omxlabs</a></p>
+</section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/notes/notes.js"></script>
+<script src="../assets/deck.js"></script>
+<script src="../assets/omxqua/src/omxqua.js"></script>
+<script>
+// the live demos' glue (omxqua leaves toggling .on to the app): switches flip, chips toggle, the Beacon opens and folds
+document.querySelectorAll("[data-flip]").forEach(s => s.onclick = () => { s.classList.toggle("on"); s.setAttribute("aria-pressed", s.classList.contains("on")); });
+document.querySelectorAll(".oqlive .chip").forEach(c => c.onclick = () => c.classList.toggle("on"));
+const bcn = document.getElementById("bcn");
+const fit = a => Omxqua.sizeBeacon(bcn, a);
+bcn.onclick = e => { if (e.target.closest(".x")) { bcn.classList.remove("open"); fit(true); e.stopPropagation(); return; } if (!bcn.classList.contains("open")) { bcn.classList.add("open"); fit(true); } };
+Reveal.on("ready", () => requestAnimationFrame(() => fit(false)));
+Reveal.on("slidechanged", e => { if (e.currentSlide.contains(bcn)) requestAnimationFrame(() => fit(false)); });
+</script>
+</body></html>

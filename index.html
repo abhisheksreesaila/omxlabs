@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-labs" data-here="labs" data-root=".">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxlabs · GPU-native, agent-native software, written in Mojo</title>
+<meta name="description" content="omxlabs builds GPU-native, agent-native software in Mojo. The flagship, omxplorer, answers a million rows in under a millisecond, and every button is a tool your AI agent can call.">
+<meta property="og:title" content="omxlabs · Every kind of data. One GPU. Built for people and agents.">
+<link rel="stylesheet" href="assets/omxqua/src/fonts.css"><link rel="stylesheet" href="assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="assets/omxqua/src/components.css"><link rel="stylesheet" href="assets/suite.css">
+<style>
+/* omxlabs' own: the suite's five colours in the headline, the "built from" strip under the flagship, the comparison table */
+.spectrum { display: flex; height: 4px; max-width: 260px; margin: 26px auto 0; border-radius: 4px; overflow: hidden; }
+.spectrum i { flex: 1; background: var(--px); }
+.built { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 18px; }
+.built a { display: inline-flex; align-items: center; gap: 9px; padding: 9px 15px; border-radius: 999px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); text-decoration: none; font: 500 14px var(--sans); color: var(--ink2); transition: box-shadow .2s, color .2s; }
+.built a b { color: var(--px); font-weight: 650; }
+.built a i { width: 8px; height: 8px; border-radius: 50%; background: var(--px); }
+.built a:hover { color: var(--ink); box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 60%, var(--line)); }
+.fam.big a { padding: 26px 22px 22px; min-height: 230px; }
+.fam.big b { font-size: 24px; }
+.vs { margin-top: 48px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); overflow: hidden; text-align: left; }
+.vs > div { display: grid; grid-template-columns: 170px 1fr 1fr; gap: 20px; padding: 18px 24px; border-top: 1px solid var(--oq-line-2); font-size: 15.5px; color: var(--ink2); align-items: start; }
+.vs > div:first-child { border-top: 0; background: var(--oq-surface-2); font: 600 11.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding-top: 13px; padding-bottom: 13px; }
+.vs > div > b { color: var(--ink); font-weight: 650; }
+.vs > div > span:last-child { color: var(--ink); }
+.vs > div.edge > span:last-child { color: var(--oq-warn); }
+@media (max-width: 900px) { .vs > div { grid-template-columns: 1fr 1fr; } .vs > div > b { grid-column: 1 / -1; } .vs > div:first-child > span:first-child { display: none; } }
+</style>
+</head>
+<body id="top">
+<nav class="top" data-cta="Meet omxplorer" data-cta-href="omxplorer/" data-gh="https://github.com/abhisheksreesaila"></nav>
+
+<!-- hero -->
+<section class="hero"><div class="wrap center">
+  <div class="eyebrow">omxlabs · GPU-native · agent-native · written in Mojo <span class="tag live"><i></i>public alpha</span></div>
+  <h1 class="rise"><span>Every</span> <span>kind</span> <span>of</span> <span>data.</span> <span>One</span> <span>GPU.</span> <span class="two">Built</span> <span class="two">for</span> <span class="two">people</span> <span class="two">and</span> <span class="two">agents.</span></h1>
+  <div class="spectrum"><i class="px-plorer"></i><i class="px-core"></i><i class="px-code"></i><i class="px-console"></i><i class="px-qua"></i></div>
+  <p class="lede">We build software that runs serious data and AI work on <b>the GPU you already own</b>, and that an AI agent can use <b>as easily as you can</b>. Our flagship is <b>omxplorer</b>.</p>
+  <div class="ctas"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="#slides">▶ Watch the 2-minute slides</a><a class="more" href="https://github.com/abhisheksreesaila">GitHub</a></div>
+  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxplorer · orders_1m.csv · 1,000,000 rows</span></div>
+    <video src="assets/img/clip-sentence-web.mp4" autoplay muted loop playsinline poster="assets/img/omxplorer-sentence-web.jpg"></video>
+    <span class="bdg">median per group, 1M rows: <b>6.4 ms</b> · RTX 3090</span></figure>
+  <div class="built">
+    <a class="px-core" href="omxcore/"><i></i>Powered by <b>omxcore</b></a>
+    <a class="px-code" href="omxcode/"><i></i>Built with <b>omxcode</b></a>
+    <a class="px-console" href="omxconsole/"><i></i>Local AI by <b>omxconsole</b></a>
+    <a class="px-qua" href="omxqua/"><i></i>The look: <b>omxqua</b></a>
+  </div>
+</div></section>
+
+<!-- numbers: one per product -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <h2>Your own hardware <span class="two">is enough.</span></h2>
+  <div class="nums">
+    <div class="px-plorer"><b style="color:var(--px)">0.6<small>ms</small></b><span>omxplorer: a chart over 1 million rows</span></div>
+    <div class="px-core"><b style="color:var(--px)">3.15<small>s</small></b><span>omxcore: all 22 TPC-H queries at SF10 (DuckDB 5.08 s)</span></div>
+    <div class="px-code"><b style="color:var(--px)">1<small>file</small></b><span>omxcode: one app.mojo, native on Linux, web, Android, Mac</span></div>
+    <div class="px-console"><b style="color:var(--px)">8</b><span>omxconsole: model architectures ported and serving locally</span></div>
+  </div>
+  <p class="srcline">RTX 3090 · omxcode README (chart 0.5–0.7 ms) · omxcore docs/bench/m2s-engine.csv (v0.6.0; DuckDB is faster on 12 of the 22 queries, the total is ours) · omxconsole docs/PORTING.md (text models) · iPhone builds but hasn't run on a phone</p>
+</div></section>
+
+<!-- five things = the five products -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <h2>One flagship. <span class="two">Four breakthroughs under it.</span></h2>
+  <p class="lede">Each one stands on its own. Each has a cover page and a two-minute deck.</p>
+  <div class="fam big"></div>
+</div></section>
+
+<!-- slides -->
+<section id="slides" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">The slides · 12 · about two minutes</div>
+  <h2>The lab, <span class="two">in twelve slides.</span></h2>
+  <p class="lede">Click the slides, then use the arrow keys. Each product has its own deck on its page, with the code.</p>
+  <div class="deck"><div class="bar"><span class="dot"></span><span>omxlabs · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
+    <iframe src="deck.html" title="omxlabs, the slides" loading="lazy" allowfullscreen></iframe></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="2">The stack</button><button data-slide="4">omxplorer</button><button data-slide="5">omxcore</button><button data-slide="6">omxcode</button><button data-slide="7">omxconsole</button><button data-slide="8">omxqua</button><button data-slide="10">Roadmap</button></div>
+</div></section>
+
+<!-- today vs omxlabs -->
+<section><div class="wrap center rv">
+  <h2>Today's stack <span class="two">vs omxlabs.</span></h2>
+  <div class="vs">
+    <div><span></span><span>Today</span><span>omxlabs</span></div>
+    <div><b>Languages</b><span>JavaScript for the screen, Python for the data, C++ or CUDA for speed, glue between.</span><span>One language, Mojo, from the button to the GPU kernel.</span></div>
+    <div><b>The GPU</b><span>Idle, or behind a copy to the CPU and back.</span><span>The GPU does the work. On Linux its frames go straight to the window.</span></div>
+    <div><b>Big data</b><span>A warehouse, a cluster, a bill.</span><span>100M rows on one workstation: 30 ms a dashboard click (goal 38).</span></div>
+    <div><b>Agents</b><span>Screenshots, pixel coordinates, guesses.</span><span>Every button is a tool (MCP). A disabled button is no tool.</span></div>
+    <div class="edge"><b>The honest edge</b><span>Mature ecosystems; every GPU vendor; years of polish.</span><span>NVIDIA today; iPhone builds only; public alpha by one founder.</span></div>
+  </div>
+</div></section>
+
+<!-- agents -->
+<section id="agents" style="padding-top:40px"><div class="wrap center rv">
+  <h2>Every tile <span class="ac">is a tool.</span></h2>
+  <p class="lede">Any omxcode app is an MCP server. What a person can tap, an agent can call, and nothing more. omxplorer's charts, omxconsole's console, even a panel an agent builds.</p>
+  <div class="pair">
+    <div class="pane"><div class="bar">A real session with omxplorer · no screenshots</div><pre><span class="k">→</span> choose-a-file  {<span class="s">"path"</span>: <span class="s">"orders_1m.csv"</span>}
+<span class="k">→</span> create-table
+<span class="k">→</span> insert-chart
+<span class="k">→</span> ask  {<span class="s">"text"</span>: <span class="s">"revenue by product, largest first, top 5"</span>}
+<span class="c">← Now: chart0: 0.6 ms</span></pre></div>
+    <div class="pane" style="display:grid;align-content:center;gap:16px;padding:24px"><b style="font-size:18px">Give any omxcode app to Claude Code:</b>
+      <span class="cmd">scripts/agent.sh omxplorer<button data-copy="scripts/agent.sh omxplorer">Copy</button></span>
+      <a class="more" href="https://github.com/abhisheksreesaila/omxcode/blob/main/docs/agent.md">Read the agent docs</a>
+      <div class="srcline" style="margin:0">omxcode README · docs/agent.md</div></div>
+  </div>
+</div></section>
+
+<!-- now · next · later -->
+<section><div class="wrap center rv">
+  <h2>Live now, <span class="two">and what's next.</span></h2>
+  <div class="road">
+    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li><b>omxplorer</b>: sheets, pivots, charts, 100M-row files</li><li><b>omxcore</b> 834ef9a: CTEs, subqueries, QUALIFY</li><li><b>omxcode</b>: five hosts and an agent host</li><li><b>omxconsole</b>: local, OpenAI-compatible models</li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>omxplorer in your browser</b>, live on omxlabs.tech <span class="tbd">(hosting not set up yet)</span></li><li>omxplorer's Ask, answered by omxconsole</li><li>Images, video and audio become rows</li></ul></div>
+    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Apple GPUs</li><li>Edit video with a query</li></ul></div>
+  </div>
+</div></section>
+
+<!-- about -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">About omxlabs</div>
+  <h2>A gaming GPU <span class="two">should run serious work.</span></h2>
+  <p class="lede">We believe a workstation or a MacBook should run serious analytics and AI locally, and every app should be as easy for an agent to use as for a person.</p>
+  <p class="body">Built by <a href="https://github.com/abhisheksreesaila">Abhishek Sreesaila</a>, who teaches GPU programming every week on <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a>.</p>
+</div></section>
+
+<div class="band"><h2>See a million rows answer <span class="two">in under a millisecond.</span></h2><div class="ctas" style="justify-content:center"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="#slides">Watch the slides</a></div></div>
+<footer><div class="wrap fine"><span>omxlabs · <a href="https://github.com/abhisheksreesaila">GitHub</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a> · <a href="#" class="tbd">X [link]</a></span><span>built in Mojo · drawn in omxqua</span></div></footer>
+<script src="assets/suite.js"></script>
+</body></html>

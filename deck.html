@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-labs">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxlabs · the slides</title>
+<meta name="description" content="omxlabs in twelve slides: why, the stack, the five products in their colours, agents, and the roadmap.">
+<link rel="stylesheet" href="assets/omxqua/src/fonts.css"><link rel="stylesheet" href="assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="assets/omxqua/src/components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+<link rel="stylesheet" href="assets/suite.css"><link rel="stylesheet" href="assets/deck.css">
+<style>
+/* omxlabs' own: a product slide wears its product's colour; the stack's boxes carry theirs */
+.reveal section[class*="px-"] { --oq-accent: var(--px); }
+.box[class*="px-"] { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--px) 55%, var(--oq-line)); }
+.box[class*="px-"] > span:first-child { color: var(--px); }
+.box.flag { padding: 30px 30px; font-size: 32px; }
+.spectrum { display: flex; height: 6px; width: 340px; border-radius: 6px; overflow: hidden; margin: 6px 0 34px; }
+.spectrum i { flex: 1; background: var(--px); }
+.prod { display: grid; grid-template-columns: 1fr 1.1fr; gap: 50px; align-items: center; }
+.prod .shot img { max-height: 520px; object-fit: cover; object-position: top left; }
+.reveal .go { font: 600 22px var(--mono); color: var(--oq-accent); }
+</style>
+</head>
+<body>
+<a class="dk-brand" href="./"><span class="mark"></span>omxlabs</a>
+<div class="reveal"><div class="slides">
+
+<!-- 1 · title -->
+<section>
+  <div class="eyebrow">omxlabs · GPU-native · agent-native · written in Mojo</div>
+  <h1>Every kind of data. One GPU. <span class="two">Built for people and agents.</span></h1>
+  <div class="spectrum"><i class="px-plorer"></i><i class="px-core"></i><i class="px-code"></i><i class="px-console"></i><i class="px-qua"></i></div>
+  <p class="note fragment rise">arrow keys, space or swipe · 12 slides · each product has its own deck with the code</p>
+</section>
+
+<!-- 2 · why -->
+<section>
+  <div class="eyebrow">Why</div>
+  <h2>Your own hardware <span class="two">is enough.</span></h2>
+  <div class="cols r3" style="margin-top:40px">
+    <div class="card fragment rise"><span class="em">🎮</span><h3>A GPU is already there.</h3><p>A gaming card or a workstation can answer a million rows in under a millisecond. Most software leaves it idle.</p></div>
+    <div class="card fragment rise"><span class="em">🤖</span><h3>Agents are the new users.</h3><p>They drive apps by screenshot and guesswork. Apps should hand them tools instead.</p></div>
+    <div class="card fragment rise"><span class="em">🧵</span><h3>Too many languages.</h3><p>JavaScript, Python, C++ and CUDA, glued together. Every seam costs speed and time.</p></div>
+  </div>
+</section>
+
+<!-- 3 · the stack -->
+<section data-auto-animate>
+  <div class="eyebrow">The stack</div>
+  <h2 data-id="h">One flagship, <span class="two">four breakthroughs under it.</span></h2>
+  <div class="layers" style="margin-top:26px">
+    <div class="box flag px-plorer" data-id="plorer"><span>omxplorer</span><small>the flagship: ask your data in a sentence</small></div>
+    <div class="cols r2" style="gap:12px">
+      <div class="box px-code" data-id="code"><span>omxcode</span><small>builds it</small></div>
+      <div class="box px-qua" data-id="qua"><span>omxqua</span><small>the look</small></div>
+    </div>
+    <div class="cols r2" style="gap:12px">
+      <div class="box px-core" data-id="core"><span>omxcore</span><small>powers it</small></div>
+      <div class="box px-console" data-id="console"><span>omxconsole</span><small>local AI</small></div>
+    </div>
+    <div class="box" data-id="gpu"><span>Your GPU</span><small>NVIDIA today · CPU fallback</small></div>
+  </div>
+</section>
+
+<!-- 4 · a question travels -->
+<section data-auto-animate>
+  <div class="eyebrow">A question, as it runs</div>
+  <h2 data-id="h">You ask. <span class="two">The whole lab answers.</span></h2>
+  <div class="flow" style="margin-top:40px">
+    <div class="box px-plorer" data-id="plorer"><span>omxplorer</span><small>“median revenue by product”</small></div><span class="arrow"></span>
+    <div class="box px-core" data-id="core"><span>omxcore</span><small>the query, on the GPU</small></div><span class="arrow"></span>
+    <div class="box" data-id="gpu"><span>GPU</span><small>1M rows, 6.4 ms</small></div><span class="arrow"></span>
+    <div class="box px-code" data-id="code"><span>omxcode</span><small>new bars, drawn natively</small></div>
+  </div>
+  <div class="cols r2" style="margin-top:40px">
+    <div class="box px-console dim" data-id="console"><span>omxconsole</span><small>next: answers “why?” on the same GPU</small></div>
+    <div class="box px-qua" data-id="qua"><span>omxqua</span><small>the bars spring, the screen stays calm</small></div>
+  </div>
+</section>
+
+<!-- 5 · omxplorer -->
+<section class="px-plorer">
+  <div class="prod">
+    <div>
+      <div class="eyebrow">omxplorer · the flagship</div>
+      <h2>Ask your data <span class="ac">in a sentence.</span></h2>
+      <p>The chart's title is the chart. Tap a word, or type “median”, and a million rows are recomputed on the GPU.</p>
+      <div class="num">0.6<small>ms</small></div><p class="note">a chart over 1M rows · RTX 3090 · omxcode README</p>
+      <p class="go">omxlabs.tech/omxplorer ›</p>
+    </div>
+    <div class="shot"><img src="assets/img/omxplorer-sentence-web.jpg" alt="omxplorer's sheet with a chart sentence"></div>
+  </div>
+</section>
+
+<!-- 6 · omxcore -->
+<section class="px-core">
+  <div class="eyebrow">omxcore · powers it</div>
+  <h2>SQL on your CPU <span class="ac">and your GPU.</span></h2>
+  <div class="term" data-type style="min-height:0;font-size:21px"><div class="tc"><span class="p">$</span> mx sql "SELECT l_returnflag, sum(l_extendedprice) AS revenue FROM 'lineitem.parquet' GROUP BY l_returnflag"</div><div class="ok">{"rows":[["A",…],["N",…],["R",…]], …}</div></div>
+  <div class="bars" style="margin-top:30px">
+    <div class="bar"><span class="name">omxcore</span><div class="track"><div class="fill me" style="--w:22%"></div></div><span class="val">3.15 s</span></div>
+    <div class="bar"><span class="name">DuckDB</span><div class="track"><div class="fill" style="--w:35%"></div></div><span class="val">5.08 s</span></div>
+    <div class="bar"><span class="name">Polars</span><div class="track"><div class="fill" style="--w:100%"></div></div><span class="val">14.40 s</span></div>
+  </div>
+  <p class="note" style="margin-top:22px">all 22 TPC-H queries at SF10, v0.6.0 · docs/bench/m2s-engine.csv · DuckDB is faster on 12 of the 22; the total is ours</p>
+</section>
+
+<!-- 7 · omxcode -->
+<section class="px-code">
+  <div class="prod">
+    <div>
+      <div class="eyebrow">omxcode · builds it</div>
+      <h2>Write it once. <span class="ac">Native everywhere.</span></h2>
+      <p>Two functions, <b>view()</b> and <b>update()</b>. Linux, the web, Android and Mac draw it with their own widgets. iPhone builds.</p>
+      <p>The GPU code sits in the same file. And every app is an MCP server.</p>
+      <p class="go">omxlabs.tech/omxcode ›</p>
+    </div>
+    <pre><code class="language-python" data-trim data-line-numbers="1-3|5-7|9-13">struct Main(App):
+    var name: String
+    var clicks: Int
+
+    def update(mut self, event: Event):
+        if event.message == GREET:
+            self.clicks += 1
+
+    def view(self) -> View:
+        return VStack(
+            Text("Hello, " + self.name, style=TITLE),
+            Button("Greet", on_tap=GREET, style=PROMINENT),
+        )</code></pre>
+  </div>
+</section>
+
+<!-- 8 · omxconsole -->
+<section class="px-console">
+  <div class="eyebrow">omxconsole · local AI</div>
+  <h2>Your GPU, <span class="ac">a private model server.</span></h2>
+  <div class="cols r2" style="align-items:start">
+    <div class="term" data-type style="min-height:0"><div class="tc"><span class="p">$</span> pixi run mxc serve qwen2.5-0.5b</div><div>endpoint  <span class="p">http://127.0.0.1:11435/v1</span></div><div class="c"># any OpenAI client works: point base_url here</div></div>
+    <div>
+      <p class="fragment rise"><b>OpenAI-compatible.</b> Your apps and agents talk to it as they would to the cloud.</p>
+      <p class="fragment rise"><b>Ports new models.</b> 8 architectures MAX couldn't run, ported and serving (text models).</p>
+      <p class="fragment rise"><b>Private.</b> Prompts stay on your machine. Linux + NVIDIA today.</p>
+      <p class="note">mxstudio · mxconsole/settings.py, docs/PORTING.md</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · omxqua -->
+<section class="px-qua">
+  <div class="prod">
+    <div>
+      <div class="eyebrow">omxqua · the look</div>
+      <h2>Google's surfaces. <span class="ac">Apple's springs.</span></h2>
+      <p>The design language this site is drawn in. Solid tonal surfaces, one soft shadow, buttons that squish and spring back, one accent per product.</p>
+      <p class="note">4 families · 4 skins · omxqua tokens.css · omxplorer moves onto it next</p>
+      <p class="go">omxlabs.tech/omxqua ›</p>
+    </div>
+    <div class="shot"><img src="assets/img/omxqua-showcase.png" alt="omxqua's showcase, night"></div>
+  </div>
+</section>
+
+<!-- 10 · agents -->
+<section>
+  <div class="eyebrow">Built for agents</div>
+  <h2>Every tile <span class="ac">is a tool.</span></h2>
+  <div class="cols" style="grid-template-columns:1.15fr 1fr;align-items:start;margin-top:10px">
+    <div class="term" data-type style="min-height:0"><div class="tc"><span class="p">$</span> scripts/agent.sh omxplorer</div><div><span class="p">→</span> choose-a-file {"path": "orders_1m.csv"}</div><div><span class="p">→</span> insert-chart</div><div><span class="p">→</span> ask {"text": "revenue by product, top 5"}</div><div class="ok">← Now: chart0: 0.6 ms</div></div>
+    <div>
+      <p class="fragment rise"><b>No screenshots.</b> A button's tag is its tool's name.</p>
+      <p class="fragment rise"><b>The screen is the permission.</b> A disabled button is no tool.</p>
+      <p class="fragment rise"><b>Any omxcode app.</b> omxplorer, the console, a panel an agent builds as data.</p>
+      <p class="note">a real session · omxcode README, docs/agent.md</p>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · roadmap -->
+<section>
+  <div class="eyebrow">Where it's going</div>
+  <h2>From tables <span class="ac">to every kind of data.</span></h2>
+  <div class="road3">
+    <div><span class="tag live"><i></i>Now</span><ul><li>Five products, public alpha</li><li>100M-row files on one GPU</li><li>Every app an MCP server</li></ul></div>
+    <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>omxplorer live in your browser</li><li>Ask, answered by omxconsole</li><li>Images, video and audio as rows</li></ul></div>
+    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Share with a team</li><li>Apple GPUs</li><li>Edit video with a query</li></ul></div>
+  </div>
+</section>
+
+<!-- 12 · read on -->
+<section>
+  <div class="eyebrow">Read on</div>
+  <h2>Pick a colour.</h2>
+  <div class="cols" style="grid-template-columns:repeat(5,1fr);margin-top:30px">
+    <a class="card px-plorer" href="omxplorer/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxplorer</h3><p>the flagship</p></a>
+    <a class="card px-core" href="omxcore/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxcore</h3><p>the engine</p></a>
+    <a class="card px-code" href="omxcode/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxcode</h3><p>the framework</p></a>
+    <a class="card px-console" href="omxconsole/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxconsole</h3><p>local AI</p></a>
+    <a class="card px-qua" href="omxqua/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxqua</h3><p>the look</p></a>
+  </div>
+  <p class="lede" style="margin-top:40px;font-size:30px">Each cover has its own deck, with the code. · <a href="https://github.com/abhisheksreesaila" target="_top">GitHub</a></p>
+</section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/notes/notes.js"></script>
+<script src="assets/deck.js"></script>
+</body></html>

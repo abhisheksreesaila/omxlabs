@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-code" data-here="code" data-root="..">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxcode · write an app once in Mojo · omxlabs</title>
+<meta name="description" content="omxcode is a Mojo app framework: write view() and update() once, and the app opens natively on Linux, the web, Android and Mac. The GPU code lives in the same file, and every app is already a tool server for AI agents.">
+<meta property="og:title" content="omxcode · Write it once. Open it everywhere.">
+<link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="../assets/omxqua/src/components.css"><link rel="stylesheet" href="../assets/suite.css">
+<style>
+/* omxcode's own: the hero shows one app on every host, side by side (real screenshots, labels in HTML) */
+.hosts { display: grid; grid-template-columns: 1fr 1fr .5fr; gap: 10px; padding: 10px; }
+.hosts figure { margin: 0; position: relative; border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 0 0 1px var(--oq-line-2); }
+.hosts img { display: block; width: 100%; height: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: left top; }
+.hosts .ph { grid-column: 3; grid-row: 1 / span 2; }
+.hosts .ph img { aspect-ratio: auto; object-position: center 40%; }
+.hosts .gpu img { object-position: center; }
+.hosts figcaption { position: absolute; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 7px; font: 600 12px var(--mono); padding: 6px 11px; border-radius: 999px; background: var(--oq-surface-3); color: var(--ink); box-shadow: var(--oq-shadow-2); white-space: nowrap; }
+.hosts figcaption i { width: 7px; height: 7px; border-radius: 50%; background: var(--oq-accent); }
+.hosts figcaption.b i { background: var(--oq-info); }
+.hosts .bdg { top: 10px; right: 10px; }
+#code .pane pre { font-size: 12.5px; }
+/* omxqua components.css styles any .side as an app sidebar (:where(.oq-root) .side); the cover's .side is a plain two-column row */
+#apps .side { background: none; box-shadow: none; padding: 0; z-index: auto; }
+.steps { display: grid; gap: 18px; padding: 22px 22px 24px; align-content: start; }
+.steps .st { display: grid; gap: 8px; }
+.steps .st b { font: 650 16px var(--sans); }
+.steps .st b em { font: 600 12px var(--mono); font-style: normal; color: var(--oq-accent); margin-right: 8px; }
+.steps .cmd { justify-self: start; max-width: 100%; overflow-x: auto; }
+.steps .out { font: 12.5px/1.6 var(--mono); color: var(--ink2); white-space: pre-wrap; margin: 0; }
+.steps .out .ok { color: var(--oq-ok); }
+@media (max-width: 900px) {
+  .hosts .bdg { display: none; }
+  .hosts { gap: 6px; padding: 6px; }
+  .hosts figcaption { left: 5px; bottom: 5px; font-size: 9.5px; padding: 3px 7px; gap: 5px; }
+  .hosts figcaption i { width: 5px; height: 5px; }
+  .steps .cmd { font-size: 12.5px; }
+}
+</style>
+</head>
+<body id="top">
+<!-- The cover template (same on every product): top · hero · numbers · five things · slides · the code · built with it · now/next/later · the suite · band · footer -->
+<nav class="top" data-cta="Watch the slides" data-cta-href="#slides" data-gh="https://github.com/abhisheksreesaila/omxcode"></nav>
+
+<!-- hero -->
+<section class="hero"><div class="wrap center">
+  <div class="eyebrow"><span class="px">omxcode</span> · the framework <span class="tag prog"><i></i>Public alpha</span></div>
+  <h1 class="rise"><span>Write</span> <span>it</span> <span>once.</span> <span class="ac">Open</span> <span class="ac">it</span> <span class="ac">everywhere.</span></h1>
+  <p class="lede">An app framework for <b>Mojo</b>. You write two functions, <b>view()</b> and <b>update()</b>, and the app opens natively on Linux, the web, Android and Mac. <b>The GPU code sits in the same file</b>, and every app is already a set of tools an AI agent can call.</p>
+  <div class="ctas"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="#code">See how you'd code it</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">GitHub</a></div>
+  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>one app.mojo · native on every host</span></div>
+    <div class="hosts">
+      <figure><img src="../assets/img/omxcode-gtk.png" alt="The widgets example as a native GTK 4 window on Linux"><figcaption><i></i>Linux · GTK 4</figcaption></figure>
+      <figure><img src="../assets/img/omxcode-web.png" alt="The same widgets example as a web page, served by FastHTML"><figcaption><i></i>Web · FastHTML</figcaption></figure>
+      <figure class="ph"><img src="../assets/img/omxcode-android.png" alt="The hello example as real Android views on the emulator"><figcaption><i></i>Android</figcaption></figure>
+      <figure><img src="../assets/img/omxcode-mac.png" alt="The same widgets example as a native AppKit window on one of GitHub's Macs"><figcaption><i></i>Mac · AppKit</figcaption></figure>
+      <figure class="gpu"><img src="../assets/img/omxcode-lens.jpg" alt="The Data Lens: 20 million points drawn live on the GPU, beside native controls"><figcaption class="b"><i></i>GPU · 20M points</figcaption><span class="bdg">one frame: <b>1.5 ms</b> · RTX 3090</span></figure>
+    </div></figure>
+  <p class="cap">Real screenshots: the widgets example on GTK, the web and one of GitHub's Macs; hello on the Android emulator; the Data Lens on GTK.</p>
+</div></section>
+
+<!-- numbers -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <h2>Native speed, <span class="two">measured.</span></h2>
+  <div class="nums">
+    <div><b>1.5<small>ms</small></b><span>20 million points counted and coloured, one 1080p frame</span></div>
+    <div><b>0.8<small>ms</small></b><span>a frame, scrolling a 1M-row grid (p95)</span></div>
+    <div><b>0.6<small>ms</small></b><span>a chart over 1 million rows</span></div>
+    <div><b>1<small>file</small></b><span>for a 20M-particle app, in one language. JS + WebGPU took 8 files in 5.</span></div>
+  </div>
+  <p class="srcline">NVIDIA RTX 3090 · Data Lens 1.48 ms vs 132 ms on the CPU (docs/goals/06-report.md) · grid docs/goals/26-report.md · chart 0.5–0.7 ms (README) · files docs/benchmarks.md · honest edge: native Rust + wgpu draws 1M particles faster (0.34 vs 1.23 ms)</p>
+</div></section>
+
+<!-- five things -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <h2>Five things <span class="two">in one language.</span></h2>
+  <div class="five">
+    <div><span class="em">🧩</span><h3>Two functions, every screen.</h3><p><code>view()</code> draws the screen from your state; <code>update()</code> changes it. Each host patches <b>only what changed</b>.</p></div>
+    <div><span class="em">🖥️</span><h3>Native, not imitated.</h3><p>GTK 4, HTML, Android views and AppKit, each with its own keyboard and screen reader. iPhone builds and signs; <b>it hasn't run on a phone yet.</b></p></div>
+    <div><span class="em">⚡</span><h3>The GPU, in the same file.</h3><p>A plain Mojo function becomes a GPU kernel: <code>gpu.render[mandelbrot]</code>. No CUDA, no shaders.</p></div>
+    <div><span class="em">🤖</span><h3>Every app is an MCP server.</h3><p>A button's tag is its tool's name. A disabled button is <b>no tool</b>.</p></div>
+    <div><span class="em">🪄</span><h3>Agents build UI as data.</h3><p>Over AG-UI an agent sends a UI as JSON. It is checked, then drawn natively, or <b>refused with a reason</b>.</p></div>
+  </div>
+</div></section>
+
+<!-- slides -->
+<section id="slides" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">The slides · 16 · about three minutes</div>
+  <h2>How you'd code it, <span class="two">line by line.</span></h2>
+  <p class="lede">Click the slides, then use the arrow keys. Code steps line by line; the architecture moves as a tap runs.</p>
+  <div class="deck"><div class="bar"><span class="dot"></span><span>omxcode · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
+    <iframe src="deck.html" title="omxcode, the slides" loading="lazy" allowfullscreen></iframe></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="2">An app</button><button data-slide="3">Architecture</button><button data-slide="5">A tap</button><button data-slide="7">Build it</button><button data-slide="8">The GPU</button><button data-slide="9">Speed</button><button data-slide="11">Agents</button><button data-slide="13">Honest edges</button><button data-slide="14">Roadmap</button></div>
+</div></section>
+
+<!-- the code -->
+<section id="code"><div class="wrap center rv">
+  <h2>Two functions. <span class="ac">Every screen.</span></h2>
+  <p class="lede">This is the whole hello app. One file opens as a GTK window, a web page, a Mac app, an iPhone build and an Android APK.</p>
+  <div class="pair">
+    <div class="pane"><div class="bar">examples/hello/app.mojo · real code, trimmed</div><pre><span class="k">from</span> mojoui <span class="k">import</span> App, Event, View, VStack, Text, Button, TITLE, PROMINENT
+
+<span class="k">comptime</span> GREET = <span class="n">1</span>          <span class="c"># a message is a number</span>
+
+<span class="k">struct</span> Main(App):
+    <span class="k">var</span> name: String
+    <span class="k">var</span> clicks: Int
+
+    <span class="k">def</span> update(<span class="k">mut</span> self, event: Event):
+        <span class="k">if</span> event.message == GREET:
+            self.clicks += <span class="n">1</span>
+
+    <span class="k">def</span> view(self) -> View:
+        <span class="k">return</span> VStack(
+            Text(<span class="s">"Hello, Ada! ("</span> + String(self.clicks) + <span class="s">")"</span>, style=TITLE),
+            Button(<span class="s">"Greet"</span>, on_tap=GREET, style=PROMINENT),
+            spacing=<span class="n">20</span>,
+        )</pre></div>
+    <div class="pane steps"><div class="st"><b><em>1</em>Build it for every host</b><span class="cmd">scripts/build.sh hello all<button data-copy="scripts/build.sh hello all">Copy</button></span>
+        <pre class="out">== Linux (hello): GTK4 + libadwaita
+== Web (hello): Mojo Python module for FastHTML
+== Mac (hello): AppKit, arm64 macOS 14+
+== iPhone (hello): UIKit, arm64 iOS 17+</pre></div>
+      <div class="st"><b><em>2</em>Or the Android APK</b><span class="cmd">scripts/build.sh hello android<button data-copy="scripts/build.sh hello android">Copy</button></span></div>
+      <div class="st"><b><em>3</em>Give it to an agent</b><span class="cmd">scripts/agent.sh hello<button data-copy="scripts/agent.sh hello">Copy</button></span>
+        <pre class="out">→ greet
+<span class="ok">← Did greet. Now: Hello, Ada! (click 1)</span></pre></div>
+      <div class="srcline" style="margin:0">output lines from scripts/build.sh · the agent call is a real run of mojoui/hosts/agent.py on build/hello/web</div></div>
+  </div>
+</div></section>
+
+<!-- built with it -->
+<section id="apps"><div class="wrap center rv">
+  <h2>Real apps, <span class="two">built with it.</span></h2>
+  <p class="lede">The apps only put the framework's components together. Anything another app would need moves into the framework.</p>
+  <div class="side">
+    <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>examples/agentchat · an agent's UI, drawn natively</span></div><img src="../assets/img/omxcode-agentchat.png" alt="Agent chat: an agent answered 'show me sales as a chart' with a card, a segmented control, a sparkline and a table"></figure>
+    <ul>
+      <li><b>📊 omxplorer, the flagship.</b>A data workspace over 100M-row files. <a href="../omxplorer/">See its cover</a>.</li>
+      <li><b>🛰️ omxconsole's console.</b>The local-AI console's pages, native on GTK and the Mac and a page on the web (<code>examples/console</code>).</li>
+      <li><b>🔭 The Data Lens.</b>20 million trips drawn live on the GPU, beside native controls (<code>examples/lens</code>).</li>
+      <li><b>💬 Agent chat.</b>An agent builds the UI over AG-UI; omxcode checks it and draws it (<code>examples/agentchat</code>).</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- now · next · later -->
+<section id="try"><div class="wrap center rv">
+  <h2>Runs today, <span class="two">and what's next.</span></h2>
+  <div class="road">
+    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Linux, the web, Android (emulator)</li><li>Mac: omxplorer runs on GitHub's Macs</li><li>GPU kernels in the same file (NVIDIA)</li><li>The agent host: <code>scripts/agent.sh</code></li><li>AG-UI and validated generated UI</li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>iPhone on a real phone</b> <span class="two">(builds and signs today)</span></li><li>Android's newer components</li><li>Apple GPUs (a Metal build ran on GitHub's Mac)</li><li>Mac checks counted in the component matrix</li></ul></div>
+    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>A coding agent writes an app from one sentence</li><li>Drop a Mojo app into a FastHTML site</li><li>Windows, once Mojo ships for it</li></ul></div>
+  </div>
+</div></section>
+
+<!-- the suite -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">omxlabs</div>
+  <h2>The framework <span class="two">under every app.</span></h2>
+  <div class="fam"></div>
+</div></section>
+
+<div class="band"><h2>One Mojo file. <span class="two">Every screen, and the GPU.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">Build hello from GitHub</a></div></div>
+<footer><div class="wrap fine"><span>omxcode by <a href="../">omxlabs</a> · <a href="https://github.com/abhisheksreesaila/omxcode">GitHub</a> · <a href="https://github.com/abhisheksreesaila/omxcode/blob/main/docs/reference.md">Reference</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a></span><span>MIT licensed · built in Mojo</span></div></footer>
+<script src="../assets/suite.js"></script>
+</body></html>

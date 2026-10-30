@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-plorer">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxplorer · the slides</title>
+<meta name="description" content="omxplorer in fifteen slides: why, the sentence, how it's built, the code, the speed, agents, and where it's going.">
+<link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="../assets/omxqua/src/components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+<link rel="stylesheet" href="../assets/suite.css"><link rel="stylesheet" href="../assets/deck.css">
+<style>
+/* omxplorer's own: the sentence chart, whose bars move when a word changes */
+.chart { display: flex; align-items: flex-end; gap: 22px; height: 300px; margin-top: 30px; padding: 0 10px; border-bottom: 2px solid var(--oq-line); }
+.chart div { flex: 1; background: var(--oq-accent); border-radius: 10px 10px 0 0; position: relative; }
+.chart div span { position: absolute; bottom: -42px; left: 0; right: 0; text-align: center; font: 18px var(--mono); color: var(--oq-ink-2); }
+.chart div em { position: absolute; top: -34px; left: 0; right: 0; text-align: center; font: 600 19px var(--mono); color: var(--oq-ink); font-style: normal; }
+.reveal .say { font: 650 46px/1.45 var(--sans); color: var(--oq-ink); letter-spacing: -.02em; }
+.reveal .say u { text-decoration: none; color: var(--oq-accent); background: color-mix(in srgb, var(--oq-accent) 14%, transparent); border-radius: 10px; padding: 0 8px; }
+.reveal .say u.lit { background: var(--oq-accent); color: #000; }
+.tools { width: 100%; border-collapse: collapse; font-size: 24px; }
+.tools td { padding: 14px 18px; border-top: 1px solid var(--oq-line); color: var(--oq-ink-2); }
+.tools td:nth-child(2) { font-family: var(--mono); color: var(--oq-accent); }
+.tools tr:first-child td { border-top: 0; }
+.plat { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-top: 30px; }
+.plat .card { text-align: center; padding: 30px 16px; }
+.plat .card b { display: block; font-size: 30px; margin: 12px 0 14px; }
+</style>
+</head>
+<body>
+<a class="dk-brand" href="./"><span class="mark"></span><span>omxlabs ›</span> omxplorer</a>
+<div class="reveal"><div class="slides">
+
+<!-- 1 · title -->
+<section>
+  <div class="eyebrow">omxplorer · by omxlabs · built in Mojo</div>
+  <h1>Ask your data <span class="ac">in a sentence.</span></h1>
+  <p class="lede fragment rise">A data workspace where a million rows answer in under a millisecond, on your own GPU, and every button is a tool an AI agent can call.</p>
+  <p class="note fragment rise">arrow keys, space or swipe · 15 slides, about two minutes</p>
+</section>
+
+<!-- 2 · why -->
+<section>
+  <div class="eyebrow">Why</div>
+  <h2>Data tools make you wait, <span class="two">and make agents guess.</span></h2>
+  <div class="cols r3" style="margin-top:40px">
+    <div class="card fragment rise"><span class="em">⏳</span><h3>You wait.</h3><p>Spreadsheets choke past a million rows. Warehouses answer in seconds and send a bill.</p></div>
+    <div class="card fragment rise"><span class="em">🖱️</span><h3>Agents squint.</h3><p>AI agents drive apps through screenshots and pixel coordinates. It's slow and it breaks.</p></div>
+    <div class="card fragment rise"><span class="em">💤</span><h3>Your GPU naps.</h3><p>Most workstations have one. Data apps leave it idle while the CPU struggles.</p></div>
+  </div>
+</section>
+
+<!-- 3 · what it is -->
+<section>
+  <div class="eyebrow">What it is</div>
+  <div class="cols" style="grid-template-columns:1.5fr 1fr;align-items:center">
+    <div class="shot"><img src="../assets/img/readme-report.jpg" alt="omxplorer's Report over a million orders"></div>
+    <div>
+      <h2 style="font-size:54px">Numbers and Power BI, <span class="ac">on the GPU.</span></h2>
+      <p class="fragment rise">Sheets, pivots, charts and reports over your CSV and Parquet files.</p>
+      <p class="fragment rise">About 2,100 lines of Mojo, built from omxcode's components, run by omxcore.</p>
+      <p class="note fragment rise">a million orders, every tile recomputed in 0.3 ms · RTX 3090</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · the sentence: Sum -->
+<section data-auto-animate>
+  <div class="eyebrow">The big idea</div>
+  <h2 data-id="h">The title <span class="ac">is</span> the chart.</h2>
+  <p class="say" data-id="say"><u>Sum</u> of <u>revenue</u> by <u>product</u>, <u>largest first</u>, as <u>bars</u></p>
+  <div class="chart" data-id="chart">
+    <div data-id="b1" style="height:92%"><em>41.2M</em><span>Laptop</span></div><div data-id="b2" style="height:74%"><em>33.0M</em><span>Phone</span></div>
+    <div data-id="b3" style="height:51%"><em>22.8M</em><span>Monitor</span></div><div data-id="b4" style="height:30%"><em>13.4M</em><span>Tablet</span></div><div data-id="b5" style="height:8%"><em>3.6M</em><span>Cable</span></div>
+  </div>
+  <aside class="notes">Illustrative bars; the real app recomputes from the data on every word.</aside>
+</section>
+
+<!-- 5 · the sentence: Median -->
+<section data-auto-animate>
+  <div class="eyebrow">Tap a word. Or type it.</div>
+  <h2 data-id="h">Tap <span class="ac">Sum</span>, pick Median.</h2>
+  <p class="say" data-id="say"><u class="lit">Median</u> of <u>revenue</u> by <u>product</u>, <u>largest first</u>, as <u>bars</u></p>
+  <div class="chart" data-id="chart">
+    <div data-id="b1" style="height:58%"><em>1,240</em><span>Laptop</span></div><div data-id="b2" style="height:44%"><em>940</em><span>Monitor</span></div>
+    <div data-id="b3" style="height:36%"><em>780</em><span>Phone</span></div><div data-id="b4" style="height:26%"><em>560</em><span>Tablet</span></div><div data-id="b5" style="height:4%"><em>12</em><span>Cable</span></div>
+  </div>
+  <p class="note" style="margin-top:56px">a median per group over 1M rows: 6.4 ms on the GPU · omxcode README</p>
+</section>
+
+<!-- 6 · architecture: the stack -->
+<section data-auto-animate>
+  <div class="eyebrow">How it's built</div>
+  <h2 data-id="h">One language, <span class="two">from the button to the GPU kernel.</span></h2>
+  <div class="layers" style="margin-top:30px">
+    <div class="box" data-id="l1">omxplorer <small>the app · app.mojo · view() and update()</small></div>
+    <div class="box" data-id="l2">omxcode <small>components, the sentence, five hosts</small></div>
+    <div class="box" data-id="l3">omxcore <small>GPU dataframes and SQL</small></div>
+    <div class="box" data-id="l4">Your GPU <small>NVIDIA today · CPU fallback</small></div>
+  </div>
+  <p class="note fragment rise" style="margin-top:26px">all Mojo: no Python, no JavaScript framework, no C++ in the middle</p>
+</section>
+
+<!-- 7 · architecture: a tap travels -->
+<section data-auto-animate>
+  <div class="eyebrow">A tap, as it runs</div>
+  <h2 data-id="h">You tap “Median”. <span class="two">0.6 ms later, new bars.</span></h2>
+  <div class="flow" style="margin-top:40px">
+    <div class="box hot" data-id="l1">omxplorer<small>update(): the word changes</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="l3">omxcore<small>median by product</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="l4">GPU<small>one kernel, 1M rows</small></div><span class="arrow"></span>
+    <div class="box hot" data-id="l2">omxcode<small>view(): only what changed is redrawn</small></div>
+  </div>
+  <div class="cols r3" style="margin-top:44px">
+    <p class="fragment rise"><b>No round trip.</b> The engine is linked into the app, like SQLite.</p>
+    <p class="fragment rise"><b>No copy, on Linux.</b> GPU frames go straight to the window (saves 4–5 ms a frame).</p>
+    <p class="fragment rise"><b>Just the diff.</b> The host patches the native widgets that changed.</p>
+  </div>
+</section>
+
+<!-- 8 · the code: an app -->
+<section>
+  <div class="eyebrow">How you'd write one</div>
+  <h2 style="font-size:52px">An app is a struct: <span class="ac">state, update, view.</span></h2>
+  <div class="file">examples/hello/app.mojo · real code, trimmed</div>
+  <pre><code class="language-python" data-trim data-line-numbers="1-3|5-8|10-12|14-20">struct Main(App):
+    var name: String
+    var clicks: Int
+
+    def update(mut self, event: Event):
+        if event.message == GREET:
+            self.clicks += 1
+
+    def view(self) -> View:
+        var greeting = "Hello, " + self.name + "! (click " + String(self.clicks) + ")"
+        return VStack(
+            Text(greeting, style=TITLE),
+            Button("Greet", on_tap=GREET, style=PROMINENT),
+            spacing=20,
+        )</code></pre>
+  <p class="note" style="margin-top:18px">the same file opens on Linux (GTK), the web, Android, Mac; iPhone builds</p>
+</section>
+
+<!-- 9 · the code: the sentence -->
+<section>
+  <div class="eyebrow">How the sentence works</div>
+  <h2 style="font-size:52px">Words are buttons. <span class="two">Buttons are tools.</span></h2>
+  <div class="file">mojoui/sentence.mojo · real code, trimmed</div>
+  <pre class="small"><code class="language-python" data-trim data-line-numbers="1|3-6|7-9">Sentence([Word("Sum", ASK_COMBINE, "word-combine"), Word(" of "), Word("amount", ASK_VALUE, "word-value")])
+
+for w in words:
+    if w.msg != NO_MSG:      # a token: tap it to see its choices
+        line.append(Button(w.text, w.msg, TOKEN).tag(w.tag))
+    else:                    # plain words: " of ", ", "
+        line.append(Text(w.text, style))
+# a tag names the button; the agent host turns every tagged button into an MCP tool,
+# so "word-combine" is something a person taps and an agent calls</code></pre>
+</section>
+
+<!-- 10 · speed -->
+<section>
+  <div class="eyebrow">The numbers</div>
+  <h2>Fast enough <span class="two">that you stop waiting.</span></h2>
+  <div class="cols r4" style="margin-top:40px">
+    <div class="fragment rise"><div class="num">0.6<small>ms</small></div><p>a chart over 1M rows</p></div>
+    <div class="fragment rise"><div class="num">0.8<small>ms</small></div><p>a frame, scrolling a 1M-row grid (p95)</p></div>
+    <div class="fragment rise"><div class="num">1.5<small>ms</small></div><p>20M points in one frame</p></div>
+    <div class="fragment rise"><div class="num">0.2<small>s</small></div><p>to open a 100M-row file, streamed</p></div>
+  </div>
+  <p class="note" style="margin-top:30px">RTX 3090 · the repo's own checks re-run each one · honest edge: a 100M-row median chart takes about 0.7 s</p>
+</section>
+
+<!-- 11 · big data -->
+<section>
+  <div class="eyebrow">100 million rows</div>
+  <h2>A dashboard over 100M rows: <span class="ac">30 ms a click.</span></h2>
+  <div class="bars">
+    <div class="bar"><span class="name">omxplorer</span><div class="track"><div class="fill me" style="--w:29%"></div></div><span class="val">30.3 ms</span></div>
+    <div class="bar"><span class="name">Rust + Polars</span><div class="track"><div class="fill" style="--w:35%"></div></div><span class="val">37.0 ms</span></div>
+    <div class="bar"><span class="name">JS + Polars</span><div class="track"><div class="fill" style="--w:42%"></div></div><span class="val">44.2 ms</span></div>
+    <div class="bar"><span class="name">JS + DuckDB</span><div class="track"><div class="fill" style="--w:100%"></div></div><span class="val">104.9 ms</span></div>
+  </div>
+  <p class="note" style="margin-top:30px">goal 38 · median of medians, p95 49.1 ms · Rust + Polars + egui · JS + FastAPI + Polars · JS + DuckDB-WASM · docs/data-benchmark.md</p>
+</section>
+
+<!-- 12 · agents -->
+<section>
+  <div class="eyebrow">Built for agents</div>
+  <h2>Every button <span class="ac">is a tool.</span></h2>
+  <div class="cols" style="grid-template-columns:1.15fr 1fr;align-items:start;margin-top:20px">
+    <div class="term" data-type>
+      <div class="tc"><span class="p">$</span> scripts/agent.sh omxplorer</div>
+      <div class="c">claude mcp add omxplorer -- …agent.py build/omxplorer/web</div>
+      <div><span class="p">→</span> choose-a-file {"path": "orders_1m.csv"}</div>
+      <div><span class="p">→</span> create-table</div>
+      <div><span class="p">→</span> insert-chart</div>
+      <div><span class="p">→</span> ask {"text": "revenue by product, largest first, top 5"}</div>
+      <div class="ok">← Now: chart0: 0.6 ms</div>
+    </div>
+    <div>
+      <p class="fragment rise"><b>No screenshots, no coordinates.</b> A button's tag is its tool's name.</p>
+      <p class="fragment rise"><b>The screen is the permission model.</b> A disabled button is no tool. A dialog's buttons exist only while it's open.</p>
+      <p class="fragment rise"><b>One sentence for both.</b> The words you tap are the words the agent asks.</p>
+      <p class="note">a real session · omxcode README, docs/agent.md</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · runs everywhere -->
+<section>
+  <div class="eyebrow">Where it runs</div>
+  <h2>Written once. <span class="two">Native everywhere.</span></h2>
+  <div class="plat">
+    <div class="card fragment rise"><span class="em">🐧</span><b>Linux</b><span class="tag live"><i></i>runs</span></div>
+    <div class="card fragment rise"><span class="em">🌐</span><b>Web</b><span class="tag live"><i></i>runs</span></div>
+    <div class="card fragment rise"><span class="em">🤖</span><b>Android</b><span class="tag live"><i></i>runs</span></div>
+    <div class="card fragment rise"><span class="em">🍎</span><b>Mac</b><span class="tag live"><i></i>runs</span></div>
+    <div class="card fragment rise"><span class="em">📱</span><b>iPhone</b><span class="tag builds"><i></i>builds</span></div>
+  </div>
+  <p class="note" style="margin-top:28px">Mac checked on GitHub's runners · iPhone compiles and signs, hasn't run on a phone yet · the GPU path is NVIDIA today</p>
+</section>
+
+<!-- 14 · roadmap -->
+<section>
+  <div class="eyebrow">Where it's going</div>
+  <h2>From tables <span class="ac">to every kind of data.</span></h2>
+  <div class="road3">
+    <div><span class="tag live"><i></i>Now</span><ul><li>Sheets, pivots, charts, reports</li><li>The sentence chart</li><li>100M-row files, streamed</li><li>Agent host (MCP)</li></ul></div>
+    <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>Try it in the browser</li><li>Ask, answered by omxconsole</li><li>Images, video and audio as rows</li></ul></div>
+    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Share with a team</li><li>Edit video with a query</li><li>Apple GPUs</li></ul></div>
+  </div>
+</section>
+
+<!-- 15 · the lab + read on -->
+<section>
+  <div class="eyebrow">omxlabs</div>
+  <h2>One app. <span class="two">Four breakthroughs under it.</span></h2>
+  <div class="cols r4" style="margin-top:30px">
+    <div class="card px-core"><h3 style="color:var(--px)">omxcore</h3><p>powers it: the GPU engine</p></div>
+    <div class="card px-code"><h3 style="color:var(--px)">omxcode</h3><p>builds it: write once, native everywhere</p></div>
+    <div class="card px-console"><h3 style="color:var(--px)">omxconsole</h3><p>local AI, on the same GPU</p></div>
+    <div class="card px-qua"><h3 style="color:var(--px)">omxqua</h3><p>the look: springs and solid surfaces (this site; omxplorer next)</p></div>
+  </div>
+  <p class="lede" style="margin-top:40px;font-size:30px">Read on: <a href="https://github.com/abhisheksreesaila/omxcode" target="_top">GitHub</a> · <a href="https://github.com/abhisheksreesaila/omxcode/blob/main/docs/agent.md" target="_top">the agent docs</a> · <a href="../" target="_top">omxlabs</a></p>
+</section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/notes/notes.js"></script>
+<script src="../assets/deck.js"></script>
+</body></html>

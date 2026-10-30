@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-console" data-here="console" data-root="..">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>omxconsole · your GPU as a private model server · omxlabs</title>
+<meta name="description" content="One command turns your NVIDIA GPU into a private, OpenAI-compatible model server on Modular MAX. Models load when called and sleep when idle. Its console is an omxcode app.">
+<meta property="og:title" content="omxconsole · Your GPU. Your models. One endpoint.">
+<link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="../assets/omxqua/src/components.css"><link rel="stylesheet" href="../assets/suite.css">
+<style>
+/* omxconsole's own: four honest facts (no speed numbers measured on real hardware yet), who it's for, the console's code */
+.nums b.w { font-size: clamp(30px, 3.6vw, 48px); line-height: 1.4; }
+.why4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 44px; text-align: left; }
+.why4 .pt .em { font-size: 26px; display: block; margin-bottom: 10px; }
+.pane .o { color: var(--oq-ok); }
+.pane pre { white-space: pre; }
+@media (max-width: 900px) { .why4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .why4 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body id="top">
+<!-- The cover template (same on every product): top · hero · numbers · five things · slides · write a command · the console · now/next/later · the suite · band · footer -->
+<nav class="top" data-cta="Serve a model" data-cta-href="#use" data-gh="https://github.com/abhisheksreesaila/mxstudio"></nav>
+
+<!-- hero -->
+<section class="hero"><div class="wrap center">
+  <div class="eyebrow"><span class="px">omxconsole</span> · local AI <span class="tag live"><i></i>Public alpha</span></div>
+  <h1 class="rise"><span>Your</span> <span>GPU.</span> <span>Your</span> <span>models.</span> <span class="ac">One</span> <span class="ac">endpoint.</span></h1>
+  <p class="lede">One command turns your NVIDIA GPU into a <b>private, OpenAI-compatible model server</b>. Models load when they're called and sleep when idle. No cloud, <b>no per-token bill</b>, and your prompts never leave the machine.</p>
+  <div class="ctas"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="#use">Write your first command</a><a class="more" href="https://github.com/abhisheksreesaila/mxstudio">GitHub</a></div>
+  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxconsole · My models · 127.0.0.1/console</span></div>
+    <img src="../assets/img/omxconsole-home-dark.png" alt="omxconsole's My models page: eight models, two running, with their state, kind, size and memory">
+    <span class="bdg">one endpoint: <b>127.0.0.1:11435/v1</b></span></figure>
+  <p class="cap">The real console on a test install. Every model you've pulled, behind one URL.</p>
+</div></section>
+
+<!-- numbers: honest facts, not speeds (no throughput has been published from real hardware yet) -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <h2>Small, and <span class="two">checked.</span></h2>
+  <div class="nums">
+    <div><b>1<small>URL</small></b><span>for every model you've pulled: /v1 on port 11435</span></div>
+    <div><b>5<small>min</small></b><span>idle, then a model unloads and frees the GPU (pin to keep it)</span></div>
+    <div><b>8</b><span>architectures MAX couldn't run, ported and serving</span></div>
+    <div><b>1,044</b><span>tests pass, with a fake MAX, so no GPU needed</span></div>
+  </div>
+  <p class="srcline">mxstudio repo · port 11435: mxconsole/settings.py · 5 min: docs/CLI.md (--keep-alive default) · 8 ports on 2× RTX 3090, MAX 26.7: docs/PORTING.md · 1,044 tests: docs/plan.md, F-063 review round 2</p>
+</div></section>
+
+<!-- five things -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <h2>Five things, <span class="two">in one small server.</span></h2>
+  <div class="five">
+    <div><span class="em">🔌</span><h3>One command, one endpoint.</h3><p><code>mxc serve qwen2.5-0.5b</code> downloads, starts and prints <b>a URL, a key and a curl line</b>. Any OpenAI client works: change the base URL.</p></div>
+    <div><span class="em">💤</span><h3>Models sleep when idle.</h3><p>A model starts on its first request and unloads after five idle minutes, so <b>GPU memory goes to the models in use</b>.</p></div>
+    <div><span class="em">🔑</span><h3>Safe to share.</h3><p>One revocable key per app, stored as a hash. <code>mxc expose</code> puts the four /v1 routes on your LAN over HTTPS.</p></div>
+    <div><span class="em">🧬</span><h3>MAX can't run it? Port it.</h3><p><code>mxc port &lt;repo&gt; --auto</code> has Claude Code write a MAX version in a sandbox, checked against Hugging Face. Text models only.</p></div>
+    <div><span class="em">🖥️</span><h3>A console written in Mojo.</h3><p>Rebuilt with omxcode: native on Linux and Mac, and on the web it matches the original to <b>99.2 %</b> of pixels.</p></div>
+  </div>
+</div></section>
+
+<!-- slides -->
+<section id="slides" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">The slides · 16 · about three minutes</div>
+  <h2>The why, the command, <span class="two">and how it's built.</span></h2>
+  <p class="lede">Click the slides, then use the arrow keys. The terminal types the real command; the code steps line by line; the architecture moves as a request travels.</p>
+  <div class="deck"><div class="bar"><span class="dot"></span><span>omxconsole · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
+    <iframe src="deck.html" title="omxconsole, the slides" loading="lazy" allowfullscreen></iframe></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="4">The command</button><button data-slide="5">Call it</button><button data-slide="7">Architecture</button><button data-slide="10">The console</button><button data-slide="12">Porting</button><button data-slide="13">Honest edges</button><button data-slide="14">Roadmap</button></div>
+</div></section>
+
+<!-- write a command -->
+<section id="use"><div class="wrap center rv">
+  <h2>How would I write a command? <span class="two">Like this.</span></h2>
+  <p class="lede">One line to serve. Then call it the way you'd call OpenAI, with your own URL and key.</p>
+  <div class="pair">
+    <div class="pane"><div class="bar">your terminal · what <code>mxc serve</code> prints</div><pre><span class="k">$</span> pixi run mxc serve qwen2.5-0.5b
+<span class="c">pulled qwen2.5-0.5b (Qwen/Qwen2.5-0.5B-Instruct@…)</span>
+<span class="c">started the omxconsole daemon</span>
+<span class="c">loading qwen2.5-0.5b (the first load compiles…)</span>
+<span class="o">qwen2.5-0.5b is ready</span>
+
+endpoint  http://127.0.0.1:11435/v1
+key       mst-…   <span class="c">(shown once, keep it)</span></pre></div>
+    <div class="pane"><div class="bar">your app · the OpenAI client, pointed home</div><pre><span class="k">import</span> os
+<span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+client = OpenAI(
+    base_url=<span class="s">"http://127.0.0.1:11435/v1"</span>,
+    api_key=os.environ[<span class="s">"MXC_API_KEY"</span>],
+)
+reply = client.chat.completions.create(
+    model=<span class="s">"qwen2.5-0.5b"</span>,
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"Hello"</span>}],
+)</pre></div>
+  </div>
+  <p class="srcline">left: what mxconsole/cli.py serve_model prints · right: the snippet from mxconsole/serve.py usage(), with the key read from the environment · the real key is printed once, here elided</p>
+  <div class="why4">
+    <div class="pt"><span class="em">🔒</span><h3>Private</h3><p>Prompts and answers stay on your machine. Weights come from Hugging Face once.</p></div>
+    <div class="pt"><span class="em">✈️</span><h3>Offline</h3><p>Once a model is downloaded, serving needs no network at all.</p></div>
+    <div class="pt"><span class="em">🧾</span><h3>No meter</h3><p>No per-token bill. The GPU you already own does the work.</p></div>
+    <div class="pt"><span class="em">🤖</span><h3>An agent's brain</h3><p>Any tool that speaks the OpenAI API can use it: scripts, notebooks, agents.</p></div>
+  </div>
+</div></section>
+
+<!-- the console -->
+<section id="console"><div class="wrap center rv">
+  <h2>The console <span class="ac">is an omxcode app.</span></h2>
+  <p class="lede">The same pages, rewritten in Mojo with omxcode's components. It talks to the server over plain HTTP, like any other client.</p>
+  <div class="side">
+    <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>the omxcode console · Linux (GTK), native widgets</span></div><img src="../assets/img/omxconsole-gtk.png" alt="the omxcode console's My models page drawn natively on GTK"></figure>
+    <ul>
+      <li><b>📡 Same server, same API.</b>It polls the server's local <code>/admin/*</code> routes every 3 seconds and draws the replies.</li>
+      <li><b>🎯 99 % the same.</b>On the web, all 20 screens match the original JavaScript console to at least 99.2 % of pixels.</li>
+      <li><b>🧱 Only components.</b>A lint fails the app if it sets a colour, font or size. The 31 modules it needed went into omxcode.</li>
+    </ul>
+  </div>
+  <p class="srcline">omxcode repo · examples/console/api.mojo, app.mojo · docs/goals/33-report.md · the server still ships its JavaScript console at /console today</p>
+</div></section>
+
+<!-- now · next · later -->
+<section id="try"><div class="wrap center rv">
+  <h2>Works today, <span class="two">and what's next.</span></h2>
+  <div class="road">
+    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li><code>mxc serve</code>: one OpenAI-compatible endpoint</li><li>Idle unload, pin, keep-alive</li><li>Keys, and HTTPS on your LAN</li><li>Porting text models with Claude Code</li><li>The console: models, benchmark, logs, notebook</li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li>The Mac app <span class="tbd">(in review)</span></li><li>A catalog of finished ports</li><li>A swappable porting agent</li><li><b>omxplorer's Ask</b>, answered on your GPU</li></ul></div>
+    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Our own router, if several backends are ever needed</li><li>Porting vision and embedding models</li></ul></div>
+  </div>
+</div></section>
+
+<!-- the suite -->
+<section style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">omxlabs</div>
+  <h2>Local AI, <span class="two">on the same GPU as your data.</span></h2>
+  <div class="fam"></div>
+</div></section>
+
+<div class="band"><h2>Serve your first model <span class="two">in one line.</span></h2>
+  <p style="margin-top:22px"><span class="cmd">pixi run mxc serve qwen2.5-0.5b<button data-copy="pixi run mxc serve qwen2.5-0.5b">Copy</button></span></p>
+  <div class="ctas center" style="justify-content:center"><a class="cta" href="https://github.com/abhisheksreesaila/mxstudio">Get it on GitHub</a><a class="more" href="#slides">Watch the slides</a></div>
+  <p class="srcline" style="margin-top:18px">Linux with an NVIDIA GPU · qwen2.5-0.5b is about 1 GB, ungated · docs/USER_GUIDE.md</p></div>
+<footer><div class="wrap fine"><span>omxconsole by <a href="../">omxlabs</a> · <a href="https://github.com/abhisheksreesaila/mxstudio">GitHub</a> · <a href="https://abhisheksreesaila.github.io/mxstudio/site/console.html">Console tour</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a></span><span>MIT · built on Modular MAX</span></div></footer>
+<script src="../assets/suite.js"></script>
+</body></html>

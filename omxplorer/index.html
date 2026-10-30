@@ -1,21 +1,28 @@
 <!doctype html>
 <html lang="en" class="oq-root oq-night oq-family-dev px-plorer" data-here="plorer" data-root="..">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>omxplorer · ask your data in a sentence · omxlabs</title>
 <meta name="description" content="A data workspace where a million rows answer in under a millisecond on your own GPU, and every button is a tool your AI agent can call. Built in Mojo by omxlabs.">
 <meta property="og:title" content="omxplorer · Ask your data in a sentence.">
 <link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
 <link rel="stylesheet" href="../assets/omxqua/src/components.css"><link rel="stylesheet" href="../assets/suite.css">
 <style>
-/* omxplorer's own: the in-progress scenarios (their clips arrive with g39) */
-.scen { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 48px; text-align: left; }
-.scen > div { padding: 28px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); display: flex; flex-direction: column; gap: 10px; }
-.scen .em { font-size: 28px; line-height: 1; }
-.scen p { margin: 0; color: var(--ink2); font-size: 16px; }
-.scen p + p { color: var(--ink); }
+/* omxplorer's own: video becomes rows (g39): two recorded clips in frames, then what's built and what isn't */
+.clips { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; text-align: left; }
+.clips figure { margin: 0; min-width: 0; }
+.clips .frame { margin: 0; }
+.clips .cap { text-align: left; }
+.scen { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 40px; text-align: left; }
+.scen > div { padding: 28px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); }
+.scen h3 { margin: 0; }
+.scen ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.scen li { font-size: 15.5px; color: var(--ink2); padding-left: 20px; position: relative; }
+.scen li b { color: var(--ink); font-weight: 600; }
+.scen li::before { content: ""; position: absolute; left: 0; top: .55em; width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--oq-ok)); }
+.scen .nx li { --c: var(--oq-warn); }
 .road li a { color: inherit; text-underline-offset: 3px; }
-@media (max-width: 900px) { .scen { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .scen, .clips { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body id="top">
@@ -60,12 +67,12 @@
 
 <!-- slides -->
 <section id="slides" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">The slides · 15 · about two minutes</div>
+  <div class="eyebrow">The slides · 18 · about two minutes</div>
   <h2>The why, the how, <span class="two">and the code.</span></h2>
   <p class="lede">Click the slides, then use the arrow keys. Code steps line by line; the architecture moves as a tap runs.</p>
   <div class="deck"><div class="bar"><span class="dot"></span><span>omxplorer · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
     <iframe src="deck.html" title="omxplorer, the slides" loading="lazy" allowfullscreen></iframe></div>
-  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">The sentence</button><button data-slide="5">Architecture</button><button data-slide="7">The code</button><button data-slide="9">Speed</button><button data-slide="11">Agents</button><button data-slide="13">Roadmap</button></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">The sentence</button><button data-slide="5">Architecture</button><button data-slide="7">The code</button><button data-slide="9">Speed</button><button data-slide="11">Agents</button><button data-slide="13">Video</button><button data-slide="16">Roadmap</button></div>
 </div></section>
 
 <!-- the idea -->
@@ -103,21 +110,37 @@
 <section id="try"><div class="wrap center rv">
   <h2>Live now, <span class="two">and what's next.</span></h2>
   <div class="road">
-    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li></ul></div>
-    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>Try it in your browser</b> <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by omxconsole on your GPU</li><li><a href="#rows">Video, images and audio become rows</a></li></ul></div>
-    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Edit video with a query</li><li>Apple GPUs</li></ul></div>
+    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li><li><a href="#rows">Video becomes rows, and a reel cut by them</a></li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>Try it in your browser</b> <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by omxconsole on your GPU</li><li><a href="#rows">Real-world footage, the drone, audio</a></li></ul></div>
+    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Apple GPUs</li></ul></div>
   </div>
 </div></section>
 
-<!-- in progress: video, images and audio become rows -->
+<!-- live: video becomes rows (g39); in progress: real footage, other GPUs, the drone in omxplorer -->
 <section id="rows" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow"><span class="tag prog"><i></i>In progress</span></div>
-  <h2>Video, images and audio <span class="two">become rows.</span></h2>
-  <p class="lede">Footage turns into a table you can ask, like any CSV. Two scenarios we're building toward.</p>
-  <!-- g39: scenario clips go here -->
+  <div class="eyebrow"><span class="tag live"><i></i>Live</span><span class="tag prog"><i></i>In progress</span></div>
+  <h2>Video <span class="two">becomes rows.</span></h2>
+  <p class="lede">Open a video and it turns into a table you can ask, like any CSV: <b>about 400 frames a second</b>, on your GPU. Ask for a reel, and the rows cut it.</p>
+  <div class="clips">
+    <figure><div class="frame"><div class="bar"><i></i><i></i><i></i><span>omxplorer · warehouse.mp4 · 1,140 frames</span></div>
+      <video src="../assets/img/clip-warehouse.mp4" autoplay muted loop playsinline preload="metadata" poster="../assets/img/clip-warehouse.jpg" aria-label="omxplorer opens a warehouse video, analyzes it into a detections table, and makes a reel of the damaged pallets with faces blurred and shipment IDs burned in"></video></div>
+      <figcaption class="cap">The warehouse, a real recording driven by omxplorer's agent tools: open, Analyze, the detections table, a reel of damaged pallets (faces blurred, shipment ID burned in). Then the editor cuts it into 3 clips from the rows.</figcaption></figure>
+    <figure><div class="frame"><div class="bar"><i></i><i></i><i></i><span>omxcode · drone_a.mp4 · telemetry at 10 Hz</span></div>
+      <video src="../assets/img/clip-drone.mp4" autoplay muted loop playsinline preload="metadata" poster="../assets/img/clip-drone.jpg" aria-label="a drone inspection video playing beside its telemetry chart, whose cursor follows the picture, then the editor with an altitude lane"></video></div>
+      <figcaption class="cap">The drone, recorded from omxcode's media example (not yet inside omxplorer): the telemetry's cursor follows the picture frame by frame, then the editor with its altitude lane.</figcaption></figure>
+  </div>
   <div class="scen">
-    <div><span class="em">📦</span><h3>The warehouse</h3><p>A 60-second reel of every damaged pallet, faces blurred, shipment ID burned in.</p><p>Delivered shipments whose label never appears on camera becomes one query.</p></div>
-    <div><span class="em">🛰️</span><h3>The drone</h3><p>A drone lands with hours of inspection footage. One button turns it into a database of every asset and defect, located on the map.</p><p>Ask which insulators got worse since last quarter, and the answer becomes the next flight plan.</p></div>
+    <div><h3><span class="tag live"><i></i>Built and running</span></h3><ul>
+      <li><b>Video becomes rows on the GPU</b>, about 400 frames a second: every pallet, code and face, frame by frame.</li>
+      <li><b>The reel:</b> the frames where a column is true, faces blurred, the shipment ID burned in.</li>
+      <li><b>SQL joins video rows with a CSV:</b> the delivered shipments whose label never shows is one query.</li>
+      <li><b>Find more like this:</b> tap one example and OWLv2 finds the rest, in process. Recall 1.000, precision 0.886 on our footage; the warehouse scan takes 8.4 s.</li>
+      <li><b>Every step is an agent tool,</b> the clip above included.</li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Not yet</span></h3><ul>
+      <li><b>The footage is generated</b> (so we know the truth of every frame). Real-world footage hasn't been tried.</li>
+      <li><b>The models (OWLv2, SAM 2.1) run on Linux with NVIDIA only.</b></li>
+      <li><b>The drone inside omxplorer:</b> hours of inspection footage as a database of assets and defects on the map, and the answer to "which got worse since last time" as the next flight plan.</li>
+      <li><b>Audio.</b></li></ul></div>
   </div>
 </div></section>
 

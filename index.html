@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" class="oq-root oq-night oq-family-dev px-labs" data-here="labs" data-root=".">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>omxplorer by omxlabs · ask your data in a sentence, on your own GPU</title>
 <meta name="description" content="omxplorer, from omxlabs: ask your data in a sentence. A million rows answer in under a millisecond on your own GPU, and every button is a tool your AI agent can call. Written in Mojo.">
 <meta property="og:title" content="omxplorer · Every kind of data. One GPU. Built for people and agents.">
@@ -70,7 +70,7 @@
     <div><span class="em">📂</span><h3>Your files, as they are.</h3><p><b>CSV and Parquet straight from disk</b>, no import and no warehouse. 100M-row files stream in.</p></div>
     <div><span class="em">💬</span><h3>The sentence is the chart.</h3><p><b>“Sum of revenue by product, top 5, as bars.”</b> Tap “Sum”, pick “Median”, and the bars move.</p></div>
     <div><span class="em">🤖</span><h3>Agents use it too.</h3><p>Every button is a tool an agent can call, and <b>nothing more</b>. No screenshots, no guessing.</p></div>
-    <div class="soon"><span class="em">🎞️</span><h3>Video, images and audio as rows. <span class="tag prog"><i></i>In progress</span></h3><p>Footage becomes a table you can ask, like any other file.</p></div>
+    <div><span class="em">🎞️</span><h3>Video becomes rows. <span class="tag live"><i></i>Live</span></h3><p>Open a video and it becomes a table you can ask, <b>about 400 frames a second</b> on your GPU. Ask for a reel, and the rows cut it. <a href="omxplorer/#rows">Watch the clip</a></p></div>
   </div>
   <div class="plorer-stat"><b>0.6<small>ms</small></b><span>a chart over 1 million rows</span></div>
   <p class="srcline">RTX 3090 · omxcode README (chart 0.5–0.7 ms)</p>
@@ -114,7 +114,7 @@
   <p class="lede">Click the slides, then use the arrow keys.</p>
   <div class="deck"><div class="bar"><span class="dot"></span><span>omxplorer · the slides</span><span class="sp"></span><a href="omxplorer/deck.html" target="_blank">Full screen ↗</a></div>
     <iframe src="omxplorer/deck.html" title="omxplorer, the slides" loading="lazy" allowfullscreen></iframe></div>
-  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">The sentence</button><button data-slide="5">How it works</button><button data-slide="9">Speed</button><button data-slide="11">Agents</button><button data-slide="12">Every screen</button><button data-slide="13">Next</button></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">The sentence</button><button data-slide="5">How it works</button><button data-slide="9">Speed</button><button data-slide="11">Agents</button><button data-slide="12">Every screen</button><button data-slide="13">Video</button><button data-slide="16">Next</button></div>
 </div></section>
 
 <!-- today vs omxplorer -->
@@ -134,17 +134,17 @@
 <section class="px-plorer"><div class="wrap center rv">
   <h2>Live now, <span class="two">and what's next.</span></h2>
   <div class="road">
-    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>100M-row CSV and Parquet files</li><li>The sentence chart: tap a word, ask</li><li>An agent can drive every button</li><li>Native on Linux and Mac, and on the web</li></ul></div>
-    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>omxplorer in your browser</b>, live on omxlabs.tech <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by a model on your own GPU</li><li>Images, video and audio become rows</li></ul></div>
-    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Apple GPUs</li><li>Edit video with a query</li></ul></div>
+    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>100M-row CSV and Parquet files</li><li>The sentence chart: tap a word, ask</li><li>An agent can drive every button</li><li>Native on Linux and Mac, and on the web</li><li>Video becomes rows, and a reel cut by them</li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>omxplorer in your browser</b>, live on omxlabs.tech <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by a model on your own GPU</li><li>Real-world footage, the drone, audio</li></ul></div>
+    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Apple GPUs</li></ul></div>
   </div>
 </div></section>
 
 <!-- under the hood: secondary, one row, each card opens its page -->
 <section id="tech" style="padding-top:40px"><div class="wrap center rv">
   <div class="eyebrow">Under the hood</div>
-  <h2>Built on four technologies <span class="two">we made for it.</span></h2>
-  <p class="lede">omxplorer is fast, native everywhere and easy for agents because of what it's built on. Each of these also works without omxplorer.</p>
+  <h2>Powered by four breakthrough technologies, <span class="two">made for it.</span></h2>
+  <p class="lede">omxplorer is fast, native everywhere and easy for agents because of what it's built on: omxcore, omxcode, omxqua and omxconsole. Each of these also works without omxplorer.</p>
   <div class="fam" data-only="tech"></div>
 </div></section>
 

@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en" class="oq-root oq-night oq-family-dev px-plorer">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>omxplorer · the slides</title>
-<meta name="description" content="omxplorer in fifteen slides: why, the sentence, how it's built, the code, the speed, agents, and where it's going.">
+<meta name="description" content="omxplorer in eighteen slides: why, the sentence, how it's built, the code, the speed, agents, video as rows, and where it's going.">
 <link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
 <link rel="stylesheet" href="../assets/omxqua/src/components.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
@@ -23,6 +23,9 @@
 .tools tr:first-child td { border-top: 0; }
 .plat { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-top: 30px; }
 .plat .card { text-align: center; padding: 30px 16px; }
+.vflow { gap: 12px; }
+.vflow .box { justify-content: flex-start; padding: 20px 22px; }
+.vflow .arrow { width: 30px; }
 .plat .card b { display: block; font-size: 30px; margin: 12px 0 14px; }
 </style>
 </head>
@@ -35,7 +38,7 @@
   <div class="eyebrow">omxplorer · by omxlabs · built in Mojo</div>
   <h1>Ask your data <span class="ac">in a sentence.</span></h1>
   <p class="lede fragment rise">A data workspace where a million rows answer in under a millisecond, on your own GPU, and every button is a tool an AI agent can call.</p>
-  <p class="note fragment rise">arrow keys, space or swipe · 15 slides, about two minutes</p>
+  <p class="note fragment rise">arrow keys, space or swipe · 18 slides, about two minutes</p>
 </section>
 
 <!-- 2 · why -->
@@ -219,18 +222,73 @@ for w in words:
   <p class="note" style="margin-top:28px">Mac checked on GitHub's runners · iPhone compiles and signs, hasn't run on a phone yet · the GPU path is NVIDIA today</p>
 </section>
 
-<!-- 14 · roadmap -->
+<!-- 14 · video becomes rows: the clips -->
+<section data-auto-animate>
+  <div class="eyebrow">Every kind of data <span class="tag live"><i></i>live</span></div>
+  <h2 data-id="h">A video <span class="ac">becomes rows,</span> <span class="two">400 frames a second.</span></h2>
+  <div class="cols r2" style="margin-top:10px">
+    <div><div class="shot"><video data-src="../assets/img/clip-warehouse.mp4" data-autoplay muted loop playsinline poster="../assets/img/clip-warehouse.jpg"></video></div>
+      <p class="note" style="margin-top:14px">omxplorer, by its agent tools: Analyze → rows → a reel, faces blurred, ID burned in</p></div>
+    <div><div class="shot"><video data-src="../assets/img/clip-drone.mp4" data-autoplay muted loop playsinline poster="../assets/img/clip-drone.jpg"></video></div>
+      <p class="note" style="margin-top:14px">omxcode's media example: telemetry in step (not in omxplorer yet)</p></div>
+  </div>
+  <aside class="notes">Real recordings from the headless display. The footage is generated, so every frame's truth is known; real-world footage hasn't been tried.</aside>
+</section>
+
+<!-- 15 · video becomes rows: the flow -->
+<section data-auto-animate>
+  <div class="eyebrow">How a video becomes rows</div>
+  <h2 data-id="h">Frames in, <span class="ac">rows out.</span> <span class="two">Then it's just data.</span></h2>
+  <div class="flow vflow" style="margin-top:44px;align-items:stretch">
+    <div class="box" data-id="v1">VideoSource<small>ffmpeg decodes; frames go to the GPU</small></div><span class="arrow" style="align-self:center"></span>
+    <div style="flex:1.2;display:flex;flex-direction:column;gap:12px">
+      <div class="box hot" data-id="v2" style="flex:1;flex-direction:column;align-items:flex-start;gap:6px">GPU kernels<small>colour, motion, printed codes</small></div>
+      <div class="box" data-id="vm" style="flex:1;flex-direction:column;align-items:flex-start;gap:6px">VisionModel slot<small>OWLv2, SAM 2.1, in process</small></div>
+    </div><span class="arrow" style="align-self:center"></span>
+    <div class="box hot" data-id="v3">Rows<small>frame, track, code, damaged, face box</small></div><span class="arrow" style="align-self:center"></span>
+    <div class="box" data-id="v4">SQL · the sentence<small>join with shipments.csv</small></div><span class="arrow" style="align-self:center"></span>
+    <div class="box hot" data-id="v5">The reel<small>blur, burn in, H.264</small></div>
+  </div>
+  <div class="cols r3" style="margin-top:44px">
+    <p class="fragment rise"><b>One slot, two engines.</b> Classic GPU vision today; a model plugs into the same place and gives the same rows.</p>
+    <p class="fragment rise"><b>Rows are rows.</b> "Delivered, but the label never shows on camera" is one SQL join.</p>
+    <p class="fragment rise"><b>Every step is a tool.</b> Analyze, Make a reel, Cut it: an agent calls what you tap.</p>
+  </div>
+</section>
+
+<!-- 16 · find more like this -->
+<section data-auto-animate>
+  <div class="eyebrow">Find more like this</div>
+  <h2 data-id="h">Tap one example. <span class="ac">It finds the rest.</span></h2>
+  <div class="cols" style="grid-template-columns:1.1fr 1.2fr;gap:40px;margin-top:30px;align-items:center">
+    <div class="layers">
+      <div class="box" data-id="v1">One tapped crop<small>a damaged pallet</small></div>
+      <div class="down"></div>
+      <div class="box hot" data-id="vm">VisionModel: OWLv2<small>image-guided, in process</small></div>
+      <div class="down"></div>
+      <div class="box" data-id="v3">Rows: every frame with a hit<small>no colour rules, no labels</small></div>
+    </div>
+    <div class="cols r3">
+      <div class="fragment rise"><div class="num" style="font-size:96px">1.000</div><p>recall on the damaged frames</p></div>
+      <div class="fragment rise"><div class="num" style="font-size:96px">0.886</div><p>precision</p></div>
+      <div class="fragment rise"><div class="num" style="font-size:96px">8.4<small>s</small></div><p>to scan the 1,140-frame warehouse</p></div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:34px">on our generated footage, scored against its truth · RTX 3090 · models run on Linux + NVIDIA only, for now</p>
+</section>
+
+<!-- 17 · roadmap -->
 <section>
   <div class="eyebrow">Where it's going</div>
   <h2>From tables <span class="ac">to every kind of data.</span></h2>
   <div class="road3">
-    <div><span class="tag live"><i></i>Now</span><ul><li>Sheets, pivots, charts, reports</li><li>The sentence chart</li><li>100M-row files, streamed</li><li>Agent host (MCP)</li></ul></div>
-    <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>Try it in the browser</li><li>Ask, answered by omxconsole</li><li>Images, video and audio as rows</li></ul></div>
-    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Share with a team</li><li>Edit video with a query</li><li>Apple GPUs</li></ul></div>
+    <div><span class="tag live"><i></i>Now</span><ul><li>Sheets, pivots, charts, reports</li><li>The sentence chart</li><li>100M-row files, streamed</li><li>Agent host (MCP)</li><li>Video becomes rows; the reel</li></ul></div>
+    <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>Try it in the browser</li><li>Ask, answered by omxconsole</li><li>Real-world footage, the drone, audio</li></ul></div>
+    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Share with a team</li><li>Apple GPUs</li></ul></div>
   </div>
 </section>
 
-<!-- 15 · the lab + read on -->
+<!-- 18 · the lab + read on -->
 <section>
   <div class="eyebrow">omxlabs</div>
   <h2>One app. <span class="two">Four breakthroughs under it.</span></h2>

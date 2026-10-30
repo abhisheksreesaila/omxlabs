@@ -85,7 +85,7 @@ h3 { font: 650 20px/1.25 var(--sans); letter-spacing: -.02em; margin: 0; }
 .techmenu summary .pm { --s: 18px; }
 .techmenu summary:hover, .techmenu[open] summary { color: var(--ink); background: rgb(var(--oq-state) / .08); }
 .techmenu.on summary { color: var(--ink); background: var(--oq-surface-3); }
-.techmenu .menu { position: absolute; top: calc(100% + 10px); left: 50%; translate: -50% 0; min-width: 260px; display: grid; gap: 2px; padding: 6px; border-radius: 18px; background: var(--oq-surface-2); box-shadow: var(--oq-shadow-3), 0 0 0 1px var(--line); z-index: 60;
+.techmenu .menu { position: absolute; top: calc(100% + 10px); left: 50%; translate: -50% 0; min-width: 260px; max-width: calc(100vw - 24px); display: grid; gap: 2px; padding: 6px; border-radius: 18px; background: var(--oq-surface-2); box-shadow: var(--oq-shadow-3), 0 0 0 1px var(--line); z-index: 60;
   transform-origin: top center; animation: techmenu-in var(--oq-spring-fast-dur, .25s) var(--oq-island-spring, ease-out); }
 .techmenu .menu a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; text-decoration: none; color: var(--ink2); font: 13px var(--sans); }
 .techmenu .menu a .pm { --s: 30px; }
@@ -226,6 +226,7 @@ footer { padding: 34px 24px 90px; }
   section { padding: 84px 20px; }
   .top { grid-template-columns: 1fr auto; padding: 10px 14px; }
   .top .suite { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
+  .techmenu .menu { left: auto; right: 0; translate: none; transform-origin: top right; }
   .top .gh { display: none; }
   .nums { grid-template-columns: 1fr 1fr; }
   .five { grid-template-columns: 1fr; } .five > div, .five > div:nth-child(-n+2) { grid-column: auto; }

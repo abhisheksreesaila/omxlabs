@@ -27,6 +27,7 @@ const GH = "https://github.com/abhisheksreesaila";
       `<div class="right">${gh ? `<a class="gh" href="${gh}">GitHub</a>` : ""}<a class="cta" href="${ctaHref}">${cta}</a></div>`;
   }
   // the technology menu closes on a click outside it
+  document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll("details.techmenu[open]").forEach(d => d.open = false); });
   document.addEventListener("click", e => document.querySelectorAll("details.techmenu[open]").forEach(d => { if (!d.contains(e.target)) d.open = false; }));
   document.querySelectorAll(".fam").forEach(fam => {
     const list = fam.dataset.only === "tech" ? SUITE.filter(p => p.k !== "plorer") : SUITE, anchor = fam.dataset.to === "anchor";

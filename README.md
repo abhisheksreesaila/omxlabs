@@ -4,7 +4,7 @@
 
 **Every kind of data. One GPU. Built for people and agents.**
 
-### [🌐 omxlabs.tech →](https://omxlabs.tech) &nbsp;·&nbsp; [▶ The slides (2 min) →](https://omxlabs.tech/deck.html)
+### [🌐 omxlabs.tech →](https://omxlabs.tech) &nbsp;·&nbsp; [▶ The slides (2 min) →](https://omxlabs.tech/omxplorer/deck.html)
 
 </div>
 
@@ -33,3 +33,5 @@ Each product has a cover page and a two-minute deck with the code. Read those; t
 The site itself: plain HTML, `assets/suite.css` (one cover layout; each product's colour and mark, `.px-*` and `.pm`), `assets/deck.css` + `deck.js`
 (one reveal.js deck template), `assets/suite.js` (the suite list that draws every page's top bar and suite row).
 `readmes/` holds the short README drafts for each product's repo. Preview: `python3 -m http.server` and open `/`.
+
+Once omxplorer is hosted, every "Meet omxplorer" button becomes "Try omxplorer" and opens the live app; `omxplorer/` stays the deep dive.

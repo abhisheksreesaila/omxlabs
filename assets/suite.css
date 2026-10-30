@@ -11,9 +11,13 @@
   --bg: #000; --ink: var(--oq-ink); --ink2: var(--oq-ink-2); --line: var(--oq-line); --ease: var(--oq-ease-in);
   --hero: clamp(52px, 8.4vw, 124px); --h2: clamp(38px, 5.6vw, 76px); --lede: clamp(19px, 2vw, 25px);
 }
-.px-labs { --px: var(--ox-labs); } .px-plorer { --px: var(--ox-plorer); --pg: "P"; } .px-core { --px: var(--ox-core); --pg: "C"; }
-.px-code { --px: var(--ox-code); --pg: "</>"; --pgs: .34; --pgf: var(--mono); } .px-qua { --px: var(--ox-qua); --pg: "Q"; }
-.px-console { --px: var(--ox-console); --pg: "AI"; --pgs: .42; }
+/* each product: one colour and one outline icon (Lucide, ISC) that says its job: compass explores, cog is the engine, </> the code, palette the design, sparkles the AI, flask the lab */
+.px-plorer { --px: var(--ox-plorer); --pi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z'/%3E%3C/svg%3E"); }
+.px-core { --px: var(--ox-core); --pi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z'/%3E%3Cpath d='M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z'/%3E%3Cpath d='M12 2v2'/%3E%3Cpath d='M12 22v-2'/%3E%3Cpath d='m17 20.66-1-1.73'/%3E%3Cpath d='M11 10.27 7 3.34'/%3E%3Cpath d='m20.66 17-1.73-1'/%3E%3Cpath d='m3.34 7 1.73 1'/%3E%3Cpath d='M14 12h8'/%3E%3Cpath d='M2 12h2'/%3E%3Cpath d='m20.66 7-1.73 1'/%3E%3Cpath d='m3.34 17 1.73-1'/%3E%3Cpath d='m17 3.34-1 1.73'/%3E%3Cpath d='m11 13.73-4 6.93'/%3E%3C/svg%3E"); }
+.px-code { --px: var(--ox-code); --pi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 16 4-4-4-4'/%3E%3Cpath d='m6 8-4 4 4 4'/%3E%3Cpath d='m14.5 4-5 16'/%3E%3C/svg%3E"); }
+.px-qua { --px: var(--ox-qua); --pi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='13.5' cy='6.5' r='1' fill='black'/%3E%3Ccircle cx='17.5' cy='10.5' r='1' fill='black'/%3E%3Ccircle cx='8.5' cy='7.5' r='1' fill='black'/%3E%3Ccircle cx='6.5' cy='12.5' r='1' fill='black'/%3E%3Cpath d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z'/%3E%3C/svg%3E"); }
+.px-console { --px: var(--ox-console); --pi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/%3E%3Cpath d='M20 3v4'/%3E%3Cpath d='M22 5h-4'/%3E%3Cpath d='M4 17v2'/%3E%3Cpath d='M5 18H3'/%3E%3C/svg%3E"); }
+.px-labs { --px: var(--ox-labs); --pi: var(--pi-labs); } :root { --pi-labs: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2'/%3E%3Cpath d='M8.5 2h7'/%3E%3Cpath d='M7 16h10'/%3E%3C/svg%3E"); }
 .oq-root.oq-night[class*="px-"], section[class*="px-"] { --oq-accent: var(--px); --oq-on-accent: #0b0b0d; }
 section:has(> .tech) { padding-top: 96px; padding-bottom: 96px; }
 
@@ -61,18 +65,17 @@ h3 { font: 650 20px/1.25 var(--sans); letter-spacing: -.02em; margin: 0; }
 .more:hover { text-decoration: underline; text-underline-offset: 4px; }
 
 /* the top bar: the trail (omxlabs › product) · GitHub and one CTA */
-.top { position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 12px 20px; background: var(--bg); box-shadow: 0 1px 0 var(--line); }
+.top { position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 12px 20px; background: rgb(0 0 0 / .55); -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5); box-shadow: 0 1px 0 rgb(255 255 255 / .07); }
 .trail { display: flex; align-items: center; gap: 8px; font: 700 16px var(--sans); letter-spacing: -.02em; text-decoration: none; min-width: 0; }
 .trail a { text-decoration: none; color: var(--ink2); } .trail a:hover { color: var(--ink); }
 .trail .sep { color: var(--ink2); opacity: .5; font-weight: 400; }
 .trail b { color: var(--ink); white-space: nowrap; }
-/* a product's mark: a rounded tile in its colour with its letter (the glyph lives here, so decks and pages share it).
-   <i class="pm px-core"></i>, or a bare .pm inside anything with a px-* class. Size with --s. omxlabs' own .mark is ink with a dot. */
-.pm, .mark { --s: 24px; flex: none; display: inline-grid; place-items: center; width: var(--s); height: var(--s); border-radius: calc(var(--s) * .3);
-  background: var(--px, var(--oq-accent)); color: #0b0b0d; font: 800 calc(var(--s) * var(--pgs, .5))/1 var(--pgf, var(--sans)); letter-spacing: -.04em; font-style: normal;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / .28), inset 0 -1px 0 rgb(0 0 0 / .18), 0 1px 2px rgb(0 0 0 / .5); vertical-align: middle; }
-.pm::after, .mark::after { content: var(--pg, ""); }
-.px-labs .mark::after { content: ""; width: 30%; height: 30%; border-radius: 50%; background: #000; }
+/* a product's mark: an outline icon in its colour on a faint tile of the same colour (decks and pages share it).
+   <i class="pm px-core"></i>, or a bare .pm inside anything with a px-* class. Size with --s. omxlabs' own .mark is the flask. */
+.pm, .mark { --s: 24px; flex: none; display: inline-grid; place-items: center; width: var(--s); height: var(--s); border-radius: calc(var(--s) * .3); font-style: normal; vertical-align: middle;
+  background: color-mix(in srgb, var(--px, var(--oq-accent)) 12%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--px, var(--oq-accent)) 55%, transparent); }
+.pm::after, .mark::after { content: ""; width: 62%; height: 62%; background: var(--px, var(--oq-accent)); -webkit-mask: var(--pi) center / contain no-repeat; mask: var(--pi) center / contain no-repeat; }
+.mark { --px: var(--ox-labs); --pi: var(--pi-labs); }
 .top .right { justify-self: end; display: flex; gap: 14px; align-items: center; }
 .top .cta { height: 36px; padding: 0 16px; font-size: 13.5px; }
 .top .gh { font: 500 13.5px var(--sans); color: var(--ink2); text-decoration: none; } .top .gh:hover { color: var(--ink); }

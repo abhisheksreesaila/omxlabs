@@ -234,3 +234,7 @@ footer { padding: 34px 24px 90px; }
 /* product names are always lowercase, even inside uppercase labels (suite.js and deck.js wrap them) */
 .nm { text-transform: none; letter-spacing: -.01em; }
 .tag.plan { color: var(--ink2); background: rgb(255 255 255 / .06); }
+/* touch: the small buttons still give a 44 px target */
+.chapters button { min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; }
+.cmd button { min-height: 36px; min-width: 56px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; position: relative; }
+.cmd button::after { content: ""; position: absolute; inset: -6px; }

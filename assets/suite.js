@@ -1,4 +1,4 @@
-// omxlabs suite: one list of products draws every page's top bar and suite row, so the five covers can't drift apart.
+// omxlabs suite: one list of products draws every page's top bar (no product switcher: pages lead on by scrolling) and suite row, so the five covers can't drift apart.
 // A page says who it is with <html data-here="plorer" data-root="..">; it marks <nav class="top"> and <div class="fam"> to fill.
 // Every product has one colour and one mark (suite.css .px-* and .pm), like an Office icon: <i class="pm px-core"></i> anywhere.
 // <div class="fam" data-only="tech"> lists only the four technologies; data-to="anchor" links cards to #omx<k> on the same page.
@@ -20,15 +20,8 @@ const GH = "https://github.com/abhisheksreesaila";
     const cta = top.dataset.cta || "Watch the slides", ctaHref = top.dataset.ctaHref || "#slides", gh = top.dataset.gh;
     top.innerHTML =
       `<div class="trail"><span class="${me ? "pm" : "mark"}"></span>${me ? `<a href="${href("labs")}">omxlabs</a><span class="sep">›</span><b>${me.name}</b>` : `<b>omxlabs</b>`}</div>` +
-      // omxplorer up front; the four technologies wait behind one menu, so a first visit sees one product
-      `<div class="suite"><a class="px-plorer${here === "plorer" ? " on" : ""}" href="${href("plorer")}"><i class="pm"></i>omxplorer</a>` +
-      `<details class="techmenu${me && me.k !== "plorer" ? " on" : ""}"><summary>${me && me.k !== "plorer" ? `<i class="pm px-${me.k}"></i>${me.name}` : "Technology"}</summary>` +
-      `<div class="menu">${SUITE.filter(p => p.k !== "plorer").map(p => `<a class="px-${p.k}${p.k === here ? " on" : ""}" href="${href(p.k)}"><i class="pm"></i><span><b>${p.name}</b>${p.role.replace("technology · ", "")}</span></a>`).join("")}</div></details></div>` +
       `<div class="right">${gh ? `<a class="gh" href="${gh}">GitHub</a>` : ""}<a class="cta" href="${ctaHref}">${cta}</a></div>`;
   }
-  // the technology menu closes on Escape or a click outside it
-  document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll("details.techmenu[open]").forEach(d => d.open = false); });
-  document.addEventListener("click", e => document.querySelectorAll("details.techmenu[open]").forEach(d => { if (!d.contains(e.target)) d.open = false; }));
   document.querySelectorAll(".fam").forEach(fam => {
     const list = fam.dataset.only === "tech" ? SUITE.filter(p => p.k !== "plorer") : SUITE, anchor = fam.dataset.to === "anchor";
     fam.classList.toggle("four", list.length === 4);

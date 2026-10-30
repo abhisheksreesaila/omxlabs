@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="../assets/omxqua/src/components.css"><link rel="stylesheet" href="../assets/suite.css">
 <style>
 /* omxplorer's own: video becomes rows (g39): two recorded clips in frames, then what's built and what isn't */
-.clips { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; text-align: left; }
+.clips { display: grid; grid-template-columns: 1.2fr 1fr;  /* (equal heights: the warehouse is 16:10, the drone 4:3) */ gap: 24px; margin-top: 48px; text-align: left; }
 .clips figure { margin: 0; min-width: 0; }
 .clips .frame { margin: 0; }
 .clips .cap { text-align: left; }
@@ -110,13 +110,13 @@
 <section id="try"><div class="wrap center rv">
   <h2>Live now, <span class="two">and what's next.</span></h2>
   <div class="road">
-    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li><li><a href="#rows">Video becomes rows, and a reel cut by them</a></li></ul></div>
-    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>Try it in your browser</b> <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by omxconsole on your GPU</li><li><a href="#rows">Real-world footage, the drone, audio</a></li></ul></div>
+    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li><li><a href="#rows">Video becomes rows: the reel, the drone's flight plan</a></li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>Try it in your browser</b> <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by omxconsole on your GPU</li><li><a href="#rows">Real-world footage, audio</a></li></ul></div>
     <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Apple GPUs</li></ul></div>
   </div>
 </div></section>
 
-<!-- live: video becomes rows (g39); in progress: real footage, other GPUs, the drone in omxplorer -->
+<!-- live: video becomes rows (g39): the warehouse and the drone; in progress: real footage, other GPUs, audio -->
 <section id="rows" style="padding-top:40px"><div class="wrap center rv">
   <div class="eyebrow"><span class="tag live"><i></i>Live</span><span class="tag prog"><i></i>In progress</span></div>
   <h2>Video <span class="two">becomes rows.</span></h2>
@@ -124,10 +124,10 @@
   <div class="clips">
     <figure><div class="frame"><div class="bar"><i></i><i></i><i></i><span>omxplorer · warehouse.mp4 · 1,140 frames</span></div>
       <video src="../assets/img/clip-warehouse.mp4" autoplay muted loop playsinline preload="metadata" poster="../assets/img/clip-warehouse.jpg" aria-label="omxplorer opens a warehouse video, analyzes it into a detections table, and makes a reel of the damaged pallets with faces blurred and shipment IDs burned in"></video></div>
-      <figcaption class="cap">The warehouse, a real recording driven by omxplorer's agent tools: open, Analyze, the detections table, a reel of damaged pallets (faces blurred, shipment ID burned in). Then the editor cuts it into 3 clips from the rows.</figcaption></figure>
-    <figure><div class="frame"><div class="bar"><i></i><i></i><i></i><span>omxcode · drone_a.mp4 · telemetry at 10 Hz</span></div>
-      <video src="../assets/img/clip-drone.mp4" autoplay muted loop playsinline preload="metadata" poster="../assets/img/clip-drone.jpg" aria-label="a drone inspection video playing beside its telemetry chart, whose cursor follows the picture, then the editor with an altitude lane"></video></div>
-      <figcaption class="cap">The drone, recorded from omxcode's media example (not yet inside omxplorer): the telemetry's cursor follows the picture frame by frame, then the editor with its altitude lane.</figcaption></figure>
+      <figcaption class="cap">The warehouse, a real recording driven by omxplorer's agent tools: open, Analyze, the detections table, a reel of damaged pallets (faces blurred, shipment ID burned in). Then the video card's Edit: Cut it makes 3 clips from the rows.</figcaption></figure>
+    <figure><div class="frame"><div class="bar"><i></i><i></i><i></i><span>omxplorer · two drone flights · telemetry</span></div>
+      <video src="../assets/img/clip-drone.mp4" autoplay muted loop playsinline preload="metadata" poster="../assets/img/clip-drone.jpg" aria-label="omxplorer opens a drone inspection video with its telemetry chart and map, analyzes it into assets and defects, compares two flights and makes the next flight plan"></video></div>
+      <figcaption class="cap">The drone, in omxplorer, driven by its agent tools: the flight with its telemetry (the chart's cursor and the map's dot follow the video), Analyze, then two flights compared: the assets that got worse, and the next flight plan.</figcaption></figure>
   </div>
   <div class="scen">
     <div><h3><span class="tag live"><i></i>Built and running</span></h3><ul>
@@ -135,11 +135,12 @@
       <li><b>The reel:</b> the frames where a column is true, faces blurred, the shipment ID burned in.</li>
       <li><b>SQL joins video rows with a CSV:</b> the delivered shipments whose label never shows is one query.</li>
       <li><b>Find more like this:</b> tap one example and OWLv2 finds the rest, in process. Recall 1.000, precision 0.886 on our footage; the warehouse scan takes 8.4 s.</li>
-      <li><b>Every step is an agent tool,</b> the clip above included.</li></ul></div>
+      <li><b>The drone:</b> two inspection flights become a table of every asset and defect on the map; which got worse since last time is one tap, and the answer becomes the next flight plan.</li>
+      <li><b>Every step is an agent tool,</b> both clips included.</li></ul></div>
     <div class="nx"><h3><span class="tag prog"><i></i>Not yet</span></h3><ul>
       <li><b>The footage is generated</b> (so we know the truth of every frame). Real-world footage hasn't been tried.</li>
       <li><b>The models (OWLv2, SAM 2.1) run on Linux with NVIDIA only.</b></li>
-      <li><b>The drone inside omxplorer:</b> hours of inspection footage as a database of assets and defects on the map, and the answer to "which got worse since last time" as the next flight plan.</li>
+      <li><b>The defect severity scale is calibrated to how our footage was drawn.</b> On real footage it would need calibrating again.</li>
       <li><b>Audio.</b></li></ul></div>
   </div>
 </div></section>

@@ -26,7 +26,7 @@ const GH = "https://github.com/abhisheksreesaila";
       `<div class="menu">${SUITE.filter(p => p.k !== "plorer").map(p => `<a class="px-${p.k}${p.k === here ? " on" : ""}" href="${href(p.k)}"><i class="pm"></i><span><b>${p.name}</b>${p.role.replace("technology · ", "")}</span></a>`).join("")}</div></details></div>` +
       `<div class="right">${gh ? `<a class="gh" href="${gh}">GitHub</a>` : ""}<a class="cta" href="${ctaHref}">${cta}</a></div>`;
   }
-  // the technology menu closes on a click outside it
+  // the technology menu closes on Escape or a click outside it
   document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll("details.techmenu[open]").forEach(d => d.open = false); });
   document.addEventListener("click", e => document.querySelectorAll("details.techmenu[open]").forEach(d => { if (!d.contains(e.target)) d.open = false; }));
   document.querySelectorAll(".fam").forEach(fam => {

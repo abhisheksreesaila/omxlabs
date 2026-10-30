@@ -1,18 +1,21 @@
 /* =====================================================================
    omxlabs suite · one cover layout for every product (omxqua · Developer · Graphite · night)
-   Every page has the same sections in the same order; only the accent changes:
-     omxlabs ink · omxplorer green · omxcore teal · omxconsole amber · omxcode rose · omxqua violet.
-   The five accents are omxqua's night app accents (tokens.css .oq-app-*; green is the dev family's beacon).
+   Every page has the same sections in the same order; only the accent changes.
+   Every product has one colour and one mark, wherever it appears (like Excel green, PowerPoint orange):
+     omxplorer green P · omxcore blue C · omxcode red </> · omxqua purple Q · omxconsole orange AI · omxlabs ink.
+   Five hues far apart on the wheel, all bright enough for dark text on the mark and for text on black.
    ===================================================================== */
 :root {
-  --ox-labs: var(--oq-ink); --ox-plorer: var(--oq-beacon-accent); --ox-core: #4fd1c5; --ox-console: #f5b041; --ox-code: #ff8fa3; --ox-qua: #b39dff;
+  --ox-labs: var(--oq-ink); --ox-plorer: #3ccf6e; --ox-core: #4aa8ff; --ox-code: #ff5d6c; --ox-qua: #c084fc; --ox-console: #ff9f40;
   --sans: "Geist", system-ui, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
   --bg: #000; --ink: var(--oq-ink); --ink2: var(--oq-ink-2); --line: var(--oq-line); --ease: var(--oq-ease-in);
   --hero: clamp(52px, 8.4vw, 124px); --h2: clamp(38px, 5.6vw, 76px); --lede: clamp(19px, 2vw, 25px);
 }
-.px-labs { --px: var(--ox-labs); } .px-plorer { --px: var(--ox-plorer); } .px-core { --px: var(--ox-core); }
-.px-console { --px: var(--ox-console); } .px-code { --px: var(--ox-code); } .px-qua { --px: var(--ox-qua); }
-.oq-root.oq-night[class*="px-"] { --oq-accent: var(--px); --oq-on-accent: #0b0b0d; }
+.px-labs { --px: var(--ox-labs); } .px-plorer { --px: var(--ox-plorer); --pg: "P"; } .px-core { --px: var(--ox-core); --pg: "C"; }
+.px-code { --px: var(--ox-code); --pg: "</>"; --pgs: .34; --pgf: var(--mono); } .px-qua { --px: var(--ox-qua); --pg: "Q"; }
+.px-console { --px: var(--ox-console); --pg: "AI"; --pgs: .42; }
+.oq-root.oq-night[class*="px-"], section[class*="px-"] { --oq-accent: var(--px); --oq-on-accent: #0b0b0d; }
+section:has(> .tech) { padding-top: 96px; padding-bottom: 96px; }
 
 html, body { margin: 0; background: var(--bg); }
 html { scroll-padding-top: 80px; scroll-behavior: smooth; }
@@ -63,11 +66,16 @@ h3 { font: 650 20px/1.25 var(--sans); letter-spacing: -.02em; margin: 0; }
 .trail a { text-decoration: none; color: var(--ink2); } .trail a:hover { color: var(--ink); }
 .trail .sep { color: var(--ink2); opacity: .5; font-weight: 400; }
 .trail b { color: var(--ink); white-space: nowrap; }
-.mark { width: 24px; height: 24px; border-radius: 7px; background: var(--oq-accent); flex: none; display: grid; place-items: center; }
-.mark::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #000; }
+/* a product's mark: a rounded tile in its colour with its letter (the glyph lives here, so decks and pages share it).
+   <i class="pm px-core"></i>, or a bare .pm inside anything with a px-* class. Size with --s. omxlabs' own .mark is ink with a dot. */
+.pm, .mark { --s: 24px; flex: none; display: inline-grid; place-items: center; width: var(--s); height: var(--s); border-radius: calc(var(--s) * .3);
+  background: var(--px, var(--oq-accent)); color: #0b0b0d; font: 800 calc(var(--s) * var(--pgs, .5))/1 var(--pgf, var(--sans)); letter-spacing: -.04em; font-style: normal;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .28), inset 0 -1px 0 rgb(0 0 0 / .18), 0 1px 2px rgb(0 0 0 / .5); vertical-align: middle; }
+.pm::after, .mark::after { content: var(--pg, ""); }
+.px-labs .mark::after { content: ""; width: 30%; height: 30%; border-radius: 50%; background: #000; }
 .suite { display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); }
-.suite a { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 999px; font: 500 13.5px var(--sans); color: var(--ink2); text-decoration: none; transition: background .15s, color .15s; }
-.suite a i { width: 8px; height: 8px; border-radius: 50%; background: var(--px); }
+.suite a { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 7px; border-radius: 999px; font: 500 13.5px var(--sans); color: var(--ink2); text-decoration: none; transition: background .15s, color .15s; }
+.suite a .pm { --s: 18px; }
 .suite a:hover { color: var(--ink); background: rgb(var(--oq-state) / .08); }
 .suite a.on { color: var(--ink); background: var(--oq-surface-3); }
 .top .right { justify-self: end; display: flex; gap: 14px; align-items: center; }
@@ -147,17 +155,37 @@ h3 { font: 650 20px/1.25 var(--sans); letter-spacing: -.02em; margin: 0; }
 .road .nx li { --c: var(--oq-warn); } .road .lt li { --c: var(--ink2); }
 .road li b { color: var(--ink); font-weight: 600; }
 
-/* the suite: five cards, colour-coded, the current one marked */
+/* the suite: a card per product, each with its mark and colour; the current one marked */
 .fam { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 48px; text-align: left; }
-.fam a { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 22px 20px 20px; border-radius: 22px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); text-decoration: none; overflow: hidden; transition: transform var(--oq-spring-dur) var(--oq-island-spring), box-shadow .2s; }
-.fam a::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--px); }
+.fam.four { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.fam a { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 22px 20px 20px; border-radius: 22px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); text-decoration: none; overflow: hidden; transition: transform var(--oq-spring-dur) var(--oq-spring), box-shadow .2s; }
 .fam a:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 60%, var(--line)), var(--oq-shadow-2); }
+.fam a:active { transform: scale(.98); transition-duration: var(--oq-spring-fast-dur); }
+.fam .pm { --s: 40px; margin-bottom: 10px; transition: transform var(--oq-spring-slow-dur) var(--oq-spring-slow); }
+.fam a:hover .pm { transform: scale(1.08) rotate(-4deg); }
 .fam b { font: 750 21px var(--sans); letter-spacing: -.03em; color: var(--ink); }
 .fam .role { font: 500 11.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--px); }
 .fam p { margin: 0; color: var(--ink2); font-size: 14.5px; flex: 1; }
-.fam .go { font: 500 13.5px var(--sans); color: var(--ink); } .fam .go::after { content: " ›"; }
+.fam .go { font: 500 13.5px var(--sans); color: var(--ink); margin-top: 6px; } .fam .go::after { content: " ›"; }
 .fam a.here { box-shadow: 0 0 0 1.5px var(--px); }
 .fam a.here .go::after { content: ""; }
+
+/* a technology, told in its colour: words on one side, its proof on the other (alternating with .flip) */
+.tech { display: grid; grid-template-columns: 1fr 1.15fr; gap: 64px; align-items: center; text-align: left; }
+.tech.flip > :first-child { order: 2; }
+.tech .pm { --s: 56px; }
+.tech .who { display: flex; align-items: center; gap: 14px; font: 600 12.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--px); }
+.tech .who b { font: 750 22px var(--sans); letter-spacing: -.03em; text-transform: none; color: var(--ink); display: block; }
+.tech h2 { font-size: clamp(30px, 3.3vw, 46px); line-height: 1.04; margin-top: 26px; }
+.tech h2 .ac { color: var(--px); }
+.tech .body { margin-top: 18px; }
+.tech .stat { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--line); }
+.tech .stat b { display: block; font: 800 clamp(40px, 4.4vw, 60px)/1 var(--sans); letter-spacing: -.05em; font-variant-numeric: tabular-nums; color: var(--px); }
+.tech .stat b small { font-size: .42em; letter-spacing: -.02em; color: var(--ink2); margin-left: 5px; }
+.tech .stat span { display: block; color: var(--ink2); font-size: 15.5px; margin-top: 8px; }
+.tech .ctas { margin-top: 26px; gap: 26px; }
+.tech .frame { margin: 0; }
+.tech .frame > img { aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; }
 
 /* the final band and the footer */
 .band { text-align: center; padding: 100px 24px; background: var(--oq-surface-1); border-top: 1px solid var(--line); }
@@ -170,7 +198,7 @@ footer { padding: 34px 24px 90px; }
 /* motion: hero words rise once; sections rise 24 px as they enter; nothing moves with reduced motion */
 .rise > span { display: inline-block; opacity: 0; transform: translateY(.3em); animation: rise .85s var(--ease) forwards; }
 @keyframes rise { to { opacity: 1; transform: none; } }
-.rv { opacity: 0; transform: translateY(24px); transition: opacity .85s var(--ease), transform .85s var(--ease); }
+.rv { opacity: 0; transform: translateY(28px); transition: opacity .7s var(--ease), transform var(--oq-spring-slow-dur) var(--oq-spring); }
 .rv.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -189,6 +217,7 @@ footer { padding: 34px 24px 90px; }
   .side, .pair, .pts, .road { grid-template-columns: 1fr; }
   .fam { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin: 48px -20px 0; padding: 4px 20px 8px; scrollbar-width: none; }
   .fam a { flex: 0 0 72%; scroll-snap-align: start; }
+  .tech { grid-template-columns: 1fr; gap: 36px; } .tech.flip > :first-child { order: 0; }
   .frame .bdg { position: static; display: inline-block; margin: 10px 12px; }
   .hero { padding-top: 56px; }
 }

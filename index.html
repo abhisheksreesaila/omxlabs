@@ -8,23 +8,28 @@
 <link rel="stylesheet" href="assets/omxqua/src/fonts.css"><link rel="stylesheet" href="assets/omxqua/src/tokens.css">
 <link rel="stylesheet" href="assets/omxqua/src/components.css"><link rel="stylesheet" href="assets/suite.css">
 <style>
-/* omxlabs' own: the suite's five colours in the headline, the "built from" strip under the flagship, the comparison table */
-.spectrum { display: flex; height: 4px; max-width: 260px; margin: 26px auto 0; border-radius: 4px; overflow: hidden; }
-.spectrum i { flex: 1; background: var(--px); }
-.built { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 18px; }
-.built a { display: inline-flex; align-items: center; gap: 9px; padding: 9px 15px; border-radius: 999px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); text-decoration: none; font: 500 14px var(--sans); color: var(--ink2); transition: box-shadow .2s, color .2s; }
-.built a b { color: var(--px); font-weight: 650; }
-.built a i { width: 8px; height: 8px; border-radius: 50%; background: var(--px); }
-.built a:hover { color: var(--ink); box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 60%, var(--line)); }
-.fam.big a { padding: 26px 22px 22px; min-height: 230px; }
-.fam.big b { font-size: 24px; }
+/* omxlabs' own: omxplorer's few things, the comparison table */
+.does { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 52px; text-align: left; }
+.does > div { padding: 26px 24px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); display: flex; flex-direction: column; gap: 10px; }
+.does .em { font-size: 26px; line-height: 1; }
+.does p { margin: 0; color: var(--ink2); font-size: 15.5px; }
+.does p b { color: var(--ink); font-weight: 600; }
+.does .soon { box-shadow: 0 0 0 1px var(--line); background: var(--bg); }
+.does .soon h3 { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.prodhead { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.prodhead .pm { --s: 56px; }
+.plorer-stat { display: flex; justify-content: center; align-items: baseline; gap: 18px; margin-top: 44px; flex-wrap: wrap; }
+.plorer-stat b { font: 800 clamp(48px, 6vw, 84px)/1 var(--sans); letter-spacing: -.05em; color: var(--px); }
+.plorer-stat b small { font-size: .4em; color: var(--ink2); margin-left: 5px; letter-spacing: -.02em; }
+.plorer-stat span { color: var(--ink2); font-size: 17px; }
 .vs { margin-top: 48px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); overflow: hidden; text-align: left; }
 .vs > div { display: grid; grid-template-columns: 170px 1fr 1fr; gap: 20px; padding: 18px 24px; border-top: 1px solid var(--oq-line-2); font-size: 15.5px; color: var(--ink2); align-items: start; }
 .vs > div:first-child { border-top: 0; background: var(--oq-surface-2); font: 600 11.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding-top: 13px; padding-bottom: 13px; }
 .vs > div > b { color: var(--ink); font-weight: 650; }
 .vs > div > span:last-child { color: var(--ink); }
 .vs > div.edge > span:last-child { color: var(--oq-warn); }
-@media (max-width: 900px) { .vs > div { grid-template-columns: 1fr 1fr; } .vs > div > b { grid-column: 1 / -1; } .vs > div:first-child > span:first-child { display: none; } }
+@media (max-width: 1100px) { .does { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 900px) { .does { grid-template-columns: 1fr; } .vs > div { grid-template-columns: 1fr 1fr; } .vs > div > b { grid-column: 1 / -1; } .vs > div:first-child > span:first-child { display: none; } }
 </style>
 </head>
 <body id="top">
@@ -34,37 +39,86 @@
 <section class="hero"><div class="wrap center">
   <div class="eyebrow">omxlabs · GPU-native · agent-native · written in Mojo <span class="tag live"><i></i>public alpha</span></div>
   <h1 class="rise"><span>Every</span> <span>kind</span> <span>of</span> <span>data.</span> <span>One</span> <span>GPU.</span> <span class="two">Built</span> <span class="two">for</span> <span class="two">people</span> <span class="two">and</span> <span class="two">agents.</span></h1>
-  <div class="spectrum"><i class="px-plorer"></i><i class="px-core"></i><i class="px-code"></i><i class="px-console"></i><i class="px-qua"></i></div>
   <p class="lede">We build software that runs serious data and AI work on <b>the GPU you already own</b>, and that an AI agent can use <b>as easily as you can</b>. Our flagship is <b>omxplorer</b>.</p>
   <div class="ctas"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="#slides">▶ Watch the 2-minute slides</a><a class="more" href="https://github.com/abhisheksreesaila">GitHub</a></div>
   <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxplorer · orders_1m.csv · 1,000,000 rows</span></div>
     <video src="assets/img/clip-sentence-web.mp4" autoplay muted loop playsinline poster="assets/img/omxplorer-sentence-web.jpg"></video>
     <span class="bdg">median per group, 1M rows: <b>6.4 ms</b> · RTX 3090</span></figure>
-  <div class="built">
-    <a class="px-core" href="omxcore/"><i></i>Powered by <b>omxcore</b></a>
-    <a class="px-code" href="omxcode/"><i></i>Built with <b>omxcode</b></a>
-    <a class="px-console" href="omxconsole/"><i></i>Local AI by <b>omxconsole</b></a>
-    <a class="px-qua" href="omxqua/"><i></i>The look: <b>omxqua</b></a>
-  </div>
 </div></section>
 
-<!-- numbers: one per product -->
-<section style="padding-top:40px"><div class="wrap center rv">
-  <h2>Your own hardware <span class="two">is enough.</span></h2>
-  <div class="nums">
-    <div class="px-plorer"><b style="color:var(--px)">0.6<small>ms</small></b><span>omxplorer: a chart over 1 million rows</span></div>
-    <div class="px-core"><b style="color:var(--px)">3.15<small>s</small></b><span>omxcore: all 22 TPC-H queries at SF10 (DuckDB 5.08 s)</span></div>
-    <div class="px-code"><b style="color:var(--px)">1<small>file</small></b><span>omxcode: one app.mojo, native on Linux, web, Android, Mac</span></div>
-    <div class="px-console"><b style="color:var(--px)">8</b><span>omxconsole: model architectures ported and serving locally</span></div>
+<!-- omxplorer: the product, first -->
+<section id="omxplorer" class="px-plorer" style="padding-top:60px"><div class="wrap center rv">
+  <div class="prodhead"><i class="pm"></i></div>
+  <div class="eyebrow" style="margin-top:20px"><span style="color:var(--px)">omxplorer</span> · the product <span class="tag live"><i></i>Live now</span></div>
+  <h2>omxplorer is the product. <span class="two">It does a few things.</span></h2>
+  <div class="does">
+    <div><span class="em">📂</span><h3>Your data, all of it.</h3><p>Sheets, pivots, charts and reports over <b>CSV and Parquet straight from disk</b>. 100M-row files stream in.</p></div>
+    <div><span class="em">💬</span><h3>The sentence is the chart.</h3><p><b>“Sum of revenue by product, top 5, as bars.”</b> Tap a word, or type “median”, and the bars move.</p></div>
+    <div><span class="em">🤖</span><h3>Agents use it too.</h3><p>Every button is a tool an agent can call, and <b>nothing more</b>. <a href="#agents">See a session</a>.</p></div>
+    <div class="soon"><span class="em">🎞️</span><h3>Video, images and audio as rows. <span class="tag prog"><i></i>In progress</span></h3><p>Footage becomes a table you can ask, like any other file.</p></div>
   </div>
-  <p class="srcline">RTX 3090 · omxcode README (chart 0.5–0.7 ms) · omxcore docs/bench/m2s-engine.csv (v0.6.0; DuckDB is faster on 12 of the 22 queries, the total is ours) · omxconsole docs/PORTING.md (text models) · iPhone builds but hasn't run on a phone</p>
+  <div class="plorer-stat"><b>0.6<small>ms</small></b><span>a chart over 1 million rows</span></div>
+  <p class="srcline">RTX 3090 · omxcode README (chart 0.5–0.7 ms)</p>
+  <div class="ctas"><a class="cta" href="omxplorer/">Open omxplorer</a><a class="more" href="omxplorer/#slides">Its slides</a></div>
 </div></section>
 
-<!-- five things = the five products -->
-<section style="padding-top:40px"><div class="wrap center rv">
-  <h2>One flagship. <span class="two">Four breakthroughs under it.</span></h2>
-  <p class="lede">Each one stands on its own. Each has a cover page and a two-minute deck.</p>
-  <div class="fam big"></div>
+<!-- powered by four breakthrough technologies -->
+<section id="tech" style="padding-top:60px"><div class="wrap center rv">
+  <h2>Powered by four <span class="two">breakthrough technologies.</span></h2>
+  <p class="lede">Each one stands on its own, with its own cover page and slides. Together they are why omxplorer feels the way it does.</p>
+  <div class="fam" data-only="tech" data-to="anchor"></div>
+</div></section>
+
+<!-- omxcore -->
+<section id="omxcore" class="px-core"><div class="wrap tech rv">
+  <div>
+    <div class="who"><i class="pm"></i><span><b>omxcore</b>the engine</span></div>
+    <h2>omxcore is why a million rows <span class="ac">answer in under a millisecond.</span></h2>
+    <p class="body">SQL on your CPU and your GPU, over the files you already have. omxplorer's group-bys, medians and charts run as its GPU kernels, linked in like SQLite.</p>
+    <div class="stat"><b>3.15<small>s</small></b><span>all 22 TPC-H queries at SF10 (DuckDB 5.08 s)</span></div>
+    <p class="srcline">omxcore docs/bench/m2s-engine.csv (v0.6.0; DuckDB is faster on 12 of the 22 queries, the total is ours)</p>
+    <div class="ctas"><a class="more" href="omxcore/">Open omxcore</a><a class="more" href="omxcore/#slides">Its slides</a></div>
+  </div>
+  <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>omxcore · benchmarks · TPC-H, query by query</span></div><img src="assets/img/omxcore-benchmarks.png" alt="omxcore's benchmarks page: TPC-H SF10, all 22 queries. omxcore 3.15 s, DuckDB 5.08 s, Polars 14.40 s." loading="lazy"></figure>
+</div></section>
+
+<!-- omxcode -->
+<section id="omxcode" class="px-code"><div class="wrap tech flip rv">
+  <div>
+    <div class="who"><i class="pm"></i><span><b>omxcode</b>the framework</span></div>
+    <h2>omxcode is why omxplorer <span class="ac">is one app on every screen.</span></h2>
+    <p class="body">Write an app once in Mojo, with its GPU code in the same file. Linux, the web, Android and Mac draw it with their own widgets, and every app is an MCP server an agent can drive.</p>
+    <div class="stat"><b>1<small>file</small></b><span>one app.mojo, native on Linux, web, Android, Mac</span></div>
+    <p class="srcline">iPhone builds but hasn't run on a phone</p>
+    <div class="ctas"><a class="more" href="omxcode/">Open omxcode</a><a class="more" href="omxcode/#slides">Its slides</a></div>
+  </div>
+  <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>omxcode · Data Lens · GPU code in the same app.mojo</span></div><img src="assets/img/omxcode-lens.jpg" alt="Data Lens, an omxcode app drawing a GPU point cloud" loading="lazy"></figure>
+</div></section>
+
+<!-- omxqua -->
+<section id="omxqua" class="px-qua"><div class="wrap tech rv">
+  <div>
+    <div class="who"><i class="pm"></i><span><b>omxqua</b>the design language</span></div>
+    <h2>omxqua is why it feels <span class="ac">calm, and alive.</span></h2>
+    <p class="body">Google's solid surfaces and one soft shadow, Apple's springs. One colour per product, buttons that squish and spring back. This site is drawn in it.</p>
+    <div class="stat"><b>4</b><span>families: dev, travel, kids, money</span></div>
+    <p class="srcline">omxqua src/tokens.css (families and skins)</p>
+    <div class="ctas"><a class="more" href="omxqua/">Open omxqua</a><a class="more" href="omxqua/#slides">Its slides</a></div>
+  </div>
+  <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>omxqua · showcase · night</span></div><img src="assets/img/omxqua-showcase.png" alt="omxqua's showcase, night" loading="lazy"></figure>
+</div></section>
+
+<!-- omxconsole -->
+<section id="omxconsole" class="px-console"><div class="wrap tech flip rv">
+  <div>
+    <div class="who"><i class="pm"></i><span><b>omxconsole</b>local AI</span></div>
+    <h2>omxconsole is <span class="ac">the AI supplier.</span></h2>
+    <p class="body">One command turns your GPU into a private, OpenAI-compatible model server. Next, omxplorer's Ask is answered by it, on the same GPU as your data.</p>
+    <div class="stat"><b>8</b><span>model architectures ported and serving locally</span></div>
+    <p class="srcline">omxconsole docs/PORTING.md (text models)</p>
+    <div class="ctas"><a class="more" href="omxconsole/">Open omxconsole</a><a class="more" href="omxconsole/#slides">Its slides</a></div>
+  </div>
+  <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>omxconsole · my models</span></div><img src="assets/img/omxconsole-home-dark.png" alt="omxconsole's model list, night" loading="lazy"></figure>
 </div></section>
 
 <!-- slides -->
@@ -74,7 +128,7 @@
   <p class="lede">Click the slides, then use the arrow keys. Each product has its own deck on its page, with the code.</p>
   <div class="deck"><div class="bar"><span class="dot"></span><span>omxlabs · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
     <iframe src="deck.html" title="omxlabs, the slides" loading="lazy" allowfullscreen></iframe></div>
-  <div class="chapters"><button data-slide="1">Why</button><button data-slide="2">The stack</button><button data-slide="4">omxplorer</button><button data-slide="5">omxcore</button><button data-slide="6">omxcode</button><button data-slide="7">omxconsole</button><button data-slide="8">omxqua</button><button data-slide="10">Roadmap</button></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="2">omxplorer</button><button data-slide="3">Four technologies</button><button data-slide="5">omxcore</button><button data-slide="6">omxcode</button><button data-slide="7">omxqua</button><button data-slide="8">omxconsole</button><button data-slide="10">Roadmap</button></div>
 </div></section>
 
 <!-- today vs omxlabs -->

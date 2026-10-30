@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>omxlabs · the slides</title>
-<meta name="description" content="omxlabs in twelve slides: why, the stack, the five products in their colours, agents, and the roadmap.">
+<meta name="description" content="omxlabs in twelve slides: why, omxplorer, the four breakthrough technologies under it in their colours, agents, and the roadmap.">
 <link rel="stylesheet" href="assets/omxqua/src/fonts.css"><link rel="stylesheet" href="assets/omxqua/src/tokens.css">
 <link rel="stylesheet" href="assets/omxqua/src/components.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
@@ -14,8 +14,16 @@
 .box[class*="px-"] { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--px) 55%, var(--oq-line)); }
 .box[class*="px-"] > span:first-child { color: var(--px); }
 .box.flag { padding: 30px 30px; font-size: 32px; }
-.spectrum { display: flex; height: 6px; width: 340px; border-radius: 6px; overflow: hidden; margin: 6px 0 34px; }
-.spectrum i { flex: 1; background: var(--px); }
+.marks { display: flex; align-items: center; gap: 14px; margin: 10px 0 34px; }
+.marks .pm { --s: 56px; } .marks .plus { font: 500 18px var(--mono); color: var(--oq-ink-2); margin: 0 8px 0 4px; letter-spacing: .08em; text-transform: uppercase; }
+.reveal .eyebrow .pm { --s: 36px; }
+.box .pm { --s: 32px; margin-right: 14px; }
+.box > span:first-child { display: inline-flex; align-items: center; }
+.reveal .card .pm { --s: 48px; margin-bottom: 18px; }
+ul.does { list-style: none; margin: 0 0 26px; padding: 0; display: grid; gap: 14px; font-size: 26px; }
+ul.does li { padding-left: 26px; position: relative; } ul.does li::before { content: ""; position: absolute; left: 0; top: .55em; width: 10px; height: 10px; border-radius: 3px; background: var(--px); }
+ul.does li.soon::before { background: var(--oq-warn); }
+ul.does li { line-height: 1.35; } ul.does .wip { font: 600 18px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--oq-warn); margin-left: 6px; }
 .prod { display: grid; grid-template-columns: 1fr 1.1fr; gap: 50px; align-items: center; }
 .prod .shot img { max-height: 520px; object-fit: cover; object-position: top left; }
 .reveal .go { font: 600 22px var(--mono); color: var(--oq-accent); }
@@ -29,7 +37,7 @@
 <section>
   <div class="eyebrow">omxlabs · GPU-native · agent-native · written in Mojo</div>
   <h1>Every kind of data. One GPU. <span class="two">Built for people and agents.</span></h1>
-  <div class="spectrum"><i class="px-plorer"></i><i class="px-core"></i><i class="px-code"></i><i class="px-console"></i><i class="px-qua"></i></div>
+  <div class="marks"><i class="pm px-plorer"></i><span class="plus">powered by</span><i class="pm px-core"></i><i class="pm px-code"></i><i class="pm px-qua"></i><i class="pm px-console"></i></div>
   <p class="note fragment rise">arrow keys, space or swipe · 12 slides · each product has its own deck with the code</p>
 </section>
 
@@ -44,57 +52,61 @@
   </div>
 </section>
 
-<!-- 3 · the stack -->
-<section data-auto-animate>
-  <div class="eyebrow">The stack</div>
-  <h2 data-id="h">One flagship, <span class="two">four breakthroughs under it.</span></h2>
-  <div class="layers" style="margin-top:26px">
-    <div class="box flag px-plorer" data-id="plorer"><span>omxplorer</span><small>the flagship: ask your data in a sentence</small></div>
-    <div class="cols r2" style="gap:12px">
-      <div class="box px-code" data-id="code"><span>omxcode</span><small>builds it</small></div>
-      <div class="box px-qua" data-id="qua"><span>omxqua</span><small>the look</small></div>
-    </div>
-    <div class="cols r2" style="gap:12px">
-      <div class="box px-core" data-id="core"><span>omxcore</span><small>powers it</small></div>
-      <div class="box px-console" data-id="console"><span>omxconsole</span><small>local AI</small></div>
-    </div>
-    <div class="box" data-id="gpu"><span>Your GPU</span><small>NVIDIA today · CPU fallback</small></div>
-  </div>
-</section>
-
-<!-- 4 · a question travels -->
-<section data-auto-animate>
-  <div class="eyebrow">A question, as it runs</div>
-  <h2 data-id="h">You ask. <span class="two">The whole lab answers.</span></h2>
-  <div class="flow" style="margin-top:40px">
-    <div class="box px-plorer" data-id="plorer"><span>omxplorer</span><small>“median revenue by product”</small></div><span class="arrow"></span>
-    <div class="box px-core" data-id="core"><span>omxcore</span><small>the query, on the GPU</small></div><span class="arrow"></span>
-    <div class="box" data-id="gpu"><span>GPU</span><small>1M rows, 6.4 ms</small></div><span class="arrow"></span>
-    <div class="box px-code" data-id="code"><span>omxcode</span><small>new bars, drawn natively</small></div>
-  </div>
-  <div class="cols r2" style="margin-top:40px">
-    <div class="box px-console dim" data-id="console"><span>omxconsole</span><small>next: answers “why?” on the same GPU</small></div>
-    <div class="box px-qua" data-id="qua"><span>omxqua</span><small>the bars spring, the screen stays calm</small></div>
-  </div>
-</section>
-
-<!-- 5 · omxplorer -->
+<!-- 3 · omxplorer, the product -->
 <section class="px-plorer">
   <div class="prod">
     <div>
-      <div class="eyebrow">omxplorer · the flagship</div>
-      <h2>Ask your data <span class="ac">in a sentence.</span></h2>
-      <p>The chart's title is the chart. Tap a word, or type “median”, and a million rows are recomputed on the GPU.</p>
+      <div class="eyebrow"><i class="pm"></i>omxplorer · the product</div>
+      <h2>omxplorer is the product. <span class="two">It does a few things.</span></h2>
+      <ul class="does">
+        <li class="fragment rise"><b>Data.</b> Sheets, pivots and charts over CSV and Parquet, 100M-row files streamed.</li>
+        <li class="fragment rise"><b>The sentence chart.</b> Tap a word, or type “median”, and a million rows are recomputed on the GPU.</li>
+        <li class="fragment rise"><b>Agents.</b> Every button is a tool an agent can call.</li>
+        <li class="fragment rise soon"><b>Video, images and audio as rows.</b> <span class="wip">in progress</span></li>
+      </ul>
       <div class="num">0.6<small>ms</small></div><p class="note">a chart over 1M rows · RTX 3090 · omxcode README</p>
-      <p class="go">omxlabs.tech/omxplorer ›</p>
     </div>
     <div class="shot"><img src="assets/img/omxplorer-sentence-web.jpg" alt="omxplorer's sheet with a chart sentence"></div>
   </div>
 </section>
 
+<!-- 4 · four breakthrough technologies -->
+<section data-auto-animate>
+  <div class="eyebrow">Under omxplorer</div>
+  <h2 data-id="h">Powered by four <span class="two">breakthrough technologies.</span></h2>
+  <div class="layers" style="margin-top:26px">
+    <div class="box flag px-plorer" data-id="plorer"><span><i class="pm"></i>omxplorer</span><small>the product: ask your data in a sentence</small></div>
+    <div class="cols r2" style="gap:12px">
+      <div class="box px-core" data-id="core"><span><i class="pm"></i>omxcore</span><small>the engine: the speed</small></div>
+      <div class="box px-code" data-id="code"><span><i class="pm"></i>omxcode</span><small>the framework: every platform</small></div>
+    </div>
+    <div class="cols r2" style="gap:12px">
+      <div class="box px-qua" data-id="qua"><span><i class="pm"></i>omxqua</span><small>the design language</small></div>
+      <div class="box px-console" data-id="console"><span><i class="pm"></i>omxconsole</span><small>local AI: the AI supplier</small></div>
+    </div>
+    <div class="box" data-id="gpu"><span>Your GPU</span><small>NVIDIA today · CPU fallback</small></div>
+  </div>
+</section>
+
+<!-- 5 · a question travels -->
+<section data-auto-animate>
+  <div class="eyebrow">A question, as it runs</div>
+  <h2 data-id="h">You ask. <span class="two">The whole lab answers.</span></h2>
+  <div class="flow" style="margin-top:40px">
+    <div class="box px-plorer" data-id="plorer"><span><i class="pm"></i>omxplorer</span><small>“median revenue by product”</small></div><span class="arrow"></span>
+    <div class="box px-core" data-id="core"><span><i class="pm"></i>omxcore</span><small>the query, on the GPU</small></div><span class="arrow"></span>
+    <div class="box" data-id="gpu"><span>GPU</span><small>1M rows, 6.4 ms</small></div><span class="arrow"></span>
+    <div class="box px-code" data-id="code"><span><i class="pm"></i>omxcode</span><small>new bars, drawn natively</small></div>
+  </div>
+  <div class="cols r2" style="margin-top:40px">
+    <div class="box px-console dim" data-id="console"><span><i class="pm"></i>omxconsole</span><small>next: answers “why?” on the same GPU</small></div>
+    <div class="box px-qua" data-id="qua"><span><i class="pm"></i>omxqua</span><small>the bars spring, the screen stays calm</small></div>
+  </div>
+</section>
+
 <!-- 6 · omxcore -->
 <section class="px-core">
-  <div class="eyebrow">omxcore · powers it</div>
+  <div class="eyebrow"><i class="pm"></i>omxcore · the engine</div>
   <h2>SQL on your CPU <span class="ac">and your GPU.</span></h2>
   <div class="term" data-type style="min-height:0;font-size:21px"><div class="tc"><span class="p">$</span> mx sql "SELECT l_returnflag, sum(l_extendedprice) AS revenue FROM 'lineitem.parquet' GROUP BY l_returnflag"</div><div class="ok">{"rows":[["A",…],["N",…],["R",…]], …}</div></div>
   <div class="bars" style="margin-top:30px">
@@ -109,7 +121,7 @@
 <section class="px-code">
   <div class="prod">
     <div>
-      <div class="eyebrow">omxcode · builds it</div>
+      <div class="eyebrow"><i class="pm"></i>omxcode · the framework</div>
       <h2>Write it once. <span class="ac">Native everywhere.</span></h2>
       <p>Two functions, <b>view()</b> and <b>update()</b>. Linux, the web, Android and Mac draw it with their own widgets. iPhone builds.</p>
       <p>The GPU code sits in the same file. And every app is an MCP server.</p>
@@ -131,9 +143,23 @@
   </div>
 </section>
 
-<!-- 8 · omxconsole -->
+<!-- 8 · omxqua -->
+<section class="px-qua">
+  <div class="prod">
+    <div>
+      <div class="eyebrow"><i class="pm"></i>omxqua · the design language</div>
+      <h2>Google's surfaces. <span class="ac">Apple's springs.</span></h2>
+      <p>The design language this site is drawn in. Solid tonal surfaces, one soft shadow, buttons that squish and spring back, one accent per product.</p>
+      <p class="note">4 families · 4 skins · omxqua tokens.css · omxplorer moves onto it next</p>
+      <p class="go">omxlabs.tech/omxqua ›</p>
+    </div>
+    <div class="shot"><img src="assets/img/omxqua-showcase.png" alt="omxqua's showcase, night"></div>
+  </div>
+</section>
+
+<!-- 9 · omxconsole -->
 <section class="px-console">
-  <div class="eyebrow">omxconsole · local AI</div>
+  <div class="eyebrow"><i class="pm"></i>omxconsole · local AI, the AI supplier</div>
   <h2>Your GPU, <span class="ac">a private model server.</span></h2>
   <div class="cols r2" style="align-items:start">
     <div class="term" data-type style="min-height:0"><div class="tc"><span class="p">$</span> pixi run mxc serve qwen2.5-0.5b</div><div>endpoint  <span class="p">http://127.0.0.1:11435/v1</span></div><div class="c"># any OpenAI client works: point base_url here</div></div>
@@ -143,20 +169,6 @@
       <p class="fragment rise"><b>Private.</b> Prompts stay on your machine. Linux + NVIDIA today.</p>
       <p class="note">mxstudio · mxconsole/settings.py, docs/PORTING.md</p>
     </div>
-  </div>
-</section>
-
-<!-- 9 · omxqua -->
-<section class="px-qua">
-  <div class="prod">
-    <div>
-      <div class="eyebrow">omxqua · the look</div>
-      <h2>Google's surfaces. <span class="ac">Apple's springs.</span></h2>
-      <p>The design language this site is drawn in. Solid tonal surfaces, one soft shadow, buttons that squish and spring back, one accent per product.</p>
-      <p class="note">4 families · 4 skins · omxqua tokens.css · omxplorer moves onto it next</p>
-      <p class="go">omxlabs.tech/omxqua ›</p>
-    </div>
-    <div class="shot"><img src="assets/img/omxqua-showcase.png" alt="omxqua's showcase, night"></div>
   </div>
 </section>
 
@@ -189,13 +201,13 @@
 <!-- 12 · read on -->
 <section>
   <div class="eyebrow">Read on</div>
-  <h2>Pick a colour.</h2>
+  <h2>Every product, <span class="two">one colour.</span></h2>
   <div class="cols" style="grid-template-columns:repeat(5,1fr);margin-top:30px">
-    <a class="card px-plorer" href="omxplorer/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxplorer</h3><p>the flagship</p></a>
-    <a class="card px-core" href="omxcore/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxcore</h3><p>the engine</p></a>
-    <a class="card px-code" href="omxcode/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxcode</h3><p>the framework</p></a>
-    <a class="card px-console" href="omxconsole/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxconsole</h3><p>local AI</p></a>
-    <a class="card px-qua" href="omxqua/" target="_top" style="text-decoration:none"><h3 style="color:var(--px)">omxqua</h3><p>the look</p></a>
+    <a class="card px-plorer" href="omxplorer/" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxplorer</h3><p>the product</p></a>
+    <a class="card px-core" href="omxcore/" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxcore</h3><p>the engine</p></a>
+    <a class="card px-code" href="omxcode/" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxcode</h3><p>the framework</p></a>
+    <a class="card px-qua" href="omxqua/" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxqua</h3><p>the design language</p></a>
+    <a class="card px-console" href="omxconsole/" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxconsole</h3><p>local AI</p></a>
   </div>
   <p class="lede" style="margin-top:40px;font-size:30px">Each cover has its own deck, with the code. · <a href="https://github.com/abhisheksreesaila" target="_top">GitHub</a></p>
 </section>

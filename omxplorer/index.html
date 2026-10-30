@@ -7,14 +7,24 @@
 <meta property="og:title" content="omxplorer · Ask your data in a sentence.">
 <link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
 <link rel="stylesheet" href="../assets/omxqua/src/components.css"><link rel="stylesheet" href="../assets/suite.css">
+<style>
+/* omxplorer's own: the in-progress scenarios (their clips arrive with g39) */
+.scen { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 48px; text-align: left; }
+.scen > div { padding: 28px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); display: flex; flex-direction: column; gap: 10px; }
+.scen .em { font-size: 28px; line-height: 1; }
+.scen p { margin: 0; color: var(--ink2); font-size: 16px; }
+.scen p + p { color: var(--ink); }
+.road li a { color: inherit; text-underline-offset: 3px; }
+@media (max-width: 900px) { .scen { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body id="top">
-<!-- The cover template (same on every product): top · hero · numbers · five things · slides · the idea · agents · now/next/later · the suite · band · footer -->
+<!-- The cover template (same on every product): top · hero · numbers · five things · slides · the idea · agents · now/next/later · in progress: rows · powered by · band · footer -->
 <nav class="top" data-cta="Try it live" data-cta-href="#try" data-gh="https://github.com/abhisheksreesaila/omxcode"></nav>
 
 <!-- hero -->
 <section class="hero"><div class="wrap center">
-  <div class="eyebrow"><span class="px">omxplorer</span> · the flagship <span class="tag live"><i></i>Live now</span></div>
+  <div class="eyebrow"><span class="px">omxplorer</span> · the product <span class="tag live"><i></i>Live now</span></div>
   <h1 class="rise"><span>Ask</span> <span>your</span> <span>data</span> <span class="ac">in</span> <span class="ac">a</span> <span class="ac">sentence.</span></h1>
   <p class="lede">A data workspace where <b>a million rows answer in under a millisecond</b>, on your own GPU, and <b>every button is a tool your AI agent can call</b>. Written in Mojo, from the button to the GPU kernel.</p>
   <div class="ctas"><a class="cta" href="#slides">▶ Watch the 2-minute slides</a><a class="more" href="#agents">Connect your agent</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">GitHub</a></div>
@@ -94,16 +104,28 @@
   <h2>Live now, <span class="two">and what's next.</span></h2>
   <div class="road">
     <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li></ul></div>
-    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>Try it in your browser</b> <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by omxconsole on your GPU</li><li>Images, video and audio become rows</li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>Try it in your browser</b> <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by omxconsole on your GPU</li><li><a href="#rows">Video, images and audio become rows</a></li></ul></div>
     <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Edit video with a query</li><li>Apple GPUs</li></ul></div>
   </div>
 </div></section>
 
-<!-- the suite -->
+<!-- in progress: video, images and audio become rows -->
+<section id="rows" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow"><span class="tag prog"><i></i>In progress</span></div>
+  <h2>Video, images and audio <span class="two">become rows.</span></h2>
+  <p class="lede">Footage turns into a table you can ask, like any CSV. Two scenarios we're building toward.</p>
+  <!-- g39: scenario clips go here -->
+  <div class="scen">
+    <div><span class="em">📦</span><h3>The warehouse</h3><p>A 60-second reel of every damaged pallet, faces blurred, shipment ID burned in.</p><p>Delivered shipments whose label never appears on camera becomes one query.</p></div>
+    <div><span class="em">🛰️</span><h3>The drone</h3><p>A drone lands with hours of inspection footage. One button turns it into a database of every asset and defect, located on the map.</p><p>Ask which insulators got worse since last quarter, and the answer becomes the next flight plan.</p></div>
+  </div>
+</div></section>
+
+<!-- powered by: the four technologies under omxplorer, each in its own colour -->
 <section style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">omxlabs</div>
-  <h2>One flagship. <span class="two">Four breakthroughs under it.</span></h2>
-  <div class="fam"></div>
+  <div class="eyebrow">Under omxplorer</div>
+  <h2>Powered by four <span class="two">breakthrough technologies.</span></h2>
+  <div class="fam" data-only="tech"></div>
 </div></section>
 
 <div class="band"><h2>See a million rows answer <span class="two">in under a millisecond.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">Run it from GitHub</a></div></div>

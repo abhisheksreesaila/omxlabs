@@ -13,6 +13,7 @@
 .clips figure { margin: 0; min-width: 0; }
 .clips .frame { margin: 0; }
 .clips .cap { text-align: left; }
+.clips.one { grid-template-columns: minmax(0, 1fr); max-width: 1040px; margin-left: auto; margin-right: auto; }
 .scen { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 40px; text-align: left; }
 .scen > div { padding: 28px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); }
 .scen h3 { margin: 0; }
@@ -110,7 +111,7 @@
 <section id="try"><div class="wrap center rv">
   <h2>Live now, <span class="two">and what's next.</span></h2>
   <div class="road">
-    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li><li><a href="#rows">Video becomes rows: the reel, the drone's flight plan</a></li></ul></div>
+    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li><li><a href="#rows">Video becomes rows: the reel, the drone's flight plan</a></li><li><a href="#claims">The claim: a video, a sheet and paperwork, linked</a></li></ul></div>
     <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>Try it in your browser</b> <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by omxconsole on your GPU</li><li><a href="#rows">Real-world footage, audio</a></li></ul></div>
     <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Apple GPUs</li></ul></div>
   </div>
@@ -143,6 +144,31 @@
       <li><b>The defect severity scale is calibrated to how our footage was drawn.</b> On real footage it would need calibrating again.</li>
       <li><b>Models inside omxplorer.</b> Find more like this (OWLv2, from one tapped example) runs in process in the framework's tests: recall 1.000, precision 0.886 on our footage. omxplorer itself still uses classic vision.</li>
       <li><b>Audio.</b></li></ul></div>
+  </div>
+</div></section>
+
+<!-- live: the claim (g41): a video, a spreadsheet and a folder of paperwork answer one question -->
+<section id="claims" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow"><span class="tag live"><i></i>Live</span><span class="tag prog"><i></i>In progress</span></div>
+  <h2>One question, <span class="two">three kinds of evidence.</span></h2>
+  <p class="lede">The dock camera, the shipments sheet and the signed bills of lading answer one question: <b>which damaged pallets does the carrier owe for?</b> You link them yourself, then pick any answer to see its proof.</p>
+  <div class="clips one">
+    <figure><div class="frame"><div class="bar"><i></i><i></i><i></i><span>omxplorer · dock.mp4 · shipments.csv · 17 bills of lading</span></div>
+      <video src="../assets/img/clip-claims.mp4" autoplay muted loop playsinline preload="metadata" poster="../assets/img/clip-claims.jpg" aria-label="omxplorer opens a dock video, a shipments spreadsheet and a folder of bills of lading, reads the documents, links the shipment column to the video and to the documents, asks which damaged pallets have no exceptions on their bill, and shows each answer on the video and the page"></video></div>
+      <figcaption class="cap">The video, the sheet and the paperwork land. Analyze turns the video into rows; Read finds the bills' fields. A drag joins shipment_id to the video ("Link these?"), and another joins it to the bills. Hold a card to see what it's linked to. Ask in words, with the SQL beside it. Pick an answer and the video jumps to the damage while the bill marks "Exceptions: None". Then Export pack: a PDF and a clip for each shipment.</figcaption></figure>
+  </div>
+  <div class="scen">
+    <div><h3><span class="tag live"><i></i>Built and running</span></h3><ul>
+      <li><b>Explicit links:</b> drag a column onto a card and confirm. Nothing is joined until you say so, and <code>JOIN LINKED</code> uses only the links you made.</li>
+      <li><b>Documents become rows:</b> a folder of PDFs becomes one card. You name the labels printed on the form and the fields land as a table. The OCR (docTR) runs locally, inside the app, on your GPU.</li>
+      <li><b>Every answer shows its proof:</b> pick a row and the video seeks to that frame while the page highlights the field.</li>
+      <li><b>Claim pack:</b> a PDF and a blurred, captioned clip for each shipment.</li>
+      <li><b>Reproducible:</b> real functionality on generated data. One script rebuilds the same files, byte for byte, and every step in the clip is an agent tool.</li></ul></div>
+    <div class="nx"><h3><span class="tag prog"><i></i>Not yet</span></h3><ul>
+      <li><b>Real warehouse footage.</b> The dock video is generated, so every frame's truth is known.</li>
+      <li><b>Scanned or handwritten documents.</b> Our bills are clean PDFs. Scans are only scored on a public research set, never shipped.</li>
+      <li><b>Uploading a folder on the web.</b> Folders open in the desktop app and through agent tools.</li>
+      <li><b>OCR on Linux with NVIDIA only,</b> for now.</li></ul></div>
   </div>
 </div></section>
 

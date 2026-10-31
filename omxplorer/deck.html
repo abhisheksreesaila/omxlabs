@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>omxplorer · the slides</title>
-<meta name="description" content="omxplorer in eighteen slides: why, the sentence, how it's built, the code, the speed, agents, video as rows, and where it's going.">
+<meta name="description" content="omxplorer in nineteen slides: why, the sentence, how it's built, the code, the speed, agents, video as rows, linked evidence, and where it's going.">
 <link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
 <link rel="stylesheet" href="../assets/omxqua/src/components.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
@@ -256,6 +256,22 @@ for w in words:
   </div>
 </section>
 
+<!-- 15b · the claim: three kinds of evidence, one question -->
+<section data-auto-animate>
+  <div class="eyebrow">Linked evidence <span class="tag live"><i></i>live</span></div>
+  <h2 data-id="h">A video, a sheet and the paperwork <span class="ac">answer one question.</span></h2>
+  <div class="cols" style="grid-template-columns:1.6fr 1fr;gap:36px;margin-top:0;align-items:center">
+    <div><div class="shot"><video data-src="../assets/img/clip-claims.mp4" data-autoplay muted loop playsinline poster="../assets/img/clip-claims.jpg"></video></div>
+      <p class="note" style="margin-top:14px">which damaged pallets does the carrier owe for?</p></div>
+    <div style="text-align:left">
+      <p class="fragment rise"><b>You make the links.</b> Drag a column onto a card and confirm. Nothing joins until you do.</p>
+      <p class="fragment rise"><b>Documents become rows.</b> The OCR runs locally, inside the app.</p>
+      <p class="fragment rise"><b>Every answer shows its proof:</b> the frame with the damage, and the page with "Exceptions: None".</p>
+    </div>
+  </div>
+  <aside class="notes">A real recording of omxplorer driven by its agent tools (the two drags and the hold are real pointer input). Real functionality on generated data that can be rebuilt byte for byte. Not yet: real warehouse footage, scanned or handwritten documents, uploading a folder on the web.</aside>
+</section>
+
 <!-- 16 · find more like this -->
 <section data-auto-animate>
   <div class="eyebrow">Find more like this</div>
@@ -282,7 +298,7 @@ for w in words:
   <div class="eyebrow">Where it's going</div>
   <h2>From tables <span class="ac">to every kind of data.</span></h2>
   <div class="road3">
-    <div><span class="tag live"><i></i>Now</span><ul><li>Sheets, pivots, charts, reports</li><li>The sentence chart</li><li>100M-row files, streamed</li><li>Agent host (MCP)</li><li>Video becomes rows; the reel; the drone</li></ul></div>
+    <div><span class="tag live"><i></i>Now</span><ul><li>Sheets, pivots, charts, reports</li><li>The sentence chart</li><li>100M-row files, streamed</li><li>Agent host (MCP)</li><li>Video becomes rows; the reel; the drone</li><li>Linked evidence: video, sheet, paperwork</li></ul></div>
     <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>Try it in the browser</li><li>Ask, answered by omxconsole</li><li>Real-world footage, audio</li></ul></div>
     <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Share with a team</li><li>Apple GPUs</li></ul></div>
   </div>

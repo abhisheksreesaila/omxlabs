@@ -489,8 +489,8 @@ footer[data-suite] .fine { margin-top: 48px; padding-top: 22px; border-top: 1px 
 .brew .wave.back { opacity: .55; animation-duration: 11s; animation-direction: reverse; }
 .brew .level { animation: bob 6s ease-in-out infinite; }
 .brew:hover .wave { animation-duration: 2.2s; } .brew:hover .wave.back { animation-duration: 3.4s; }
-.brew .bubbles circle { fill: var(--c); opacity: 0; animation: rise 3.6s ease-out var(--d) infinite; transform-box: fill-box; transform-origin: center; }
+.brew .bubbles circle { fill: var(--c); opacity: 0; animation: brewRise 3.6s ease-out var(--d) infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes roll { to { transform: translateX(-500px); } }
 @keyframes bob { 50% { transform: translateY(10px); } }
-@keyframes rise { 0% { opacity: 0; transform: translateY(0) scale(.5); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-150px) scale(1.1); } }
+@keyframes brewRise { 0% { opacity: 0; transform: translateY(0) scale(.5); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-150px) scale(1.1); } }
 @media (prefers-reduced-motion: reduce) { .brew .wave, .brew .level, .brew .bubbles circle { animation: none; } .brew .bubbles circle { opacity: .8; } }

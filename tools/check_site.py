@@ -52,6 +52,10 @@ def main():
                     for e in errs: problems.append(f"{name}@{w} console: {e}")
                     for e in bad: problems.append(f"{name}@{w} missing: {e}")
                     if over > 1: problems.append(f"{name}@{w} overflows sideways by {over}px")
+                    if not deck:   # every headline word has finished rising and can be seen (a clashing @keyframes once left them at opacity 0)
+                        pg.wait_for_timeout(1400)
+                        hidden = pg.evaluate("[...document.querySelectorAll('h1, .rise > span')].filter(e => e.offsetParent && parseFloat(getComputedStyle(e).opacity) < .9).map(e => e.textContent.trim().slice(0, 24))")
+                        if hidden: problems.append(f"{name}@{w} headline not visible: {hidden[:4]}")
                     if w == WIDTHS[0]:
                         here = base + page_path
                         for href in pg.eval_on_selector_all("a[href],video[src],video[poster],img[src],iframe[src],source[src]",
@@ -61,6 +65,13 @@ def main():
                             links.add((name, urllib.parse.urljoin(here, v)))
                     ctx.close()
             b.close()
+        # one name per @keyframes across the shared styles: a second definition silently replaces the first everywhere
+        import re
+        seen = {}
+        for css in sorted((ROOT / "assets").glob("*.css")):
+            for k in re.findall(r"@keyframes\s+([\w-]+)", css.read_text()):
+                if k in seen: problems.append(f"@keyframes {k} defined twice ({seen[k]}, {css.name})")
+                seen.setdefault(k, css.name)
         for name, url in sorted(links):
             if not url.startswith(base): continue
             path = urllib.parse.urlparse(url).path

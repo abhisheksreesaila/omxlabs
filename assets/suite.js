@@ -49,6 +49,13 @@ const GH = "https://github.com/abhisheksreesaila";
     }).join("");
   });
 
+  // the omxcode mark snaps together: its three pieces fly in and click when you point at it (styled in suite.css)
+  const SNAP = '<svg class="snap" viewBox="0 0 24 24" aria-hidden="true"><path class="p1" d="m6 8-4 4 4 4"/><path class="p2" d="m14.5 4-5 16"/><path class="p3" d="m18 16 4-4-4-4"/><circle class="k" cx="8" cy="12" r="1"/><circle class="k" cx="16" cy="12" r="1"/></svg>';
+  document.querySelectorAll(".pm").forEach(pm => {
+    const own = [...pm.classList].find(c => c.startsWith("px-")), host = pm.closest('[class*="px-"]');
+    const k = own || (host && [...host.classList].find(c => c.startsWith("px-")));
+    if (k === "px-code" && !pm.querySelector(".snap")) { pm.classList.add("is-snap"); pm.innerHTML = SNAP; }
+  });
   // the omxlabs flask brews: liquid and five bubbles, one per product colour (styled in suite.css)
   document.querySelectorAll(".mark").forEach(m => { if (!m.querySelector(".liq")) m.innerHTML = '<i class="liq"></i>' + '<b class="fizz"></b>'.repeat(5); });
   // product names are always lowercase: wrap them inside labels the styles uppercase

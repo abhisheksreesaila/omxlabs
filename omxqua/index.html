@@ -25,28 +25,28 @@
 <!-- The cover template (same on every product): top · hero · numbers · five things · slides · families · agents · now/next/later · the suite · band · footer -->
 <nav class="top" data-cta="Hand it to your agent" data-cta-href="#agents" data-gh="https://github.com/abhisheksreesaila/omxqua"></nav>
 
-<!-- hero -->
-<section class="hero"><div class="wrap center">
-  <div class="eyebrow"><span class="px">omxqua</span> · the design language <span class="tag live"><i></i>v0.1.5 live</span></div>
-  <h1 class="rise"><span>The</span> <span>best</span> <span>of</span> <span>Apple</span> <span>and</span> <span>Google,</span> <span class="ac">and</span> <span class="ac">the</span> <span class="ac">taste</span> <span class="ac">to</span> <span class="ac">choose.</span></h1>
-  <p class="lede"><b>Google's solid surfaces and one soft shadow. Apple's springs and motion with weight.</b> A touch-first design language for every app, phone and web, shipped as three files and a skill your agent reads.</p>
-  <div class="ctas"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://abhisheksreesaila.github.io/omxqua/docs/showcase.html">Open the showcase</a><a class="more" href="https://github.com/abhisheksreesaila/omxqua">GitHub</a></div>
-  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxqua · showcase · Contoso · Money · Ledger · night · web 1280</span></div>
-    <img src="../assets/img/omxqua-showcase.png" alt="Contoso's home screen in omxqua's Ledger family, night: top islands, the Beacon, an Up next card, stats and two cards" width="1600" height="1000">
-    <span class="bdg">one markup · <b>4 families</b> · night and light</span></figure>
-  <p class="cap">A real screenshot of the showcase: a made-up trip planner, drawn only with omxqua's parts.</p>
-</div></section>
-
-<!-- numbers -->
-<section style="padding-top:40px"><div class="wrap center rv">
-  <h2>Small enough <span class="two">to read in an afternoon.</span></h2>
-  <div class="nums">
-    <div><b>4</b><span>families: dev, travel, kids, money</span></div>
-    <div><b>4</b><span>skins: Azulejo, Golden hour, Sticker, Crayon</span></div>
-    <div><b>51</b><span>checks pass: contrast in every family and skin, CSP</span></div>
-    <div><b>19<small>KB</small></b><span>gzipped: tokens, components, fonts.css and the JS</span></div>
+<!-- hero: the words left, the showcase right, the numbers under both -->
+<section class="hero"><div class="wrap hrow">
+  <div class="intro">
+    <div class="eyebrow"><span class="px">omxqua</span> · the design language <span class="tag live"><i></i>v0.1.5 live</span></div>
+    <h1 class="rise"><span>The</span> <span>best</span> <span>of</span> <span>Apple</span> <span>and</span> <span>Google,</span> <span class="ac">and</span> <span class="ac">the</span> <span class="ac">taste</span> <span class="ac">to</span> <span class="ac">choose.</span></h1>
+    <p class="lede"><b>Google's solid surfaces and one soft shadow. Apple's springs and motion with weight.</b> A touch-first design language for every app, phone and web, shipped as three files and a skill your agent reads.</p>
+    <div class="ctas"><a class="cta" href="https://abhisheksreesaila.github.io/omxqua/">Open the omxqua site</a><a class="more" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/omxqua">GitHub</a></div>
+    <div class="plats" aria-label="Where omxqua is used today"><span><i></i><b>Web</b> runs</span><span><i></i><b>This site</b> drawn in it</span><span><i></i><b>omxcode</b> cover and docs</span></div>
   </div>
-  <p class="srcline">src/tokens.css (families and skins) · node --test tests/ → 51 pass, 0 fail · gzip -9 of src/*.css + src/omxqua.js = 19,187 bytes, fonts not included · v0.1.5, CHANGELOG.md</p>
+  <div class="rv">
+    <figure class="bframe"><div class="bar"><i></i><i></i><i></i><span>omxqua · showcase · Contoso · Money · Ledger · night · web 1280</span></div>
+      <img src="../assets/img/omxqua-showcase.png" alt="Contoso's home screen in omxqua's Ledger family, night: top islands, the Beacon, an Up next card, stats and two cards" width="1600" height="1000"></figure>
+    <p class="hcap"><b>One markup · 4 families · night and light.</b> A real screenshot of the showcase: a made-up app, drawn only with omxqua's parts.</p>
+  </div>
+</div>
+<div class="wrap">
+  <div class="proofs rv">
+    <div class="pf"><b>4</b><span>families: dev, travel, kids, money</span><em>src/tokens.css</em></div>
+    <div class="pf"><b>4</b><span>skins: Azulejo, Golden hour, Sticker, Crayon</span><em>src/tokens.css</em></div>
+    <div class="pf"><b>51</b><span>checks pass: contrast in every family and skin, CSP</span><em>node --test tests/ → 51 pass, 0 fail</em></div>
+    <div class="pf"><b>19<small>KB</small></b><span>gzipped: tokens, components, fonts.css and the JS</span><em>gzip -9 of src/*.css + src/omxqua.js = 19,187 bytes, fonts not included · v0.1.5</em></div>
+  </div>
 </div></section>
 
 <!-- five things -->
@@ -126,6 +126,6 @@
 </div></section>
 
 <div class="band"><h2>Press a button <span class="two">and feel it press back.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://abhisheksreesaila.github.io/omxqua/">Try the live site</a></div></div>
-<footer><div class="wrap fine"><span>omxqua by <a href="../">omxlabs</a> · <a href="https://github.com/abhisheksreesaila/omxqua">GitHub</a> · <a href="https://abhisheksreesaila.github.io/omxqua/docs/showcase.html">showcase</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a></span><span>MIT licensed · fonts SIL OFL 1.1</span></div></footer>
+<footer data-suite></footer>
 <script src="../assets/suite.js"></script>
 </body></html>

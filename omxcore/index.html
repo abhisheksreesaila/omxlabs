@@ -23,28 +23,29 @@
 <!-- The cover template (same on every product): top · hero · numbers · five things · slides · the idea · honest numbers · now/next/later · the suite · band · footer -->
 <nav class="top" data-cta="Write a query" data-cta-href="#query" data-gh="https://github.com/abhisheksreesaila/omxcore"></nav>
 
-<!-- hero -->
-<section class="hero"><div class="wrap center">
-  <div class="eyebrow"><span class="px">omxcore</span> · the engine <span class="tag live"><i></i>Stable · 834ef9a</span></div>
-  <h1 class="rise"><span>SQL</span> <span>on</span> <span>your</span> <span>CPU</span> <span class="ac">and</span> <span class="ac">your</span> <span class="ac">GPU.</span></h1>
-  <p class="lede">Point it at the <b>CSV and Parquet files you already have</b> and ask. One native library written in Mojo, <b>no Python inside</b>. Apps link it like SQLite; agents talk to it in JSON.</p>
-  <div class="ctas"><a class="cta" href="#slides">▶ Watch the 3-minute slides</a><a class="more" href="#query">Write a query</a><a class="more" href="https://github.com/abhisheksreesaila/omxcore">GitHub</a></div>
-  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxcore · benchmarks · TPC-H, query by query</span></div>
-    <img src="../assets/img/omxcore-benchmarks.png" alt="omxcore's benchmarks page: TPC-H SF10, all 22 queries. omxcore 3.15 s, DuckDB 5.08 s, Polars 14.40 s.">
-    <span class="bdg">22 TPC-H queries, SF10: <b>3.15 s</b> · DuckDB 5.08 s</span></figure>
-  <p class="cap">The real benchmarks page. Every number on it is computed from the CSVs in docs/bench, and it says where DuckDB still wins.</p>
-</div></section>
-
-<!-- numbers -->
-<section style="padding-top:40px"><div class="wrap center rv">
-  <h2>Fast, exact, <span class="two">and honest about both.</span></h2>
-  <div class="nums">
-    <div><b>3.15<small>s</small></b><span>all 22 TPC-H queries at SF10 (DuckDB 5.08 s, Polars 14.40 s)</span></div>
-    <div><b>21<small>/ 22</small></b><span>TPC-H queries through <code>mx sql</code> equal DuckDB's answers</span></div>
-    <div><b>72<small>MB</small></b><span>of memory to query a 1.6 GB file, streamed</span></div>
-    <div><b>2.7<small>×</small></b><span>GPU over CPU on a 2-core budget; AUTO keeps the CPU on 12</span></div>
+<!-- hero: the words left, the benchmarks page right, the measured numbers under both -->
+<section class="hero"><div class="wrap hrow">
+  <div class="intro">
+    <div class="eyebrow"><span class="px">omxcore</span> · the engine <span class="tag live"><i></i>Stable · 834ef9a</span></div>
+    <h1 class="rise"><span>SQL</span> <span>on</span> <span>your</span> <span>CPU</span> <span class="ac">and</span> <span class="ac">your</span> <span class="ac">GPU.</span></h1>
+    <p class="lede">Point it at the <b>CSV and Parquet files you already have</b> and ask. One native library written in Mojo, <b>no Python inside</b>. Apps link it like SQLite; agents talk to it in JSON.</p>
+    <div class="ctas"><a class="cta" href="#slides">▶ Watch the 3-minute slides</a><a class="more" href="https://abhisheksreesaila.github.io/omxcore/">The omxcore site</a><a class="more" href="https://github.com/abhisheksreesaila/omxcore">GitHub</a></div>
+    <div class="plats" aria-label="Where omxcore runs today"><span><i></i><b>Linux</b> CPU + NVIDIA GPU runs</span><span><i></i><b>Mac</b> Apple GPU runs on CI Macs</span><span><i></i><b>Python</b> PyPI runs</span></div>
   </div>
-  <p class="srcline">3.15 s: docs/bench/m2s-engine.csv (v0.6.0, first_ms over 22 queries, query time only) · 21/22: STABLE.md, 834ef9a (Q11 waits on F-192) · 72 MB and 2.7×: docs/site/bench/engine-informal.json, informal, a shared Ryzen + RTX 3090 · honest edge: without Q21, DuckDB's SF10 total is lower (2.27 s vs 2.41 s)</p>
+  <div class="rv">
+    <figure class="bframe"><div class="bar"><i></i><i></i><i></i><span>omxcore · benchmarks · TPC-H, query by query</span></div>
+      <img src="../assets/img/omxcore-benchmarks.png" alt="omxcore's benchmarks page: TPC-H SF10, all 22 queries. omxcore 3.15 s, DuckDB 5.08 s, Polars 14.40 s."></figure>
+    <p class="hcap"><b>22 TPC-H queries, SF10: 3.15 s.</b> DuckDB 5.08 s. The real benchmarks page: every number on it is computed from the CSVs in docs/bench, and it says where DuckDB still wins.</p>
+  </div>
+</div>
+<div class="wrap">
+  <div class="proofs rv">
+    <div class="pf"><b>3.15<small>s</small></b><span>all 22 TPC-H queries at SF10 (DuckDB 5.08 s, Polars 14.40 s)</span><em>docs/bench/m2s-engine.csv · v0.6.0, first_ms, query time only</em></div>
+    <div class="pf"><b>21<small>/ 22</small></b><span>TPC-H queries through <code>mx sql</code> equal DuckDB's answers</span><em>STABLE.md, 834ef9a · Q11 waits on F-192</em></div>
+    <div class="pf"><b>72<small>MB</small></b><span>of memory to query a 1.6 GB file, streamed</span><em>docs/site/bench/engine-informal.json · informal, a shared Ryzen + RTX 3090</em></div>
+    <div class="pf"><b>2.7<small>×</small></b><span>GPU over CPU on a 2-core budget; AUTO keeps the CPU on 12</span><em>docs/site/bench/engine-informal.json · informal</em></div>
+  </div>
+  <p class="srcline" style="text-align:left">honest edge: without Q21, DuckDB's SF10 total is lower (2.27 s vs 2.41 s)</p>
 </div></section>
 
 <!-- five things -->
@@ -149,6 +150,6 @@ mx.sql(<span class="s">"SELECT dept, SUM(x) AS s
 </div></section>
 
 <div class="band"><h2>Ask a file a question. <span class="two">Get an answer you can check.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/omxcore">Build it from GitHub</a></div></div>
-<footer><div class="wrap fine"><span>omxcore by <a href="../">omxlabs</a> · <a href="https://github.com/abhisheksreesaila/omxcore">GitHub</a> · <a href="https://pypi.org/project/mxframe/">PyPI (mxframe)</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a> · <a href="#" class="tbd">X [link]</a></span><span>Apache-2.0 · built in Mojo</span></div></footer>
+<footer data-suite></footer>
 <script src="../assets/suite.js"></script>
 </body></html>

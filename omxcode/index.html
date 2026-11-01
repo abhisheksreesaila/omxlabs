@@ -59,13 +59,17 @@
 <!-- The cover template (same on every product): top · hero · numbers · five things · slides · the code · built with it · now/next/later · the suite · band · footer -->
 <nav class="top" data-cta="Watch the slides" data-cta-href="#slides" data-gh="https://github.com/abhisheksreesaila/omxcode"></nav>
 
-<!-- hero -->
-<section class="hero"><div class="wrap center">
-  <div class="eyebrow"><span class="px">omxcode</span> · the framework <span class="tag prog"><i></i>Public alpha</span></div>
-  <h1 class="rise"><span>Write</span> <span>it</span> <span>once.</span> <span class="ac">Open</span> <span class="ac">it</span> <span class="ac">everywhere.</span></h1>
-  <p class="lede">An app framework for <b>Mojo</b>. You write two functions, <b>view()</b> and <b>update()</b>, and the app opens natively on Linux, the web, Android and Mac. <b>The GPU code sits in the same file</b>, and every app is already a set of tools an AI agent can call.</p>
-  <div class="ctas"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="#code">See how you'd code it</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">GitHub</a></div>
-  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>one app.mojo · native on every host</span></div>
+<!-- hero: the words left, one app on every host right, the cover's measured numbers under both -->
+<section class="hero"><div class="wrap hrow">
+  <div class="intro">
+    <div class="eyebrow"><span class="px">omxcode</span> · the framework <span class="tag prog"><i></i>Public alpha</span></div>
+    <h1 class="rise"><span>Write</span> <span>it</span> <span>once.</span> <span class="ac">Open</span> <span class="ac">it</span> <span class="ac">everywhere.</span></h1>
+    <p class="lede">An app framework for <b>Mojo</b>. You write two functions, <b>view()</b> and <b>update()</b>, and the app opens natively. <b>The GPU code sits in the same file</b>, the window never waits, and every app is already a set of tools an AI agent can call.</p>
+    <div class="ctas"><a class="cta" href="https://abhisheksreesaila.github.io/omxcode/">Open the omxcode site</a><a class="more" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">GitHub</a></div>
+    <div class="plats" aria-label="Where it runs today"><span><i></i><b>Linux</b> runs</span><span><i></i><b>Mac</b> runs on CI Macs</span><span><i></i><b>Web</b> runs</span><span class="am"><i></i><b>Android</b> emulator</span><span class="bl"><i></i><b>iPhone</b> builds</span></div>
+  </div>
+  <div class="rv">
+    <figure class="bframe"><div class="bar"><i></i><i></i><i></i><span>one app.mojo · native on every host</span></div>
     <div class="hosts">
       <figure><img src="../assets/img/omxcode-gtk.png" alt="The widgets example as a native GTK 4 window on Linux"><figcaption><i></i>Linux · GTK 4</figcaption></figure>
       <figure><img src="../assets/img/omxcode-web.png" alt="The same widgets example as a web page, served by FastHTML"><figcaption><i></i>Web · FastHTML</figcaption></figure>
@@ -73,19 +77,17 @@
       <figure><img src="../assets/img/omxcode-mac.png" alt="The same widgets example as a native AppKit window on one of GitHub's Macs"><figcaption><i></i>Mac · AppKit</figcaption></figure>
       <figure class="gpu"><img src="../assets/img/omxcode-lens.jpg" alt="The Data Lens: 20 million points drawn live on the GPU, beside native controls"><figcaption class="b"><i></i>GPU · 20M points</figcaption><span class="bdg">one frame: <b>1.5 ms</b> · RTX 3090</span></figure>
     </div></figure>
-  <p class="cap">Real screenshots: the widgets example on GTK, the web and one of GitHub's Macs; hello on the Android emulator; the Data Lens on GTK.</p>
-</div></section>
-
-<!-- numbers -->
-<section style="padding-top:40px"><div class="wrap center rv">
-  <h2>Native speed, <span class="two">measured.</span></h2>
-  <div class="nums">
-    <div><b>1.5<small>ms</small></b><span>20 million points counted and coloured, one 1080p frame</span></div>
-    <div><b>0.8<small>ms</small></b><span>a frame, scrolling a 1M-row grid (p95)</span></div>
-    <div><b>0.6<small>ms</small></b><span>a chart over 1 million rows</span></div>
-    <div><b>1<small>file</small></b><span>for a 20M-particle app, in one language. JS + WebGPU took 8 files in 5.</span></div>
+    <p class="hcap">Real screenshots: the widgets example on GTK, the web and one of GitHub's Macs; hello on the Android emulator; the Data Lens on GTK.</p>
   </div>
-  <p class="srcline">NVIDIA RTX 3090 · Data Lens 1.48 ms vs 132 ms on the CPU (docs/goals/06-report.md) · grid docs/goals/26-report.md · chart 0.5–0.7 ms (README) · files docs/benchmarks.md · honest edge: native Rust + wgpu draws 1M particles faster (0.34 vs 1.23 ms)</p>
+</div>
+<div class="wrap">
+  <div class="proofs rv">
+    <div class="pf"><b>30<small>ms</small></b><span>a filter change over 100M rows, from input to pixels on screen</span><em>median · p95 49 ms vs Rust + Polars 131 ms · measured at 856a7e9, before the release build · docs/data-benchmark.md</em></div>
+    <div class="pf"><b>17<small>ms</small></b><span>the longest gap between frames while a 1.5 s job ran</span><em>examples/jobwake on Linux · 90 frames during the job · docs/ui-threads.md</em></div>
+    <div class="pf"><b>2–25×</b><span>cheaper for an agent to see what changed: a call answers in words, 60–650 tokens, against ~1,600 for a screenshot</span><em>MCP calls in omxplorer · a full screen read costs 2,800 · docs/agent.md</em></div>
+    <div class="pf"><b>4.0<small>s</small></b><span>cold start over 100M rows, the fastest of four builds</span><em>file not cached · Rust + Polars 6.7 s · at 856a7e9 · docs/data-benchmark.md</em></div>
+  </div>
+  <p class="srcline" style="text-align:left">NVIDIA RTX 3090 · the same numbers as <a href="https://abhisheksreesaila.github.io/omxcode/#numbers">the omxcode site</a> · honest edge: Rust + Polars uses less memory at 100M rows; native Rust + wgpu draws 1M particles faster (0.34 vs 1.23 ms)</p>
 </div></section>
 
 <!-- five things -->
@@ -204,6 +206,15 @@
       <li><b>💬 Agent chat.</b>An agent builds the UI over AG-UI; omxcode checks it and draws it (<code>examples/agentchat</code>).</li>
     </ul>
   </div>
+  <div class="gal">
+    <figure class="gi"><div class="m"><img src="../assets/img/omxplorer-sheet-mac.png" alt="omxplorer's sheet on the Mac, in AppKit" loading="lazy"></div><figcaption><b>omxplorer on the Mac.</b>The same app in AppKit.<small>Mac · runs on CI Macs</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/console-models-gtk.png" alt="omxconsole's My models page, native on GTK" loading="lazy"></div><figcaption><b>omxconsole's console.</b>Built from components only.<small>Linux · web · Mac</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/sketch-gtk.png" alt="Sketch: pressure ink drawn on omxcode's Canvas on Linux" loading="lazy"></div><figcaption><b>Sketch.</b>Pressure ink on the Canvas.<small>Linux · web</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/jot-gtk.png" alt="Jot: a notes app built with omxcode on Linux" loading="lazy"></div><figcaption><b>Jot.</b>Notes in a SQLite file, searched as you type.<small>Linux · web</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/keeper-gtk.png" alt="Keeper: a tray app that keeps a folder searchable, on Linux" loading="lazy"></div><figcaption><b>Keeper.</b>Keeps a folder searchable with its window shut.<small>Linux</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/dictate-gtk.png" alt="Dictate: speech becomes words, Whisper running in the app on Linux" loading="lazy"></div><figcaption><b>Dictate.</b>Talk, and words appear: Whisper on the GPU, in process.<small>Linux</small></figcaption></figure>
+  </div>
+  <div class="ctas" style="justify-content:center"><a class="more" href="https://abhisheksreesaila.github.io/omxcode/gallery/">The full gallery on the omxcode site</a></div>
 </div></section>
 
 <!-- now · next · later -->
@@ -224,6 +235,6 @@
 </div></section>
 
 <div class="band"><h2>One Mojo file. <span class="two">Every screen, and the GPU.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">Build hello from GitHub</a></div></div>
-<footer><div class="wrap fine"><span>omxcode by <a href="../">omxlabs</a> · <a href="https://github.com/abhisheksreesaila/omxcode">GitHub</a> · <a href="https://github.com/abhisheksreesaila/omxcode/blob/main/docs/reference.md">Reference</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a></span><span>MIT licensed · built in Mojo</span></div></footer>
+<footer data-suite></footer>
 <script src="../assets/suite.js"></script>
 </body></html>

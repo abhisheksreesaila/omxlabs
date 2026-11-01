@@ -101,16 +101,29 @@
 <body id="top">
 <nav class="top" data-cta="Meet omxplorer" data-cta-href="omxplorer/" data-gh="https://github.com/abhisheksreesaila/omxcode"></nav>
 
-<!-- hero: the mission, then the product straight away -->
-<section class="hero px-plorer"><div class="wrap center">
-  <div class="eyebrow" style="text-transform:none;letter-spacing:.02em">omxlabs presents <span style="color:var(--px)">omxplorer</span></div>
-  <h1 class="rise phrases"><span>GPU native.</span> <span>Agent native.</span> <span class="two">Multimodal.</span></h1>
-  <p class="lede">One workspace for a 100-million-row sheet, a video and a picture, and the models that read them. It runs on <b>your own GPU</b>, and you can work in it <b>by talking to an agent</b>.</p>
-  <div class="pills"><a href="#gpu"><span class="ic i-zap" style="--s:18px"></span>GPU native</a><a href="#agent"><span class="ic i-bot" style="--s:18px"></span>Agent native</a><a href="#multi"><span class="ic i-film" style="--s:18px"></span>Multimodal</a></div>
-  <div class="ctas"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="omxplorer/#slides">▶ Watch the 2-minute slides</a></div>
-  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxplorer · orders_1m.csv · 1,000,000 rows</span></div>
-    <video src="assets/img/clip-sentence-web.mp4" autoplay muted loop playsinline poster="assets/img/omxplorer-sentence-web.jpg"></video>
-    <span class="bdg">median per group, 1M rows: <b>6.4 ms</b> · RTX 3090</span></figure>
+<!-- hero: omxplorer, the robot story beside it, measured numbers under both -->
+<section class="hero px-plorer"><div class="wrap hrow">
+  <div class="intro">
+    <div class="eyebrow" style="text-transform:none;letter-spacing:.02em">omxlabs presents <span style="color:var(--px)">omxplorer</span></div>
+    <h1 class="rise phrases"><span>GPU native.</span> <span>Agent native.</span> <span class="two">Multimodal.</span></h1>
+    <p class="lede">One workspace for a 100-million-row sheet, a video and a picture, and the models that read them. It runs on <b>your own GPU</b>, and you can work in it <b>by talking to an agent</b>.</p>
+    <div class="ctas"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="omxplorer/#slides">▶ Watch the 2-minute slides</a></div>
+    <div class="plats" aria-label="Where omxplorer runs today"><span><i></i><b>Linux</b> runs</span><span><i></i><b>Mac</b> runs on CI Macs</span><span><i></i><b>Web</b> runs</span></div>
+    <div class="pills"><a href="#gpu"><span class="ic i-zap" style="--s:18px"></span>GPU native</a><a href="#agent"><span class="ic i-bot" style="--s:18px"></span>Agent native</a><a href="#multi"><span class="ic i-film" style="--s:18px"></span>Multimodal</a></div>
+  </div>
+  <div class="rv">
+    <figure class="bframe"><div class="bar"><i></i><i></i><i></i><span>omxplorer · Linux · why did the robot drop it?</span></div>
+      <video src="assets/img/clip-robots.mp4" poster="assets/img/clip-robots.jpg" muted loop playsinline preload="metadata" data-play aria-label="omxplorer opens 63,344 real DROID robot episodes as a sheet, charts success by lab, plays a failed episode's video beside its joint and gripper telemetry on one cursor as the shirt falls, asks in words over 16.8 million telemetry rows, opens the DROID paper by key and exports a pack"></video></figure>
+    <p class="hcap"><b>Why did the robot drop it?</b> 63,344 real robot episodes from 13 labs, their video and 16.8M telemetry rows, linked by key and time. A question in words over every row in about 40 ms.<br>↳ DROID (CC-BY-4.0) · omxcode docs/goals/47-report.md</p>
+  </div>
+</div>
+<div class="wrap">
+  <div class="proofs rv">
+    <div class="pf"><b>63,344</b><span>real robot episodes from 13 labs, one row each, in one sheet</span><em>DROID, CC-BY-4.0 · goal 47</em></div>
+    <div class="pf"><b>16.8<small>M</small></b><span>telemetry rows, joined to the episodes by a link you confirm</span><em>16,847,616 rows · goal 47</em></div>
+    <div class="pf"><b>~40<small>ms</small></b><span>a question in words, answered over every telemetry row</span><em>JOIN LINKED, 37–42 ms in the check's runs · goal 47</em></div>
+    <div class="pf"><b>30<small>ms</small></b><span>a filter change over 100M rows, from input to pixels on screen</span><em>median · Rust + Polars 37.0 ms · measured at 856a7e9, before the release build · docs/data-benchmark.md</em></div>
+  </div>
 </div></section>
 
 <!-- 1 · GPU native -->
@@ -136,6 +149,9 @@
     <div class="px-qua"><span class="n"><i class="pm"></i>4 · the screen</span><p>Only what changed is redrawn, and the bars <b>spring</b> to their new heights.</p></div>
     <div class="end"><span class="n">done</span><b class="t">6.4<small>ms</small></b><p>the median per group over 1M rows, RTX 3090</p></div>
   </div>
+  <figure class="bframe" style="margin-top:18px"><div class="bar"><i></i><i></i><i></i><span>omxplorer · orders_1m.csv · 1,000,000 rows</span></div>
+    <video src="assets/img/clip-sentence-web.mp4" poster="assets/img/omxplorer-sentence-web.jpg" muted loop playsinline preload="none" data-play aria-label="Changing a word in a chart's sentence recomputes a million rows on the GPU"></video></figure>
+  <p class="hcap">A real recording: change a word in the chart's sentence, and a million rows are recomputed on the GPU.</p>
 </div></section>
 
 <!-- 2 · Agent native -->
@@ -230,11 +246,13 @@
   </div>
 </div></section>
 
-<!-- under the hood: secondary, one row, each card opens its page -->
+<!-- the other app, then under the hood: secondary, one quiet row, each card opens its page -->
 <section id="tech" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">Under the hood</div>
-  <h2>Powered by four <span class="two">next-generation technologies.</span></h2>
-  <p class="lede">We built each of them for omxplorer, and each also works on its own.</p>
+  <div class="eyebrow">Also from omxlabs</div>
+  <h2>Two apps. <span class="two">Data, and the AI that reads it.</span></h2>
+  <div class="fam" data-only="apps"></div>
+  <div class="eyebrow" style="margin-top:72px">Under the hood</div>
+  <p class="lede">Three technologies we built for these apps. Each also works on its own.</p>
   <div class="fam" data-only="tech"></div>
 </div></section>
 
@@ -246,6 +264,6 @@
 </div></section>
 
 <div class="band"><h2>Every kind of data. <span class="two">One GPU. Ask it anything.</span></h2><div class="ctas" style="justify-content:center"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="omxplorer/#slides">Watch the slides</a></div></div>
-<footer><div class="wrap fine"><span>omxlabs · <a href="https://github.com/abhisheksreesaila/omxcode">GitHub</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a> · <a href="#" class="tbd">X [link]</a></span><span>built in Mojo · drawn in omxqua</span></div></footer>
+<footer data-suite></footer>
 <script src="assets/suite.js"></script>
 </body></html>

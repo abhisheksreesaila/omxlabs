@@ -22,28 +22,29 @@
 <!-- The cover template (same on every product): top · hero · numbers · five things · slides · write a command · the console · now/next/later · the suite · band · footer -->
 <nav class="top" data-cta="Serve a model" data-cta-href="#use" data-gh="https://github.com/abhisheksreesaila/mxstudio"></nav>
 
-<!-- hero -->
-<section class="hero"><div class="wrap center">
-  <div class="eyebrow"><span class="px">omxconsole</span> · local AI <span class="tag live"><i></i>Public alpha</span></div>
-  <h1 class="rise"><span>Your</span> <span>GPU.</span> <span>Your</span> <span>models.</span> <span class="ac">One</span> <span class="ac">endpoint.</span></h1>
-  <p class="lede">One command turns your NVIDIA GPU into a <b>private, OpenAI-compatible model server</b>. Models load when they're called and sleep when idle. No cloud, <b>no per-token bill</b>, and your prompts never leave the machine.</p>
-  <div class="ctas"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="#use">Write your first command</a><a class="more" href="https://github.com/abhisheksreesaila/mxstudio">GitHub</a></div>
-  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxconsole · My models · 127.0.0.1/console</span></div>
-    <img src="../assets/img/omxconsole-home-dark.png" alt="omxconsole's My models page: eight models, two running, with their state, kind, size and memory">
-    <span class="bdg">one endpoint: <b>127.0.0.1:11435/v1</b></span></figure>
-  <p class="cap">The real console on a test install. Every model you've pulled, behind one URL.</p>
-</div></section>
-
-<!-- numbers: honest facts, not speeds (no throughput has been published from real hardware yet) -->
-<section style="padding-top:40px"><div class="wrap center rv">
-  <h2>Small, and <span class="two">checked.</span></h2>
-  <div class="nums">
-    <div><b>1<small>URL</small></b><span>for every model you've pulled: /v1 on port 11435</span></div>
-    <div><b>5<small>min</small></b><span>idle, then a model unloads and frees the GPU (pin to keep it)</span></div>
-    <div><b>8</b><span>architectures MAX couldn't run, ported and serving</span></div>
-    <div><b>1,044</b><span>tests pass, with a fake MAX, so no GPU needed</span></div>
+<!-- hero: the words left, the console right, the facts under both -->
+<section class="hero"><div class="wrap hrow">
+  <div class="intro">
+    <div class="eyebrow"><span class="px">omxconsole</span> · local AI <span class="tag live"><i></i>Public alpha</span></div>
+    <h1 class="rise"><span>Your</span> <span>GPU.</span> <span>Your</span> <span>models.</span> <span class="ac">One</span> <span class="ac">endpoint.</span></h1>
+    <p class="lede">One command turns your NVIDIA GPU into a <b>private, OpenAI-compatible model server</b>. Models load when they're called and sleep when idle. No cloud, <b>no per-token bill</b>, and your prompts never leave the machine.</p>
+    <div class="ctas"><a class="cta" href="#use">Write your first command</a><a class="more" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/mxstudio">GitHub</a></div>
+    <div class="plats" aria-label="Where omxconsole runs today"><span><i></i><b>Linux</b> NVIDIA GPU runs</span><span><i></i><b>Console</b> Linux, web runs</span><span><i></i><b>Console on Mac</b> runs on CI Macs</span></div>
   </div>
-  <p class="srcline">mxstudio repo · port 11435: mxconsole/settings.py · 5 min: docs/CLI.md (--keep-alive default) · 8 ports on 2× RTX 3090, MAX 26.7: docs/PORTING.md · 1,044 tests: docs/plan.md, F-063 review round 2</p>
+  <div class="rv">
+    <figure class="bframe"><div class="bar"><i></i><i></i><i></i><span>omxconsole · My models · 127.0.0.1/console</span></div>
+      <img src="../assets/img/omxconsole-home-dark.png" alt="omxconsole's My models page: eight models, two running, with their state, kind, size and memory"></figure>
+    <p class="hcap"><b>One endpoint: 127.0.0.1:11435/v1.</b> The real console on a test install. Every model you've pulled, behind one URL.</p>
+  </div>
+</div>
+<div class="wrap">
+  <div class="proofs rv">
+    <div class="pf"><b>1<small>URL</small></b><span>for every model you've pulled: /v1 on port 11435</span><em>mxstudio repo · mxconsole/settings.py</em></div>
+    <div class="pf"><b>5<small>min</small></b><span>idle, then a model unloads and frees the GPU (pin to keep it)</span><em>docs/CLI.md · --keep-alive default</em></div>
+    <div class="pf"><b>8</b><span>architectures MAX couldn't run, ported and serving</span><em>2× RTX 3090, MAX 26.7 · docs/PORTING.md</em></div>
+    <div class="pf"><b>1,044</b><span>tests pass, with a fake MAX, so no GPU needed</span><em>docs/plan.md · F-063 review round 2</em></div>
+  </div>
+  <p class="srcline" style="text-align:left">honest facts, not speeds: no throughput has been published from real hardware yet</p>
 </div></section>
 
 <!-- five things -->
@@ -107,12 +108,17 @@ reply = client.chat.completions.create(
   <h2>The console <span class="ac">is an omxcode app.</span></h2>
   <p class="lede">The same pages, rewritten in Mojo with omxcode's components. It talks to the server over plain HTTP, like any other client.</p>
   <div class="side">
-    <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>the omxcode console · Linux (GTK), native widgets</span></div><img src="../assets/img/omxconsole-gtk.png" alt="the omxcode console's My models page drawn natively on GTK"></figure>
+    <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>the omxcode console · Linux (GTK), native widgets</span></div><img src="../assets/img/console-models-gtk.png" alt="the omxcode console's My models page drawn natively on GTK"></figure>
     <ul>
       <li><b>📡 Same server, same API.</b>It polls the server's local <code>/admin/*</code> routes every 3 seconds and draws the replies.</li>
       <li><b>🎯 99 % the same.</b>On the web, all 20 screens match the original JavaScript console to at least 99.2 % of pixels.</li>
       <li><b>🧱 Only components.</b>A lint fails the app if it sets a colour, font or size. The 31 modules it needed went into omxcode.</li>
     </ul>
+  </div>
+  <div class="gal">
+    <figure class="gi"><div class="m"><img src="../assets/img/console-models-mac.png" alt="The console's My models page as a native AppKit window on one of GitHub's Macs" loading="lazy"></div><figcaption><b>On the Mac.</b>The same pages in AppKit.<small>Mac · runs on CI Macs</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/console-models-web.png" alt="The console's My models page in the browser" loading="lazy"></div><figcaption><b>On the web.</b>The same app.mojo, served as a page.<small>web</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/console-overview-gtk.png" alt="The console's overview page on GTK" loading="lazy"></div><figcaption><b>The overview.</b>What's running, and what it's using.<small>Linux · GTK 4</small></figcaption></figure>
   </div>
   <p class="srcline">omxcode repo · examples/console/api.mojo, app.mojo · docs/goals/33-report.md · the server still ships its JavaScript console at /console today</p>
 </div></section>
@@ -138,6 +144,6 @@ reply = client.chat.completions.create(
   <p style="margin-top:22px"><span class="cmd">pixi run mxc serve qwen2.5-0.5b<button data-copy="pixi run mxc serve qwen2.5-0.5b">Copy</button></span></p>
   <div class="ctas center" style="justify-content:center"><a class="cta" href="https://github.com/abhisheksreesaila/mxstudio">Get it on GitHub</a><a class="more" href="#slides">Watch the slides</a></div>
   <p class="srcline" style="margin-top:18px">Linux with an NVIDIA GPU · qwen2.5-0.5b is about 1 GB, ungated · docs/USER_GUIDE.md</p></div>
-<footer><div class="wrap fine"><span>omxconsole by <a href="../">omxlabs</a> · <a href="https://github.com/abhisheksreesaila/mxstudio">GitHub</a> · <a href="https://abhisheksreesaila.github.io/mxstudio/site/console.html">Console tour</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a></span><span>MIT · built on Modular MAX</span></div></footer>
+<footer data-suite></footer>
 <script src="../assets/suite.js"></script>
 </body></html>

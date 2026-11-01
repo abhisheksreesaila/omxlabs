@@ -1,13 +1,13 @@
 // omxlabs suite: one list of products draws every page's top bar (no product switcher: pages lead on by scrolling) and suite row, so the five covers can't drift apart.
 // A page says who it is with <html data-here="plorer" data-root="..">; it marks <nav class="top"> and <div class="fam"> to fill.
 // Every product has one colour and one mark (suite.css .px-* and .pm), like an Office icon: <i class="pm px-core"></i> anywhere.
-// <div class="fam" data-only="tech"> lists only the four technologies; data-to="anchor" links cards to #omx<k> on the same page.
+// <div class="fam" data-only="tech"> lists only the three technologies (data-only="apps": the two apps); data-to="anchor" links cards to #omx<k> on the same page.
 const SUITE = [
-  { k: "plorer",  name: "omxplorer",  role: "the product",                line: "Ask your data in a sentence. A million rows answer in under a millisecond, and every button is a tool an agent can call." },
-  { k: "core",    name: "omxcore",    role: "technology · the engine",    line: "SQL on your CPU and your GPU, over the files you already have. All 22 TPC-H queries at SF10 in 3.15 s (DuckDB 5.08 s)." },
-  { k: "code",    name: "omxcode",    role: "technology · the framework", line: "Write an app once in Mojo; it opens natively on Linux, the web, Android and Mac, and an agent can drive it." },
-  { k: "qua",     name: "omxqua",     role: "technology · the look",      line: "The design language this site is drawn in: Google's solid surfaces, Apple's springs, one colour per product." },
-  { k: "console", name: "omxconsole", role: "technology · local AI",      line: "One command turns your GPU into a private, OpenAI-compatible model server: the AI supplier for every app." },
+  { k: "plorer",  name: "omxplorer",  role: "app · data and robotics",     home: "https://github.com/abhisheksreesaila/omxcode", line: "Ask your data in a sentence: sheets, charts, video and documents on one GPU, joined by links you confirm. Every button is a tool an agent can call." },
+  { k: "console", name: "omxconsole", role: "app · local AI",              home: "https://github.com/abhisheksreesaila/mxstudio", line: "One command turns your GPU into a private, OpenAI-compatible model server: the AI supplier for every app." },
+  { k: "core",    name: "omxcore",    role: "technology · the engine",    home: "https://abhisheksreesaila.github.io/omxcore/", line: "SQL on your CPU and your GPU, over the files you already have. All 22 TPC-H queries at SF10 in 3.15 s (DuckDB 5.08 s)." },
+  { k: "code",    name: "omxcode",    role: "technology · the framework", home: "https://abhisheksreesaila.github.io/omxcode/", line: "Write an app once in Mojo: native on Linux and the Mac, the web host today, phones next, and an agent can drive it." },
+  { k: "qua",     name: "omxqua",     role: "technology · the look",      home: "https://abhisheksreesaila.github.io/omxqua/", line: "The design language this site is drawn in: Google's solid surfaces, Apple's springs, one colour per product." },
 ];
 const GH = "https://github.com/abhisheksreesaila";
 (() => {
@@ -15,16 +15,34 @@ const GH = "https://github.com/abhisheksreesaila";
   const href = k => `${root}/${k === "labs" ? "" : "omx" + k + "/"}`;
   const me = SUITE.find(p => p.k === here);
 
+  // the top nav, the same on every page: omxlabs · the five products (this one lit in its colour) · GitHub · one CTA
   const top = document.querySelector("nav.top");
   if (top) {
-    const cta = top.dataset.cta || "Watch the slides", ctaHref = top.dataset.ctaHref || "#slides", gh = top.dataset.gh;
+    const cta = top.dataset.cta || "Meet omxplorer", ctaHref = top.dataset.ctaHref || href("plorer"), gh = top.dataset.gh;
     top.innerHTML =
-      `<div class="trail"><span class="${me ? "pm" : "mark"}"></span>${me ? `<a href="${href("labs")}">omxlabs</a><span class="sep">›</span><b>${me.name}</b>` : `<b>omxlabs</b>`}</div>` +
+      `<a class="brand" href="${href("labs")}"><span class="mark"></span>omxlabs</a>` +
+      `<div class="pill">${SUITE.map(p => `<a class="px-${p.k}${p.k === here ? " on" : ""}" href="${p.k === here ? "#top" : href(p.k)}"${p.k === here ? ' aria-current="page"' : ""}><i class="pm"></i>${p.name}</a>`).join("")}</div>` +
       `<div class="right">${gh ? `<a class="gh" href="${gh}">GitHub</a>` : ""}<a class="cta" href="${ctaHref}">${cta}</a></div>`;
+    const pill = top.querySelector(".pill"), on = pill.querySelector("a.on");   // on a phone the pill scrolls: show this page's product
+    if (on) requestAnimationFrame(() => pill.scrollLeft = on.offsetLeft - (pill.clientWidth - on.offsetWidth) / 2);
+  }
+  // the footer, the same on every page
+  const foot = document.querySelector("footer[data-suite]");
+  if (foot) {
+    const li = (u, t, k) => `<li><a ${k ? `class="px-${k}" ` : ""}href="${u}">${k ? '<i class="pm"></i>' : ""}${t}</a></li>`;
+    foot.innerHTML = `<div class="wrap">
+      <p class="note">Every number here comes from a script, on one Linux machine with an NVIDIA RTX 3090; Mac results come from GitHub's macOS runners ("runs on CI Macs"). "Runs" means a script drives the app on that platform today. Each number names its source.</p>
+      <div class="cols">
+        <div><h4>The apps</h4><ul>${SUITE.slice(0, 2).map(p => li(href(p.k), p.name, p.k)).join("")}</ul></div>
+        <div><h4>Under the hood</h4><ul>${SUITE.slice(2).map(p => li(href(p.k), p.name, p.k)).join("")}</ul></div>
+        <div><h4>Their own sites</h4><ul>${li("https://abhisheksreesaila.github.io/omxcode/", "omxcode docs")}${li("https://abhisheksreesaila.github.io/omxcore/", "omxcore docs")}${li("https://abhisheksreesaila.github.io/omxqua/", "omxqua showcase")}${li("https://abhisheksreesaila.github.io/mxstudio/site/console.html", "omxconsole tour")}</ul></div>
+        <div><h4>Source</h4><ul>${li(GH + "/omxcode", "GitHub: omxcode + omxplorer")}${li(GH + "/omxcore", "GitHub: omxcore")}${li(GH + "/omxqua", "GitHub: omxqua")}${li(GH + "/mxstudio", "GitHub: omxconsole")}${li("https://www.youtube.com/@mojomondayai", "Mojo Monday")}</ul></div>
+      </div>
+      <div class="fine"><span>${me ? me.name + " · " : ""}omxlabs · built in Mojo, 2026 · styled with <a href="${href("qua")}">omxqua</a></span><a href="${GH}/omxcode/issues">Report an issue</a></div></div>`;
   }
   document.querySelectorAll(".fam").forEach(fam => {
-    const list = fam.dataset.only === "tech" ? SUITE.filter(p => p.k !== "plorer") : SUITE, anchor = fam.dataset.to === "anchor";
-    fam.classList.toggle("four", list.length === 4);
+    const list = fam.dataset.only === "tech" ? SUITE.filter(p => p.role.startsWith("technology")) : fam.dataset.only === "apps" ? SUITE.filter(p => p.role.startsWith("app")) : SUITE, anchor = fam.dataset.to === "anchor";
+    fam.classList.toggle("four", list.length === 4); fam.classList.toggle("three", list.length === 3); fam.classList.toggle("two", list.length === 2);
     fam.innerHTML = list.map(p => {
       const on = p.k === here;
       return `<a class="px-${p.k}${on ? " here" : ""}" href="${on ? "#top" : anchor ? "#omx" + p.k : href(p.k)}"><i class="pm"></i><span class="role">${p.role}</span><b>${p.name}</b><p>${p.line}</p><span class="go">${on ? "You are here" : "Open"}</span></a>`;
@@ -94,6 +112,22 @@ const GH = "https://github.com/abhisheksreesaila";
       else if (cur < steps.length) { if (holding) timer = setTimeout(() => go(cur + 1), 1200); else v.play().catch(() => {}); }
       else timer = setTimeout(() => go(0), 14000);
     }), { threshold: .5 }).observe(stage);
+  });
+  // clips play only while on screen (and never on their own when motion is reduced)
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const vio = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting && !reduce) { v.preload = "auto"; v.play().catch(() => {}); } else v.pause(); }), { threshold: .4 });
+  document.querySelectorAll("video[data-play]").forEach(v => { vio.observe(v); if (reduce) v.controls = true; });
+  // isometric diagrams: a segmented switch swaps the frame (<div class="isoframe" data-iso='[["a.html","caption"],…]'>)
+  document.querySelectorAll(".isoframe[data-iso]").forEach(f => {
+    const ISO = JSON.parse(f.dataset.iso), seg = f.querySelector(".seg2"), ifr = f.querySelector("iframe"), open = f.querySelector(".open"), cap = f.querySelector(".isocap");
+    if (!seg) return;
+    const knob = seg.querySelector(".knob"), bs = [...seg.querySelectorAll("button")];
+    const pick = (i, user) => { bs.forEach((b, j) => { b.classList.toggle("on", i === j); b.setAttribute("aria-pressed", i === j); });
+      knob.style.width = bs[i].offsetWidth + "px"; knob.style.transform = `translateX(${bs[i].offsetLeft - 3}px)`;
+      if (user) { ifr.src = ISO[i][0]; if (open) open.href = ISO[i][0]; if (cap) cap.textContent = ISO[i][1]; } };
+    bs.forEach((b, i) => b.addEventListener("click", () => pick(i, true)));
+    addEventListener("resize", () => { const i = bs.findIndex(b => b.classList.contains("on")); if (i >= 0) pick(i, false); });
+    requestAnimationFrame(() => pick(0, false));
   });
   // sections rise as they enter; hero words rise once
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .15 });

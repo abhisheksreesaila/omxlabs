@@ -30,28 +30,53 @@
 <!-- The cover template (same on every product): top · hero · numbers · five things · slides · the idea · agents · now/next/later · in progress: rows · powered by · band · footer -->
 <nav class="top" data-cta="What's next" data-cta-href="#try" data-gh="https://github.com/abhisheksreesaila/omxcode"></nav>
 
-<!-- hero -->
-<section class="hero"><div class="wrap center">
-  <div class="eyebrow"><span class="px">omxplorer</span> by omxlabs <span class="tag live"><i></i>Live now</span></div>
-  <h1 class="rise"><span>Ask</span> <span>your</span> <span>data</span> <span class="ac">in</span> <span class="ac">a</span> <span class="ac">sentence.</span></h1>
-  <p class="lede">A data workspace where <b>a million rows answer in under a millisecond</b>, on your own GPU, and <b>every button is a tool your AI agent can call</b>. Written in Mojo, from the button to the GPU kernel.</p>
-  <div class="ctas"><a class="cta" href="#slides">▶ Watch the 2-minute slides</a><a class="more" href="#agents">Connect your agent</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">GitHub</a></div>
-  <figure class="frame" style="margin-top:56px"><div class="bar"><i></i><i></i><i></i><span>omxplorer · orders_1m.csv · 1,000,000 rows</span></div>
-    <video src="../assets/img/clip-sentence-web.mp4" autoplay muted loop playsinline poster="../assets/img/omxplorer-sentence-web.jpg"></video>
-    <span class="bdg">median per group, 1M rows: <b>6.4 ms</b> · RTX 3090</span></figure>
-  <p class="cap">A real recording: change a word, and a million rows are recomputed on the GPU.</p>
+<!-- hero: the words left, the robot story right, the measured numbers under both -->
+<section class="hero"><div class="wrap hrow">
+  <div class="intro">
+    <div class="eyebrow"><span class="px">omxplorer</span> by omxlabs <span class="tag live"><i></i>Live now</span></div>
+    <h1 class="rise"><span>Ask</span> <span>your</span> <span>data</span> <span class="ac">in</span> <span class="ac">a</span> <span class="ac">sentence.</span></h1>
+    <p class="lede">A data workspace where <b>a million rows answer in under a millisecond</b>, on your own GPU, and <b>every button is a tool your AI agent can call</b>. Written in Mojo, from the button to the GPU kernel.</p>
+    <div class="ctas"><a class="cta" href="#slides">▶ Watch the 2-minute slides</a><a class="more" href="#robots">The robot story</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">GitHub</a></div>
+    <div class="plats" aria-label="Where omxplorer runs today"><span><i></i><b>Linux</b> runs</span><span><i></i><b>Mac</b> runs on CI Macs</span><span><i></i><b>Web</b> runs</span></div>
+  </div>
+  <div class="rv">
+    <figure class="bframe"><div class="bar"><i></i><i></i><i></i><span>omxplorer · Linux · why did the robot drop it?</span></div>
+      <video src="../assets/img/clip-robots.mp4" poster="../assets/img/clip-robots.jpg" muted loop playsinline preload="metadata" data-play aria-label="omxplorer opens 63,344 real DROID robot episodes as a sheet, charts success by lab, plays a failed episode's video beside its joint and gripper telemetry on one cursor as the shirt falls, asks in words over 16.8 million telemetry rows, opens the DROID paper by key and exports a pack"></video></figure>
+    <p class="hcap"><b>Why did the robot drop it?</b> 63,344 real robot episodes from 13 labs, their video and 16.8M telemetry rows, linked by key and time. A question in words over every row in about 40 ms.<br>↳ DROID (CC-BY-4.0) · omxcode docs/goals/47-report.md</p>
+  </div>
+</div>
+<div class="wrap">
+  <div class="proofs rv">
+    <div class="pf"><b>0.6<small>ms</small></b><span>a chart over 1 million rows, grouped and sorted</span><em>RTX 3090 · chart 0.5–0.7 ms · omxcode README</em></div>
+    <div class="pf"><b>0.8<small>ms</small></b><span>a frame, scrolling a 1M-row grid</span><em>p95 · omxcode docs/goals/26-report.md</em></div>
+    <div class="pf"><b>30<small>ms</small></b><span>a filter change over 100M rows, from input to pixels</span><em>median · Rust + Polars 37.0, JS + DuckDB 104.9 · measured at 856a7e9, before the release build · docs/data-benchmark.md</em></div>
+    <div class="pf"><b>0.2<small>s</small></b><span>to open a 100-million-row file, streamed</span><em>first rows on screen; fully in memory from Parquet 1.8 s · goals 22 and 30</em></div>
+  </div>
+  <p class="srcline" style="text-align:left">NVIDIA RTX 3090 · the repo's own checks re-run each number · honest edge: a 100M-row median chart takes about 0.7 s (0.77 s in goal 30)</p>
 </div></section>
 
-<!-- numbers -->
-<section style="padding-top:40px"><div class="wrap center rv">
-  <h2>Fast enough <span class="two">that you stop waiting.</span></h2>
-  <div class="nums">
-    <div><b>0.6<small>ms</small></b><span>a chart over 1 million rows</span></div>
-    <div><b>0.8<small>ms</small></b><span>a frame, scrolling a 1M-row grid</span></div>
-    <div><b>30<small>ms</small></b><span>a click on a 100M-row dashboard</span></div>
-    <div><b>0.2<small>s</small></b><span>to open a 100-million-row file</span></div>
+<!-- the robot story (goal 47): real public data, video + telemetry + a paper, joined by links you confirm -->
+<section id="robots" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow"><span class="tag live"><i></i>Live · real data</span></div>
+  <h2>Why did the robot drop it? <span class="two">One sheet, its video, its telemetry, its paper.</span></h2>
+  <p class="lede">63,344 real episodes from 13 labs (DROID, CC-BY-4.0). <b>Link the episode key, the clip, the clock and the paper</b>, and a failure opens with its video and its telemetry on one cursor. Ask in words over all 16.8M telemetry rows.</p>
+  <div class="gal">
+    <figure class="gi w8"><div class="m"><img src="../assets/img/robots-06-drop-falling.jpg" alt="A failed episode's video beside four lanes of its telemetry on one cursor: the gripper opens over the box's edge and the shirt falls" loading="lazy"></div>
+      <figcaption><b>The drop, on one cursor.</b>F00118: the gripper pinches the shirt at 5.3 s, opens over the box's edge at 12.7 s, and the shirt falls outside.<small>video + 244 telemetry rows, opened by links alone · goal 47</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/robots-01-fleet.jpg" alt="The DROID fleet as a sheet: 63,344 episodes, one row each" loading="lazy"></div>
+      <figcaption><b>The fleet is the sheet.</b>63,344 episodes, one row each: lab, robot, task, outcome, clip.<small>DROID, CC-BY-4.0</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/robots-02-success-by-lab.jpg" alt="A chart of average success by lab" loading="lazy"></div>
+      <figcaption><b>Success by lab.</b>From PennPAL's 95 % down to RAD's 61 %, typed as a sentence.<small>chart · goal 47</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/robots-05-links.jpg" alt="The Links panel: the episode key, its video file, the clock and the paper, each confirmed" loading="lazy"></div>
+      <figcaption><b>Nothing joins until you link it.</b>The episode key, its video file, the clock, its paper.<small>explicit links · goal 47</small></figcaption></figure>
+    <figure class="gi"><div class="m"><img src="../assets/img/robots-09-ask-regrasped.jpg" alt="A question in words answered by a join over 16.8 million telemetry rows" loading="lazy"></div>
+      <figcaption><b>Asked in words.</b>"Failures where the gripper closed, let go and closed again": 2,997 episodes, about 40 ms.<small>JOIN LINKED over 16.8M rows</small></figcaption></figure>
+    <figure class="gi w6"><div class="m"><img src="../assets/img/robots-08-paper-15hz.jpg" alt="The DROID paper as a document card, the passage 'recorded at 15Hz' marked" loading="lazy"></div>
+      <figcaption><b>The paper, by its key.</b>Every row names the DROID paper; its "recorded at 15Hz" passage is marked, read from the PDF's own text.<small>arXiv 2403.12945, CC-BY-4.0</small></figcaption></figure>
+    <figure class="gi w6"><div class="m"><img src="../assets/img/robots-11-pack.jpg" alt="Export pack: a PDF per picked failure with the frame at the release and the telemetry there" loading="lazy"></div>
+      <figcaption><b>A pack per failure.</b>A PDF with the frame where it let go, the telemetry there and the paper's page, plus a 6 s clip.<small>Export pack · goal 47</small></figcaption></figure>
   </div>
-  <p class="srcline">NVIDIA RTX 3090 · the repo's own checks re-run each number · chart 0.5–0.7 ms, grid p95, the 100M dashboard is goal 38's median of medians (Rust + Polars 37.0, JS + DuckDB 104.9) · honest edge: a 100M-row median chart takes about 0.7 s</p>
+  <p class="srcline">What the data doesn't support: DROID has no force or torque, so "dropped" is read from the gripper and the video; the per-episode gripper features don't predict failure across labs, so they're filters, not a detector · omxcode docs/goals/47-report.md</p>
 </div></section>
 
 <!-- five things -->
@@ -81,7 +106,7 @@
   <h2>Ask in a sentence. <span class="two">Change it with a tap.</span></h2>
   <p class="sent"><u>Sum</u> of <u>revenue</u> by <u>product</u>, <u>largest first</u>, <u>top 5</u>, as <u>bars</u></p>
   <div class="side">
-    <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>omxplorer · sheet · the inspector</span></div><img src="../assets/img/omxplorer-sentence-web.jpg" alt="the sheet with a chart's sentence and the inspector" loading="lazy"></figure>
+    <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>omxplorer · orders_1m.csv · 1,000,000 rows</span></div><video src="../assets/img/clip-sentence-web.mp4" poster="../assets/img/omxplorer-sentence-web.jpg" muted loop playsinline preload="none" data-play aria-label="Changing a word in a chart's sentence recomputes a million rows on the GPU"></video></figure>
     <ul>
       <li><b>⏱️ It shows its work.</b>Every answer says how long it took and where it ran.</li>
       <li><b>🙋 It's honest.</b>Ask for something it can't do, and it names what it skipped.</li>
@@ -111,7 +136,7 @@
 <section id="try"><div class="wrap center rv">
   <h2>Live now, <span class="two">and what's next.</span></h2>
   <div class="road">
-    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li><li><a href="#rows">Video becomes rows: the reel, the drone's flight plan</a></li><li><a href="#claims">The claim: a video, a sheet and paperwork, linked</a></li></ul></div>
+    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li><li><a href="#rows">Video becomes rows: the reel, the drone's flight plan</a></li><li><a href="#claims">The claim: a video, a sheet and paperwork, linked</a></li><li><a href="#robots">The robot story: 63,344 real episodes, video, telemetry and the paper</a></li></ul></div>
     <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>Try it in your browser</b> <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by omxconsole on your GPU</li><li><a href="#rows">Real-world footage, audio</a></li></ul></div>
     <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Apple GPUs</li></ul></div>
   </div>
@@ -124,10 +149,10 @@
   <p class="lede">Open a video and it turns into a table you can ask, like any CSV: <b>about 400 frames a second</b>, on your GPU. Ask for a reel, and the rows cut it.</p>
   <div class="clips">
     <figure><div class="frame"><div class="bar"><i></i><i></i><i></i><span>omxplorer · warehouse.mp4 · 1,140 frames</span></div>
-      <video src="../assets/img/clip-warehouse.mp4" autoplay muted loop playsinline preload="metadata" poster="../assets/img/clip-warehouse.jpg" aria-label="omxplorer opens a warehouse video, analyzes it into a detections table, and makes a reel of the damaged pallets with faces blurred and shipment IDs burned in"></video></div>
+      <video src="../assets/img/clip-warehouse.mp4" muted loop playsinline preload="none" data-play poster="../assets/img/clip-warehouse.jpg" aria-label="omxplorer opens a warehouse video, analyzes it into a detections table, and makes a reel of the damaged pallets with faces blurred and shipment IDs burned in"></video></div>
       <figcaption class="cap">The warehouse, a real recording driven by omxplorer's agent tools: open, Analyze, the detections table, a reel of damaged pallets (faces blurred, shipment ID burned in). Then the video card's Edit: Cut it makes 3 clips from the rows.</figcaption></figure>
     <figure><div class="frame"><div class="bar"><i></i><i></i><i></i><span>omxplorer · two drone flights · telemetry</span></div>
-      <video src="../assets/img/clip-drone.mp4" autoplay muted loop playsinline preload="metadata" poster="../assets/img/clip-drone.jpg" aria-label="omxplorer opens a drone inspection video with its telemetry chart and map, analyzes it into assets and defects, compares two flights and makes the next flight plan"></video></div>
+      <video src="../assets/img/clip-drone.mp4" muted loop playsinline preload="none" data-play poster="../assets/img/clip-drone.jpg" aria-label="omxplorer opens a drone inspection video with its telemetry chart and map, analyzes it into assets and defects, compares two flights and makes the next flight plan"></video></div>
       <figcaption class="cap">The drone, in omxplorer, driven by its agent tools: the flight with its telemetry (the chart's cursor and the map's dot follow the video), Analyze, then two flights compared: the assets that got worse, and the next flight plan.</figcaption></figure>
   </div>
   <div class="scen">
@@ -154,7 +179,7 @@
   <p class="lede">The dock camera, the shipments sheet and the signed bills of lading answer one question: <b>which damaged pallets does the carrier owe for?</b> You link them yourself, then pick any answer to see its proof.</p>
   <div class="clips one">
     <figure><div class="frame"><div class="bar"><i></i><i></i><i></i><span>omxplorer · dock.mp4 · shipments.csv · 17 bills of lading</span></div>
-      <video src="../assets/img/clip-claims.mp4" autoplay muted loop playsinline preload="metadata" poster="../assets/img/clip-claims.jpg" aria-label="omxplorer opens a dock video, a shipments spreadsheet and a folder of bills of lading, reads the documents, links the shipment column to the video and to the documents, asks which damaged pallets have no exceptions on their bill, and shows each answer on the video and the page"></video></div>
+      <video src="../assets/img/clip-claims.mp4" muted loop playsinline preload="none" data-play poster="../assets/img/clip-claims.jpg" aria-label="omxplorer opens a dock video, a shipments spreadsheet and a folder of bills of lading, reads the documents, links the shipment column to the video and to the documents, asks which damaged pallets have no exceptions on their bill, and shows each answer on the video and the page"></video></div>
       <figcaption class="cap">The video, the sheet and the paperwork land. Analyze turns the video into rows; Read finds the bills' fields. A drag joins shipment_id to the video ("Link these?"), and another joins it to the bills. Hold a card to see what it's linked to. Ask in words, with the SQL beside it. Pick an answer and the video jumps to the damage while the bill marks "Exceptions: None". Then Export pack: a PDF and a clip for each shipment.</figcaption></figure>
   </div>
   <div class="scen">
@@ -175,11 +200,12 @@
 <!-- powered by: the four technologies under omxplorer, each in its own colour -->
 <section style="padding-top:40px"><div class="wrap center rv">
   <div class="eyebrow">Under omxplorer</div>
-  <h2>Powered by four <span class="two">breakthrough technologies.</span></h2>
+  <h2>Powered by three <span class="two">breakthrough technologies.</span></h2>
   <div class="fam" data-only="tech"></div>
+  <p class="lede">Next on its roadmap: questions answered by a model on your own GPU, served by <a href="../omxconsole/" style="color:var(--ox-console)">omxconsole</a>, the other omxlabs app.</p>
 </div></section>
 
 <div class="band"><h2>See a million rows answer <span class="two">in under a millisecond.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">Run it from GitHub</a></div></div>
-<footer><div class="wrap fine"><span>omxplorer by <a href="../">omxlabs</a> · <a href="https://github.com/abhisheksreesaila/omxcode">GitHub</a> · <a href="https://www.youtube.com/@mojomondayai">Mojo Monday</a> · <a href="#" class="tbd">X [link]</a></span><span>MIT licensed · built in Mojo</span></div></footer>
+<footer data-suite></footer>
 <script src="../assets/suite.js"></script>
 </body></html>

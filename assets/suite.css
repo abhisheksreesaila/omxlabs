@@ -9,7 +9,7 @@
   --ox-labs: var(--oq-ink); --ox-plorer: #3ccf6e; --ox-core: #4aa8ff; --ox-code: #ff5d6c; --ox-qua: #c084fc; --ox-console: #ff9f40;
   --sans: "Geist", system-ui, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
   --bg: #000; --ink: var(--oq-ink); --ink2: var(--oq-ink-2); --line: var(--oq-line); --ease: var(--oq-ease-in);
-  --hero: clamp(52px, 8.4vw, 124px); --h2: clamp(38px, 5.6vw, 76px); --lede: clamp(19px, 2vw, 25px);
+  --hero: clamp(32px, 3.5vw, 48px); --h2: clamp(30px, 3.6vw, 46px); --lede: clamp(17px, 1.6vw, 20px);
 }
 /* each product: one colour and one outline icon (Lucide, ISC) that says its job: compass explores, cog is the engine, </> the code, palette the design, sparkles the AI, flask the lab */
 .px-plorer { --px: var(--ox-plorer); --pi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z'/%3E%3C/svg%3E"); }
@@ -156,6 +156,7 @@ h3 { font: 650 20px/1.25 var(--sans); letter-spacing: -.02em; margin: 0; }
 /* the suite: a card per product, each with its mark and colour; the current one marked */
 .fam { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 48px; text-align: left; }
 .fam.four { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.fam.three { grid-template-columns: repeat(3, 1fr); gap: 14px; } .fam.two { grid-template-columns: repeat(2, 1fr); gap: 14px; }
 .fam a { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 22px 20px 20px; border-radius: 22px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); text-decoration: none; overflow: hidden; transition: transform var(--oq-spring-dur) var(--oq-spring), box-shadow .2s; }
 .fam a:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 60%, var(--line)), var(--oq-shadow-2); }
 .fam a:active { transform: scale(.98); transition-duration: var(--oq-spring-fast-dur); }
@@ -315,3 +316,109 @@ footer { padding: 34px 24px 90px; }
 .fstrip .res { font: 700 1.05em var(--sans); color: var(--ink); } .fstrip .res small { display: block; font: 500 .76em var(--mono); color: var(--ink2); }
 .fstrip.bad .res { color: var(--oq-warn); } .fstrip.good .res { color: var(--oq-ok); }
 @media (max-width: 900px) { .fstrip { grid-template-columns: 1fr; gap: .4em; } }
+
+/* =====================================================================
+   The cover layer: the same parts as omxcode's cover (abhisheksreesaila.github.io/omxcode), so every page of the
+   site reads as one website. Compact hero (words left, the product right, proofs under both), the shared top nav
+   and footer (suite.js draws them), platform chips, a browser frame, cards. Solid surfaces, no blur (omxqua).
+   ===================================================================== */
+section { padding: 96px 24px; }
+body { font-size: 17px; }
+.lede { max-width: 680px; }
+
+/* top nav: omxlabs left · a pill of the five products centre (each in its colour) · one CTA right */
+.top { grid-template-columns: 1fr auto 1fr; background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 0 var(--line); border: 0; }
+.top .brand { display: flex; align-items: center; gap: 9px; font: 700 16px var(--sans); letter-spacing: -.02em; text-decoration: none; color: var(--ink); min-height: 44px; }
+.top .brand .mark { --s: 26px; }
+.top .pill { display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+.top .pill::-webkit-scrollbar { display: none; }
+.top .pill a { display: inline-flex; align-items: center; gap: 7px; flex: none; color: var(--ink2); text-decoration: none; font: 500 13.5px var(--sans); padding: 0 13px 0 8px; min-height: 36px; border-radius: 999px; transition: background .15s, color .15s; }
+.top .pill a .pm { --s: 20px; }
+.top .pill a:hover { color: var(--ink); background: rgb(var(--oq-state) / .08); }
+.top .pill a.on { color: var(--ink); background: color-mix(in srgb, var(--px) 16%, var(--oq-surface-2)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--px) 45%, transparent); }
+.top .right { justify-self: end; }
+@media (max-width: 1100px) { .top .gh { display: none; } }
+@media (max-width: 900px) {
+  .top { grid-template-columns: 1fr auto; row-gap: 8px; padding: 8px 12px 10px; }
+  .top .pill { grid-column: 1 / -1; grid-row: 2; justify-self: stretch; }
+  .top .pill a { padding: 0 11px 0 6px; font-size: 13px; }
+}
+html { scroll-padding-top: 76px; }
+@media (max-width: 900px) { html { scroll-padding-top: 116px; } }
+
+/* hero: the words left, the live product right; proofs under both */
+.hero { padding: 64px 24px 40px; }
+.hero .hrow { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 44px; align-items: center; text-align: left; }
+.hero .hrow > * { min-width: 0; }
+.hero .hrow .eyebrow { justify-content: flex-start; }
+.hero h1 { font-size: clamp(32px, 3.5vw, 48px); line-height: 1.02; letter-spacing: -.045em; margin-top: 16px; }
+.hero h1 .two { display: block; }
+.hero .hrow .lede { margin: 18px 0 0; max-width: 520px; }
+.hero .hrow .ctas { justify-content: flex-start; margin-top: 26px; gap: 18px; }
+.hero .pills { justify-content: flex-start; }
+/* where it runs: green runs today (Mac: on GitHub's macOS runners), amber the emulator, blue builds */
+.plats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 24px; }
+.plats span { display: inline-flex; align-items: center; gap: 6px; font: 500 12px var(--mono); color: var(--ink2); padding: 5px 10px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); }
+.plats i { width: 7px; height: 7px; border-radius: 50%; background: var(--oq-ok); } .plats .bl i { background: var(--oq-info); } .plats .am i { background: var(--oq-warn); }
+.plats b { color: var(--ink); font-weight: 600; font-family: var(--sans); }
+/* a browser-style frame around a real clip or screenshot */
+.bframe { margin: 0; border-radius: 18px; overflow: hidden; background: var(--oq-surface-1); box-shadow: var(--oq-shadow-3), 0 0 0 1px var(--line); }
+.bframe .bar { display: flex; align-items: center; gap: 7px; height: 32px; padding: 0 14px; border-bottom: 1px solid var(--oq-line-2); }
+.bframe .bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--oq-surface-3); flex: none; }
+.bframe .bar span { flex: 1; margin: 0 28px 0 12px; height: 20px; border-radius: 999px; background: var(--oq-surface-2); font: 11px/20px var(--mono); color: var(--ink2); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 10px; }
+.bframe video, .bframe > img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; background: var(--oq-surface-2); }
+.hcap { font: 12.5px/1.5 var(--mono); color: var(--ink2); margin-top: 12px; text-align: left; }
+.hcap b { color: var(--ink); font: 600 14px var(--sans); margin-right: 4px; }
+/* proof strip: four numbers, each with the line it came from */
+.proofs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 48px; text-align: left; }
+.pf { border-radius: 20px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 6px; }
+.pf b { font: 800 34px/1 var(--sans); letter-spacing: -.04em; color: var(--oq-accent); font-variant-numeric: tabular-nums; }
+.pf b small { font: 600 14px var(--sans); letter-spacing: 0; color: var(--ink2); margin-left: 4px; }
+.pf span { font-size: 14.5px; line-height: 1.4; color: var(--ink); }
+.pf span code { font: 600 13px var(--mono); color: var(--oq-accent); }
+.pf em { font: 11.5px/1.45 var(--mono); font-style: normal; color: var(--ink2); margin-top: auto; padding-top: 6px; overflow-wrap: anywhere; }
+
+/* a gallery of real shots: a lead clip, then stills, each with what it shows */
+.gal { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px; margin-top: 40px; text-align: left; }
+.gi { grid-column: span 4; margin: 0; border-radius: 18px; overflow: hidden; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); display: flex; flex-direction: column; min-width: 0; }
+.gi.w6 { grid-column: span 6; } .gi.w8 { grid-column: span 8; } .gi.w12 { grid-column: span 12; }
+.gi .m { aspect-ratio: 16 / 10; background: var(--oq-surface-2); overflow: hidden; }
+.gi .m img, .gi .m video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+.gi figcaption { padding: 12px 14px 14px; display: grid; gap: 4px; font-size: 14px; line-height: 1.4; color: var(--ink2); }
+.gi figcaption b { color: var(--ink); font-weight: 600; font-size: 15px; }
+.gi figcaption small { font: 11.5px var(--mono); color: var(--ink2); }
+
+/* the interactive isometric diagram (iso/*.html, built by iso/build.sh), framed like the cover's "How it works" */
+.isoframe { margin-top: 36px; border-radius: 24px; overflow: hidden; background: var(--oq-surface-1); box-shadow: var(--oq-shadow-2), 0 0 0 1px var(--line); text-align: left; }
+.isoframe .bar { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--oq-line-2); flex-wrap: wrap; font: 12.5px var(--mono); color: var(--ink2); }
+.isoframe .bar .sp { flex: 1; } .isoframe .bar a { font: 500 13px var(--mono); color: var(--ink2); text-decoration: none; min-height: 32px; display: inline-flex; align-items: center; } .isoframe .bar a:hover { color: var(--ink); }
+.isoframe iframe { display: block; width: 100%; height: 620px; border: 0; background: #14161b; }
+.isocap { font: 12.5px/1.5 var(--mono); color: var(--ink2); padding: 12px 16px; border-top: 1px solid var(--oq-line-2); margin: 0; }
+.seg2 { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--bg); box-shadow: 0 0 0 1px var(--line); position: relative; }
+.seg2 button { all: unset; cursor: pointer; position: relative; z-index: 1; font: 500 12.5px var(--sans); color: var(--ink2); padding: 0 14px; min-height: 32px; display: inline-flex; align-items: center; border-radius: 999px; transition: color .2s; }
+.seg2 button.on { color: var(--ink); }
+.seg2 button:focus-visible { outline: 2px solid var(--oq-accent); outline-offset: 2px; }
+.seg2 .knob { position: absolute; top: 3px; bottom: 3px; left: 0; border-radius: 999px; background: var(--oq-surface-3); transition: transform var(--oq-spring-dur) var(--oq-island-spring), width var(--oq-spring-dur) var(--oq-island-spring); }
+
+/* the shared footer (suite.js fills <footer data-suite>): where the numbers came from, the five products, their real homes */
+footer[data-suite] { padding: 72px 24px 64px; border-top: 1px solid var(--line); color: var(--ink2); font-size: 14px; }
+footer .note { max-width: 760px; font: 13px/1.7 var(--mono); margin: 0; }
+footer .note a { color: var(--ink); }
+footer .cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 44px; }
+footer h4 { margin: 0 0 12px; font: 500 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+footer ul { list-style: none; margin: 0; padding: 0; display: grid; }
+footer li a { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; text-decoration: none; color: var(--ink2); }
+footer li a .pm { --s: 18px; }
+footer li a:hover { color: var(--ink); }
+footer[data-suite] .fine { margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--oq-line-2); align-items: center; font-size: 12px; }
+
+@media (max-width: 900px) {
+  section { padding: 72px 20px; }
+  .hero { padding: 32px 20px 24px; }
+  .hero .hrow { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .proofs { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin-top: 28px; } .pf { padding: 14px; } .pf b { font-size: 27px; } .pf span { font-size: 13.5px; }
+  .gal { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 82%; overflow-x: auto; scroll-snap-type: x mandatory; margin-right: -20px; padding-right: 20px; padding-bottom: 10px; }
+  .gi, .gi.w6, .gi.w8, .gi.w12 { grid-column: auto; scroll-snap-align: start; }
+  .isoframe iframe { height: 520px; }
+  footer .cols { grid-template-columns: 1fr 1fr; }
+}

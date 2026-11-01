@@ -1,0 +1,54 @@
+{
+ "title": "omxqua: tokens, then components, then every page",
+ "subtitle": "Three files and a skill; one root class repaints everything",
+ "style": "ink",
+ "live": true,
+ "nodes": [
+  {"id": "tokens", "label": "tokens.css", "kind": "queue", "at": [0, 0], "hue": 270, "sat": 80, "tech": "4 families · 4 skins",
+   "desc": "Colours, radii, one soft shadow scale and Liquid's spring curves. Dev, travel, kids and money; every pair clears 4.5:1.",
+   "notes": "51 checks pass: contrast in every family and skin, CSP."},
+  {"id": "fonts", "label": "fonts.css", "kind": "storage", "at": [0, 7], "hue": 270, "sat": 35, "tech": "Geist · self-hosted",
+   "desc": "Self-hosted fonts, so nothing loads from a third party."},
+  {"id": "comp", "label": "components.css", "kind": "service", "at": [7, 0], "size": [2.4, 2.4], "hue": 270, "sat": 90, "tech": "the parts",
+   "desc": "Islands, cards, buttons, sheets, dialogs: opaque tonal surfaces from Google, nothing glassy."},
+  {"id": "js", "label": "omxqua.js", "kind": "worker", "at": [7, 7], "hue": 270, "sat": 60, "tech": "springs · gestures",
+   "desc": "Every tap squashes and springs back, from Apple. The more often a thing happens, the less it moves."},
+  {"id": "skill", "label": "The skill", "kind": "ai", "at": [7, -7], "hue": 270, "sat": 70, "tech": "Claude Code plugin",
+   "desc": "Makes an agent read the reference, pick a family, use the real parts and check the page at phone width."},
+  {"id": "agent", "label": "Your agent", "kind": "client", "at": [0, -7], "hue": 230, "sat": 10, "tech": "'a trip planner in omxqua'",
+   "desc": "Ask for a screen in words; the skill makes it build from omxqua's parts."},
+  {"id": "site", "label": "omxlabs.tech", "kind": "client", "at": [15, -5], "hue": 270, "sat": 55, "tech": "runs · this site",
+   "desc": "This site is drawn in omxqua: every product in its own colour, on the same tokens."},
+  {"id": "cover", "label": "omxcode site", "kind": "client", "at": [15, 0], "hue": 354, "sat": 55, "tech": "runs · the cover",
+   "desc": "omxcode's cover and docs use the same tokens, fonts and parts."},
+  {"id": "phone", "label": "Your app, phone", "kind": "client", "at": [15, 5], "hue": 270, "sat": 55, "tech": "runs · touch first",
+   "desc": "Any web app: four links and one line of classes. Designed at 390 wide first, with 44 px targets."},
+  {"id": "native", "label": "omxcode apps", "kind": "external", "at": [22, 0], "hue": 354, "sat": 30, "tech": "an idea, later",
+   "desc": "Native omxcode apps on the same tokens is on the roadmap as an idea; it isn't built."}
+ ],
+ "edges": [
+  {"from": "tokens", "to": "comp", "label": "variables"},
+  {"from": "fonts", "to": "comp", "style": "data"},
+  {"from": "js", "to": "comp", "label": "springs"},
+  {"from": "agent", "to": "skill", "label": "asks"},
+  {"from": "skill", "to": "comp", "label": "the real parts"},
+  {"from": "comp", "to": "site"},
+  {"from": "comp", "to": "cover"},
+  {"from": "comp", "to": "phone"},
+  {"from": "cover", "to": "native", "label": "later", "style": "async"}
+ ],
+ "flows": [
+  {"name": "One root class", "steps": [
+   {"at": "tokens", "note": "oq-family-money on the root: the tokens swap to Ledger's accent and mono amounts."},
+   {"from": "tokens", "to": "comp", "note": "Every part reads the same variables, so nothing else changes."},
+   {"from": "comp", "to": "site", "note": "This site repaints."},
+   {"from": "comp", "to": "phone", "note": "So does any app on the same files, at phone width too."}
+  ]},
+  {"name": "Hand it to your agent", "steps": [
+   {"from": "agent", "to": "skill", "note": "'A trip planner in omxqua.'"},
+   {"at": "skill", "note": "The skill makes it read the reference and pick a family."},
+   {"from": "skill", "to": "comp", "note": "It builds from the real parts, not lookalikes."},
+   {"from": "comp", "to": "phone", "note": "Then it checks the page at 390 wide."}
+  ]}
+ ]
+}

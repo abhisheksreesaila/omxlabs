@@ -1,0 +1,245 @@
+{
+ "title": "omxplorer: one row, its video, its telemetry, its paper",
+ "subtitle": "Nothing joins until you link it: a key, a file, a clock and a source, confirmed by you",
+ "style": "ink",
+ "live": true,
+ "nodes": [
+  {
+   "id": "you",
+   "label": "You, or an agent",
+   "kind": "client",
+   "at": [
+    0,
+    0
+   ],
+   "hue": 141,
+   "sat": 55,
+   "tech": "pick a row · ask in words",
+   "desc": "A person taps a row or types a question; an agent calls the same buttons as MCP tools. Same rules for both."
+  },
+  {
+   "id": "fleet",
+   "label": "Fleet sheet",
+   "kind": "db",
+   "at": [
+    6,
+    0
+   ],
+   "hue": 141,
+   "sat": 70,
+   "tech": "63,344 episodes · 13 labs",
+   "desc": "DROID's success and failure sets (CC-BY-4.0), one row per episode: lab, robot, task, outcome, clip, source."
+  },
+  {
+   "id": "links",
+   "label": "Links",
+   "kind": "edge",
+   "at": [
+    12,
+    0
+   ],
+   "size": [
+    2.4,
+    2.4
+   ],
+   "hue": 141,
+   "sat": 80,
+   "tech": "key · file · clock · source",
+   "desc": "fleet.episode = telemetry.episode, fleet.clip = episode.file, telemetry.t ~ episode.t, fleet.source = paper.file. Each one typed or dragged, then confirmed.",
+   "notes": "JOIN LINKED uses only the links you made: no guessed joins."
+  },
+  {
+   "id": "video",
+   "label": "Episode video",
+   "kind": "storage",
+   "at": [
+    20,
+    -7
+   ],
+   "hue": 141,
+   "sat": 45,
+   "tech": "MP4 · 15 Hz",
+   "desc": "The failed episode's clip, opened by its link alone and decoded off the UI thread."
+  },
+  {
+   "id": "telemetry",
+   "label": "Telemetry",
+   "kind": "db",
+   "at": [
+    20,
+    0
+   ],
+   "hue": 141,
+   "sat": 45,
+   "tech": "16.8M rows · Parquet",
+   "desc": "Every frame of every episode: joint velocities, gripper, position and rotation. 16,847,616 rows; one episode slices out in about 2 ms."
+  },
+  {
+   "id": "paper",
+   "label": "DROID paper",
+   "kind": "storage",
+   "at": [
+    20,
+    7
+   ],
+   "hue": 141,
+   "sat": 45,
+   "tech": "PDF text, not OCR",
+   "desc": "Every row names the same paper as its source, so the key link marks its passage: 'All DROID data is recorded at 15Hz' (page 15)."
+  },
+  {
+   "id": "cursor",
+   "label": "One cursor",
+   "kind": "client",
+   "at": [
+    27,
+    -3
+   ],
+   "hue": 141,
+   "sat": 70,
+   "tech": "video + four lanes",
+   "desc": "The video beside four lanes of telemetry on the video's clock: F00118's gripper opens over the box's edge at 12.7 s and the shirt falls."
+  },
+  {
+   "id": "engine",
+   "label": "omxcore",
+   "kind": "service",
+   "at": [
+    25,
+    9
+   ],
+   "hue": 211,
+   "sat": 85,
+   "tech": "JOIN LINKED · CPU or GPU",
+   "desc": "The engine under omxplorer, in the same process. It runs the question's SQL over the linked tables and picks the CPU or the GPU."
+  }
+ ],
+ "edges": [
+  {
+   "from": "you",
+   "to": "fleet",
+   "label": "pick a row"
+  },
+  {
+   "from": "fleet",
+   "to": "links",
+   "label": "episode key"
+  },
+  {
+   "from": "links",
+   "to": "video",
+   "label": "clip = file"
+  },
+  {
+   "from": "links",
+   "to": "telemetry",
+   "label": "t ~ t"
+  },
+  {
+   "from": "links",
+   "to": "paper",
+   "label": "source = file"
+  },
+  {
+   "from": "video",
+   "to": "cursor"
+  },
+  {
+   "from": "telemetry",
+   "to": "cursor"
+  },
+  {
+   "from": "you",
+   "to": "engine",
+   "label": "ask in words",
+   "route": "yx"
+  },
+  {
+   "from": "engine",
+   "to": "telemetry",
+   "label": "16.8M rows",
+   "style": "data",
+   "route": "yx"
+  }
+ ],
+ "flows": [
+  {
+   "name": "Why did it drop?",
+   "desc": "A failure opens by links alone.",
+   "steps": [
+    {
+     "from": "you",
+     "to": "fleet",
+     "note": "Pick F00118, a failed AUTOLab episode, in the fleet sheet."
+    },
+    {
+     "from": "fleet",
+     "to": "links",
+     "note": "Its episode key goes through the links you confirmed."
+    },
+    {
+     "from": "links",
+     "to": "video",
+     "note": "The clip link opens its video."
+    },
+    {
+     "from": "links",
+     "to": "telemetry",
+     "note": "The key and the clock slice its 244 telemetry rows."
+    },
+    {
+     "from": "telemetry",
+     "to": "cursor",
+     "note": "Four lanes land on the video's clock."
+    },
+    {
+     "at": "cursor",
+     "note": "The gripper pinches at 5.3 s, opens over the box's edge at 12.7 s: the shirt falls outside."
+    }
+   ]
+  },
+  {
+   "name": "Ask in words",
+   "steps": [
+    {
+     "from": "you",
+     "to": "engine",
+     "note": "'Failures where the gripper closed, let go and closed again.'"
+    },
+    {
+     "from": "engine",
+     "to": "telemetry",
+     "note": "JOIN LINKED: fleet joined to telemetry on the key you linked, over 16.8M rows."
+    },
+    {
+     "at": "engine",
+     "note": "2,997 episodes, in about 40 ms (37–42 ms in the check's runs)."
+    },
+    {
+     "from": "engine",
+     "to": "you",
+     "note": "The answer is a card on the sheet; tap a row to open it."
+    }
+   ]
+  },
+  {
+   "name": "The paper, by its key",
+   "steps": [
+    {
+     "from": "fleet",
+     "to": "links",
+     "note": "Every row's source names the DROID paper."
+    },
+    {
+     "from": "links",
+     "to": "paper",
+     "note": "The source link opens it as a document card."
+    },
+    {
+     "at": "paper",
+     "note": "'Recorded at 15Hz' is marked, read from the PDF's own text: provenance for every row."
+    }
+   ]
+  }
+ ]
+}

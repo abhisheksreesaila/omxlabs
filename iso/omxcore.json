@@ -1,0 +1,223 @@
+{
+ "title": "omxcore: a file, a planner, CPU or GPU kernels",
+ "subtitle": "SQL over the files you already have; the planner picks the device, and says why",
+ "style": "ink",
+ "live": true,
+ "nodes": [
+  {
+   "id": "cli",
+   "label": "mx",
+   "kind": "client",
+   "at": [
+    0,
+    -6
+   ],
+   "hue": 211,
+   "sat": 55,
+   "tech": "a terminal · JSON out",
+   "desc": "One native program, no Python: mx sql \"SELECT …\" prints rows, the time, the device and notes as JSON."
+  },
+  {
+   "id": "py",
+   "label": "Python",
+   "kind": "client",
+   "at": [
+    0,
+    0
+   ],
+   "hue": 211,
+   "sat": 55,
+   "tech": "0.6.0 on PyPI",
+   "desc": "Lazy frames: nothing runs until compute(). Published as mxframe."
+  },
+  {
+   "id": "app",
+   "label": "Your app",
+   "kind": "client",
+   "at": [
+    0,
+    6
+   ],
+   "hue": 141,
+   "sat": 55,
+   "tech": "Mojo · like SQLite",
+   "desc": "Apps link the engine like SQLite. omxplorer runs every query through it, in the same process."
+  },
+  {
+   "id": "parse",
+   "label": "Parser",
+   "kind": "service",
+   "at": [
+    7,
+    -3
+   ],
+   "hue": 211,
+   "sat": 70,
+   "tech": "SQL · errors with hints",
+   "desc": "Joins, CTEs, subqueries, windows, QUALIFY. A typo comes back with a line, a column and 'did you mean'."
+  },
+  {
+   "id": "plan",
+   "label": "Planner",
+   "kind": "service",
+   "at": [
+    13,
+    0
+   ],
+   "size": [
+    2.4,
+    2.4
+   ],
+   "hue": 211,
+   "sat": 90,
+   "tech": "AUTO: CPU or GPU",
+   "desc": "Prices the CPU and the GPU for this query on this machine, copies included, and picks one. The answer names where it ran.",
+   "notes": "Informal: 2.7× GPU over CPU on a 2-core budget; with 12 cores AUTO keeps the CPU."
+  },
+  {
+   "id": "cpu",
+   "label": "CPU kernels",
+   "kind": "service",
+   "shape": "chip",
+   "at": [
+    20,
+    -4
+   ],
+   "hue": 211,
+   "sat": 60,
+   "tech": "Mojo · all cores",
+   "desc": "Parallel Mojo kernels. All 22 TPC-H queries at SF10 in 3.15 s (DuckDB 5.08 s)."
+  },
+  {
+   "id": "gpu",
+   "label": "GPU kernels",
+   "kind": "service",
+   "shape": "chip",
+   "at": [
+    20,
+    4
+   ],
+   "hue": 211,
+   "sat": 60,
+   "tech": "NVIDIA · Metal on CI Macs",
+   "desc": "The same queries as GPU kernels, written in Mojo too. NVIDIA on Linux; Apple's Metal on GitHub's macOS runners."
+  },
+  {
+   "id": "files",
+   "label": "Your files",
+   "kind": "storage",
+   "at": [
+    27,
+    0
+   ],
+   "hue": 230,
+   "sat": 8,
+   "tech": "CSV · Parquet",
+   "desc": "No import, no new format. Files bigger than memory stream a row group at a time: a 1.6 GB file in 72 MB."
+  }
+ ],
+ "edges": [
+  {
+   "from": "cli",
+   "to": "parse",
+   "label": "SQL"
+  },
+  {
+   "from": "py",
+   "to": "parse",
+   "label": "mx.sql"
+  },
+  {
+   "from": "app",
+   "to": "plan",
+   "label": "Query builder"
+  },
+  {
+   "from": "parse",
+   "to": "plan",
+   "label": "a plan"
+  },
+  {
+   "from": "plan",
+   "to": "cpu",
+   "label": "cheaper here"
+  },
+  {
+   "from": "plan",
+   "to": "gpu",
+   "label": "or here"
+  },
+  {
+   "from": "cpu",
+   "to": "files",
+   "label": "row groups",
+   "style": "data"
+  },
+  {
+   "from": "gpu",
+   "to": "files",
+   "label": "columns read",
+   "style": "data"
+  }
+ ],
+ "flows": [
+  {
+   "name": "A query from the terminal",
+   "steps": [
+    {
+     "from": "cli",
+     "to": "parse",
+     "note": "mx sql: revenue by return flag, from lineitem.parquet."
+    },
+    {
+     "from": "parse",
+     "to": "plan",
+     "note": "Parsed and checked; a typo would come back with 'did you mean'."
+    },
+    {
+     "at": "plan",
+     "note": "AUTO prices both devices, copies included, and picks the cheaper one."
+    },
+    {
+     "from": "plan",
+     "to": "cpu",
+     "note": "Here the CPU wins, so it runs there."
+    },
+    {
+     "from": "cpu",
+     "to": "files",
+     "note": "Only the columns it needs are read: 3 of 16."
+    },
+    {
+     "at": "cli",
+     "note": "JSON back: rows, exact decimals, the time and the device it ran on."
+    }
+   ]
+  },
+  {
+   "name": "Inside an app",
+   "steps": [
+    {
+     "from": "app",
+     "to": "plan",
+     "note": "omxplorer asks for a group-by from Mojo, no SQL text needed."
+    },
+    {
+     "from": "plan",
+     "to": "gpu",
+     "note": "On a big table the GPU is cheaper, so the kernels run there."
+    },
+    {
+     "from": "gpu",
+     "to": "files",
+     "note": "The file streams in; nothing is copied into a new format."
+    },
+    {
+     "from": "plan",
+     "to": "app",
+     "note": "The totals land in the sheet, in the same process: no server, no JSON."
+    }
+   ]
+  }
+ ]
+}

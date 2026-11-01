@@ -1,0 +1,56 @@
+{
+ "title": "omxconsole: your GPU, one OpenAI-compatible endpoint",
+ "subtitle": "Apps and agents call one URL; models wake on the first call and sleep when idle",
+ "style": "ink",
+ "live": true,
+ "nodes": [
+  {"id": "script", "label": "Your script", "kind": "client", "at": [0, -6], "hue": 30, "sat": 55, "tech": "the OpenAI client",
+   "desc": "Any OpenAI client works: change the base URL to http://127.0.0.1:11435/v1 and use your key."},
+  {"id": "agent", "label": "An agent", "kind": "client", "at": [0, 0], "hue": 30, "sat": 55, "tech": "anything OpenAI-compatible",
+   "desc": "Agents, notebooks and tools that speak the OpenAI API use it as their model, on your own GPU."},
+  {"id": "plorer", "label": "omxplorer Ask", "kind": "client", "at": [0, 6], "hue": 141, "sat": 55, "tech": "next",
+   "desc": "On omxplorer's roadmap: its questions answered by a model on your GPU, served here. Not wired yet."},
+  {"id": "api", "label": "/v1 endpoint", "kind": "edge", "at": [7, 0], "size": [2.4, 2.4], "hue": 30, "sat": 85, "tech": ":11435 · keys",
+   "desc": "One URL for every model you've pulled. One revocable key per app, stored as a hash. mxc expose puts the four /v1 routes on your LAN over HTTPS."},
+  {"id": "daemon", "label": "Model server", "kind": "service", "at": [14, 0], "hue": 30, "sat": 90, "tech": "mxc serve",
+   "desc": "Starts a model on its first request and unloads it after five idle minutes, so GPU memory goes to the models in use. Pin one to keep it.",
+   "notes": "1,044 tests pass with a fake MAX, so no GPU is needed to test it."},
+  {"id": "console", "label": "Console", "kind": "client", "at": [14, -7], "hue": 354, "sat": 60, "tech": "an omxcode app",
+   "desc": "The console's pages, rewritten in Mojo with omxcode: native on Linux and the Mac (CI Macs), a page on the web. It polls /admin/* like any client."},
+  {"id": "max", "label": "MAX models", "kind": "ai", "at": [21, 0], "hue": 30, "sat": 60, "tech": "Modular MAX",
+   "desc": "The models run on Modular's MAX. Eight architectures MAX couldn't run were ported and serve here."},
+  {"id": "port", "label": "mxc port", "kind": "worker", "at": [21, 7], "hue": 30, "sat": 40, "tech": "Claude Code, sandboxed",
+   "desc": "For a model MAX can't run: Claude Code writes a MAX version in a sandbox, checked against Hugging Face. Text models only."},
+  {"id": "hf", "label": "Hugging Face", "kind": "external", "at": [28, 7], "hue": 230, "sat": 8, "tech": "weights, once",
+   "desc": "Weights download once. After that, serving needs no network at all."},
+  {"id": "gpu", "label": "Your GPU", "kind": "service", "shape": "chip", "at": [28, 0], "hue": 230, "sat": 10, "tech": "NVIDIA",
+   "desc": "The GPU you already own. No cloud, no per-token bill; prompts never leave the machine."}
+ ],
+ "edges": [
+  {"from": "script", "to": "api", "label": "chat.completions"},
+  {"from": "agent", "to": "api"},
+  {"from": "plorer", "to": "api", "label": "next", "style": "async"},
+  {"from": "api", "to": "daemon", "label": "key checked"},
+  {"from": "console", "to": "daemon", "label": "/admin/*", "style": "async"},
+  {"from": "daemon", "to": "max", "label": "load on call"},
+  {"from": "max", "to": "gpu", "label": "runs on"},
+  {"from": "port", "to": "max", "label": "a new port"},
+  {"from": "port", "to": "hf", "label": "checked against", "style": "data"}
+ ],
+ "flows": [
+  {"name": "A chat call", "steps": [
+   {"from": "script", "to": "api", "note": "Your script calls chat.completions at 127.0.0.1:11435/v1."},
+   {"at": "api", "note": "The key is checked against its stored hash."},
+   {"from": "api", "to": "daemon", "note": "The server finds qwen2.5-0.5b."},
+   {"from": "daemon", "to": "max", "note": "It isn't loaded, so it starts on this first request."},
+   {"from": "max", "to": "gpu", "note": "The model runs on your GPU; nothing leaves the machine."},
+   {"from": "api", "to": "script", "note": "The reply comes back in OpenAI's format."},
+   {"at": "daemon", "note": "Five idle minutes later the model unloads and the GPU memory is free again."}
+  ]},
+  {"name": "Porting a model", "steps": [
+   {"at": "port", "note": "mxc port <repo> --auto: Claude Code writes a MAX version in a sandbox."},
+   {"from": "port", "to": "hf", "note": "Its answers are checked against the Hugging Face original."},
+   {"from": "port", "to": "max", "note": "Once they match, it serves like any other model."}
+  ]}
+ ]
+}

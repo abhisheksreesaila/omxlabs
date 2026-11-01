@@ -35,7 +35,8 @@ def main():
                     pg.on("console", lambda m: m.type == "error" and errs.append(m.text))
                     pg.on("pageerror", lambda e: errs.append(str(e)))
                     pg.on("response", lambda r: r.url.startswith(base) and r.status >= 400 and bad.append(f"{r.status} {r.url[len(base)-1:]}"))
-                    pg.goto(base + page_path, wait_until="networkidle")
+                    pg.goto(base + page_path, wait_until="load")   # not networkidle: the hero clip streams for its whole length
+                    pg.wait_for_timeout(800)
                     deck = page_path.endswith("deck.html")
                     if not deck:   # scroll through so reveals and lazy media load, then come back
                         h = pg.evaluate("document.body.scrollHeight")

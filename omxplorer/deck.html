@@ -140,7 +140,7 @@
             Button("Greet", on_tap=GREET, style=PROMINENT),
             spacing=20,
         )</code></pre>
-  <p class="note" style="margin-top:18px">the same file opens on Linux (GTK), the web, Android, Mac; iPhone builds</p>
+  <p class="note" style="margin-top:18px">the same file opens on Linux (GTK) and the web, and on CI Macs; Android on the emulator; iPhone builds</p>
 </section>
 
 <!-- 9 · the code: the sentence -->
@@ -176,6 +176,7 @@ for w in words:
 <section>
   <div class="eyebrow">100 million rows</div>
   <h2>A dashboard over 100M rows: <span class="ac">30 ms a click.</span></h2>
+  <p class="note">median, measured at 856a7e9, before the release build · docs/data-benchmark.md</p>
   <div class="bars">
     <div class="bar"><span class="name">omxplorer</span><div class="track"><div class="fill me" style="--w:29%"></div></div><span class="val">30.3 ms</span></div>
     <div class="bar"><span class="name">Rust + Polars</span><div class="track"><div class="fill" style="--w:35%"></div></div><span class="val">37.0 ms</span></div>
@@ -215,11 +216,11 @@ for w in words:
   <div class="plat">
     <div class="card fragment rise"><span class="em">🐧</span><b>Linux</b><span class="tag live"><i></i>runs</span></div>
     <div class="card fragment rise"><span class="em">🌐</span><b>Web</b><span class="tag live"><i></i>runs</span></div>
-    <div class="card fragment rise"><span class="em">🤖</span><b>Android</b><span class="tag live"><i></i>runs</span></div>
-    <div class="card fragment rise"><span class="em">🍎</span><b>Mac</b><span class="tag live"><i></i>runs</span></div>
+    <div class="card fragment rise"><span class="em">🤖</span><b>Android</b><span class="tag prog"><i></i>emulator</span></div>
+    <div class="card fragment rise"><span class="em">🍎</span><b>Mac</b><span class="tag live"><i></i>runs on CI Macs</span></div>
     <div class="card fragment rise"><span class="em">📱</span><b>iPhone</b><span class="tag builds"><i></i>builds</span></div>
   </div>
-  <p class="note" style="margin-top:28px">Mac checked on GitHub's runners · iPhone compiles and signs, hasn't run on a phone yet · the GPU path is NVIDIA today</p>
+  <p class="note" style="margin-top:28px">Mac: GitHub's macOS runners · Android: the emulator · iPhone compiles and signs, hasn't run on a phone yet · the GPU: NVIDIA on Linux, Metal on CI Macs</p>
 </section>
 
 <!-- 14 · video becomes rows: the clips -->
@@ -300,14 +301,14 @@ for w in words:
   <div class="road3">
     <div><span class="tag live"><i></i>Now</span><ul><li>Sheets, pivots, charts, reports</li><li>The sentence chart</li><li>100M-row files, streamed</li><li>Agent host (MCP)</li><li>Video becomes rows; the reel; the drone</li><li>Linked evidence: video, sheet, paperwork</li></ul></div>
     <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>Try it in the browser</li><li>Ask, answered by omxconsole</li><li>Real-world footage, audio</li></ul></div>
-    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Share with a team</li><li>Apple GPUs</li></ul></div>
+    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Share with a team</li><li>Apple GPUs on real Macs</li></ul></div>
   </div>
 </section>
 
 <!-- 18 · the lab + read on -->
 <section>
   <div class="eyebrow">omxlabs</div>
-  <h2>One app. <span class="two">Four breakthroughs under it.</span></h2>
+  <h2>One app. <span class="two">Three technologies under it, local AI beside it.</span></h2>
   <div class="cols r4" style="margin-top:30px">
     <div class="card px-core"><h3 style="color:var(--px)">omxcore</h3><p>powers it: the GPU engine</p></div>
     <div class="card px-code"><h3 style="color:var(--px)">omxcode</h3><p>builds it: write once, native everywhere</p></div>

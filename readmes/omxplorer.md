@@ -20,9 +20,9 @@ Written in Mojo with omxcode, powered by omxcore.
 - 🤖 **Every button is a tool.** It's an MCP server from the first line. A disabled button is no tool.
 - ⚡ **Your GPU does the work.** A chart over 1M rows in 0.5–0.7 ms; a median per group in 6.4 ms (RTX 3090).
 - 📂 **100M rows, no warehouse.** CSV and Parquet straight from disk; a 100M-row file opens in 0.2 s, streamed.
-- 🖥️ **Native everywhere.** Linux, the web, Android and Mac from one Mojo app. iPhone builds; it hasn't run on a phone yet.
+- 🖥️ **Native everywhere.** Linux and the web run today, and the Mac runs on CI Macs (GitHub's macOS runners), from one Mojo app. Phones are next.
 
-🏁 A dashboard over 100M rows: **30.3 ms** a click (Rust + Polars 37.0, JS + DuckDB-WASM 104.9; goal 38, `docs/data-benchmark.md`).
+🏁 A dashboard over 100M rows: **30.3 ms** a click (Rust + Polars 37.0, JS + DuckDB-WASM 104.9; goal 38, measured at 856a7e9, before the release build, `docs/data-benchmark.md`).
 
 ## 🚀 Try it
 

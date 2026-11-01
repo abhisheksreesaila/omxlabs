@@ -51,7 +51,7 @@
 <section>
   <div class="eyebrow">omxcode · by omxlabs · built in Mojo</div>
   <h1>Write it once. <span class="ac">Open it everywhere.</span></h1>
-  <p class="lede fragment rise">A Mojo app framework. Two functions open as a native app on Linux, the web, Android and Mac. The GPU code sits in the same file, and an AI agent can drive every app.</p>
+  <p class="lede fragment rise">A Mojo app framework. Two functions open as a native app on Linux, the web and the Mac (on CI Macs), and on the Android emulator. The GPU code sits in the same file, and an AI agent can drive every app.</p>
   <p class="note fragment rise">arrow keys, space or swipe · 16 slides, about three minutes</p>
 </section>
 
@@ -305,7 +305,7 @@ struct Main(App):
       <p class="fragment rise"><b>No per-app work.</b> A button's tag, or its title, names its tool. Tapping it and calling it are the same.</p>
       <p class="fragment rise"><b>The screen is the permission model.</b> A disabled button is no tool. A dialog's buttons exist only while it's open.</p>
       <p class="fragment rise"><b>It answers in words.</b> Each call returns what changed, not a screenshot to compare.</p>
-      <p class="note">a real run on build/hello/web · docs/agent.md · 31 components proven through the agent (docs/components.md)</p>
+      <p class="note">a real run on build/hello/web · docs/agent.md · 55 of 121 components proven through the agent (docs/components.json)</p>
     </div>
   </div>
 </section>
@@ -342,7 +342,7 @@ struct Main(App):
   <div class="cols r3 edges" style="margin-top:24px">
     <div class="card fragment rise"><span class="em">🌱</span><h3>Mojo is young.</h3><p>Version 1.1, a small ecosystem, no Windows release. Flutter and React Native are far ahead on maturity.</p></div>
     <div class="card fragment rise"><span class="em">📱</span><h3>iPhone only builds.</h3><p>It compiles and signs, with two hand-written runtime functions. It hasn't run on a phone.</p></div>
-    <div class="card fragment rise"><span class="em">🤖</span><h3>Android is partial.</h3><p>19 components run on the emulator; the newer ones are still to come.</p></div>
+    <div class="card fragment rise"><span class="em">🤖</span><h3>Android is partial.</h3><p>16 of 121 components run on the emulator; the newer ones are still to come.</p></div>
     <div class="card fragment rise"><span class="em">🍎</span><h3>The Mac is on loan.</h3><p>omxplorer runs on GitHub's Macs. The matrix still counts Mac components as “builds”.</p></div>
     <div class="card fragment rise"><span class="em">🎮</span><h3>NVIDIA first.</h3><p>The GPU path is NVIDIA. Apple and phones run the same functions on the CPU.</p></div>
     <div class="card fragment rise"><span class="em">🦀</span><h3>Not always fastest.</h3><p>Native Rust wins at 1M particles, cold start and memory.</p></div>
@@ -355,7 +355,7 @@ struct Main(App):
   <div class="eyebrow">Where it's going</div>
   <h2>From five hosts <span class="ac">to every screen.</span></h2>
   <div class="road3">
-    <div><span class="tag live"><i></i>Now</span><ul><li>Linux, web, Android, Mac</li><li>GPU kernels, same file</li><li>Agent host (MCP)</li><li>AG-UI, generated UI</li></ul></div>
+    <div><span class="tag live"><i></i>Now</span><ul><li>Linux, web; Mac on CI Macs; Android emulator</li><li>GPU kernels, same file</li><li>Agent host (MCP)</li><li>AG-UI, generated UI</li></ul></div>
     <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>iPhone on a real phone</li><li>Android's newer components</li><li>Apple GPUs</li><li>Mac in the matrix</li></ul></div>
     <div class="lt"><span class="tag"><i></i>Later</span><ul><li>An agent writes an app from one sentence</li><li>A Mojo app inside a FastHTML site</li><li>Windows, once Mojo ships it</li></ul></div>
   </div>

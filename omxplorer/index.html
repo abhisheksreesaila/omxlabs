@@ -39,7 +39,7 @@
 .ivv.piv { grid-template-columns: 64px 1fr 48px; grid-auto-rows: 1fr; place-items: stretch; gap: 3px; padding: 12px; }
 .ivv.piv i { border-radius: 4px; background: var(--oq-surface-3); font-style: normal; display: grid; place-items: center; font-size: 10.5px; color: var(--ink2); }
 .ivv.piv i.h { background: none; color: var(--ink); justify-content: start; } .ivv.piv i.h:first-child { grid-column: 1 / -1; color: var(--ink2); }
-.ivv.piv i.bar { background: var(--oq-surface-3); display: block; overflow: hidden; } .ivv.piv i.bar s { display: block; height: 100%; background: color-mix(in srgb, var(--iv) 55%, transparent); } .ivv.piv i.on { background: color-mix(in srgb, var(--iv) 30%, var(--oq-surface-3)); color: var(--ink); }
+.ivv.piv i.bar { background: var(--oq-surface-3); display: flex; justify-content: flex-start; align-items: stretch; overflow: hidden; } .ivv.piv i.bar s { display: block; flex: none; margin: 0; height: auto; background: color-mix(in srgb, var(--iv) 55%, transparent); } .ivv.piv i.on { background: color-mix(in srgb, var(--iv) 30%, var(--oq-surface-3)); color: var(--ink); }
 /* 2 · question → answer → moment */
 .ivv.qm { display: flex; gap: 8px; padding: 0 12px; justify-content: center; }
 .ivv.qm span { padding: 6px 10px; border-radius: 999px; background: var(--oq-surface-3); color: var(--ink); white-space: nowrap; }
@@ -138,7 +138,7 @@
         <div class="k">4 · Links you confirm by hand</div>
         <h3>Key, time, place: drag, confirm, done.</h3>
         <p><b>No schema written in code.</b> Drag a column onto a card and say yes. Nothing joins until you link it, and a question uses only the links you made, so every answer can show where it came from.</p></div>
-      <div class="ivc"><div class="ivv piv" aria-hidden="true"><i class="h">success by lab</i><i class="h"></i><i class="h">PennPAL</i><i class="bar"><s style="width:95%"></s></i><i class="on">95 %</i><i class="h">RAD</i><i class="bar"><s style="width:61%"></s></i><i class="on">61 %</i></div>
+      <div class="ivc"><div class="ivv piv" aria-hidden="true"><i class="h">success by lab</i><i class="h">PennPAL</i><i class="bar"><s style="width:95%"></s></i><i class="on">95 %</i><i class="h">RAD</i><i class="bar"><s style="width:61%"></s></i><i class="on">61 %</i></div>
         <div class="k">1</div><h3>The fleet is a spreadsheet you touch.</h3><p>Pivots, charts from a sentence, formulas and edits, <b>over every run</b>.</p></div>
       <div class="ivc"><div class="ivv qm" aria-hidden="true"><span>ask</span>→<span class="a"><b>2,997</b> · 40 ms</span>→<span>▶ 0:12</span></div>
         <div class="k">2</div><h3>Question → moment, in one motion.</h3><p>Ask in words over <b>16.8M rows (~40 ms)</b>, tap an answer row, and its video and telemetry open on the same cursor.</p></div>

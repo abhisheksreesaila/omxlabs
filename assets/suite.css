@@ -441,21 +441,44 @@ footer[data-suite] .fine { margin-top: 48px; padding-top: 22px; border-top: 1px 
   .dir::before { right: 0; } .stop { scroll-snap-align: start; }
 }
 
-/* the omxcode mark snaps together when you point at it (or its card, pill or link): the < flies in, then the /, then the >,
-   each on a spring, and the joins spark. suite.js swaps the masked icon for an inline svg with three pieces. At rest it holds still. */
-.pm.is-snap { color: var(--px); } .pm.is-snap::after { display: none; }
-.snap { width: 62%; height: 62%; overflow: visible; }
-.snap path { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transform-box: fill-box; transform-origin: center; }
-.snap .k { fill: currentColor; opacity: 0; transform-box: fill-box; transform-origin: center; }
-:is(:hover, :focus-visible) > .pm.is-snap .p1, :is(.box, .card, .fam a):is(:hover, :focus-visible) .pm.is-snap .p1 { animation: snapL .9s cubic-bezier(.34, 1.56, .64, 1); }
-:is(:hover, :focus-visible) > .pm.is-snap .p2, :is(.box, .card, .fam a):is(:hover, :focus-visible) .pm.is-snap .p2 { animation: snapS .9s .1s cubic-bezier(.34, 1.56, .64, 1) backwards; }
-:is(:hover, :focus-visible) > .pm.is-snap .p3, :is(.box, .card, .fam a):is(:hover, :focus-visible) .pm.is-snap .p3 { animation: snapR .9s .2s cubic-bezier(.34, 1.56, .64, 1) backwards; }
-:is(:hover, :focus-visible) > .pm.is-snap .k, :is(.box, .card, .fam a):is(:hover, :focus-visible) .pm.is-snap .k { animation: snapK .55s .6s ease-out; }
+/* live product marks (assets/marks.js swaps the masked icon for an inline svg and adds .on while you point at it).
+   Shared: strokes and fills in the product's colour; every part springs from its own centre. */
+.pm.is-live { color: var(--px); } .pm.is-live::after { display: none; }
+.lm { width: 62%; height: 62%; overflow: visible; }
+.lm * { transform-box: fill-box; transform-origin: center; }
+.lm .s { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.lm .f { fill: currentColor; }
+/* omxcode: the < flies in, then the /, then the >, and the joins spark */
+.lm-code .k { opacity: 0; }
+.on .lm-code .p1 { animation: snapL .9s var(--lm-spring); } .on .lm-code .p2 { animation: snapS .9s .1s var(--lm-spring) backwards; } .on .lm-code .p3 { animation: snapR .9s .2s var(--lm-spring) backwards; }
+.on .lm-code .k { animation: lmPing .55s .6s ease-out; }
 @keyframes snapL { from { transform: translate(-9px, -6px) rotate(-35deg); opacity: 0; } }
 @keyframes snapS { from { transform: translate(0, -12px) rotate(25deg); opacity: 0; } }
 @keyframes snapR { from { transform: translate(9px, 7px) rotate(35deg); opacity: 0; } }
-@keyframes snapK { from { opacity: 1; transform: scale(.3); } to { opacity: 0; transform: scale(2.4); } }
-@media (prefers-reduced-motion: reduce) { .snap path, .snap .k { animation: none !important; } }
+/* omxplorer: telemetry inside a lens; the line traces, the spike (the drop) pings, the lens leans in */
+.lm-plorer .ln { stroke-width: 1.8; stroke-dasharray: 1; } .lm-plorer .hit { opacity: 0; }
+.on .lm-plorer .ln { animation: lmDraw 1s ease-in-out; } .on .lm-plorer .hit { animation: lmPing .8s .55s ease-out; } .on .lm-plorer .lens { animation: lmPop .5s .55s var(--lm-spring); }
+/* omxcore: nine cores light in a wave, the pins flicker: SQL on every GPU thread at once */
+.lm-core .pin { stroke-width: 1.8; } .lm-core .d { opacity: .35; }
+.on .lm-core .d { animation: lmLane .5s ease-out 2; animation-delay: calc(var(--i) * .08s); } .on .lm-core .pin { animation: lmFlick .25s 4 alternate; }
+/* omxqua: a solid tile with one soft shadow (Material) wobbles like jelly onto it and springs back (Liquid) */
+.lm-qua .shad { opacity: .3; } .lm-qua .gl { fill: #fff; opacity: .55; }
+.on .lm-qua .front { animation: lmJelly 1.3s var(--lm-spring); } .on .lm-qua .shad { animation: lmLag 1.3s .08s var(--lm-spring); }
+/* omxconsole: the cursor types and blinks, then a spark: your GPU, serving AI */
+.lm-console .cur { transform-origin: left center; } .lm-console .spark { opacity: 0; }
+.on .lm-console .cur { animation: lmType .9s steps(4), lmFlick .3s .9s 3 alternate; } .on .lm-console .chev { animation: lmNudge .4s var(--lm-spring); } .on .lm-console .spark { animation: lmTwinkle .7s 1.1s var(--lm-spring) both; }
+:root { --lm-spring: cubic-bezier(.34, 1.56, .64, 1); }
+@keyframes lmPing { from { opacity: 1; transform: scale(.3); } to { opacity: 0; transform: scale(2.6); } }
+@keyframes lmDraw { from { stroke-dashoffset: 1; } }
+@keyframes lmPop { 50% { transform: scale(1.1); } }
+@keyframes lmLane { 0% { opacity: .35; transform: scale(1); } 40% { opacity: 1; transform: scale(1.7); } 100% { opacity: .35; transform: scale(1); } }
+@keyframes lmFlick { to { opacity: .2; } }
+@keyframes lmJelly { 0% { rx: 3.5px; transform: none; } 30% { rx: 6.5px; transform: translate(1px, 1.5px) scale(1.12, .86); } 50% { rx: 6.5px; transform: translate(1px, 1.5px) scale(.9, 1.1); } 70% { rx: 5px; transform: scale(1.03, .97); } 100% { rx: 3.5px; transform: none; } }
+@keyframes lmLag { 30% { rx: 6.5px; transform: scale(.9); opacity: .15; } 100% { rx: 3.5px; } }
+@keyframes lmType { from { transform: scaleX(0); } }
+@keyframes lmNudge { 50% { transform: translateX(1.5px); } }
+@keyframes lmTwinkle { from { opacity: 0; transform: scale(0) rotate(-90deg); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .lm * { animation: none !important; } }
 
 /* the omxlabs brew: the wordmark as a glass, filled with all five product colours, the surface rolling and bubbles rising out of it.
    Not the logo (that's the flask): a sign-off in the About section. Slower at rest, sloshes when you point at it. */

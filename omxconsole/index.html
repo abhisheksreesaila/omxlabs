@@ -56,7 +56,7 @@
     <div><span class="em">💤</span><h3>Models sleep when idle.</h3><p>A model starts on its first request and unloads after five idle minutes, so <b>GPU memory goes to the models in use</b>.</p></div>
     <div><span class="em">🔑</span><h3>Safe to share.</h3><p>One revocable key per app, stored as a hash. <code>mxc expose</code> puts the four /v1 routes on your LAN over HTTPS.</p></div>
     <div><span class="em">🧬</span><h3>MAX can't run it? Port it.</h3><p><code>mxc port &lt;repo&gt; --auto</code> has Claude Code write a MAX version in a sandbox, checked against Hugging Face. Text models only.</p></div>
-    <div><span class="em">🖥️</span><h3>A console written in Mojo.</h3><p>Rebuilt with omxcode: native on Linux and the Mac (on CI Macs), and on the web it matches the original to <b>99.2 %</b> of pixels.</p></div>
+    <div><span class="em">🖥️</span><h3>A console written in Mojo.</h3><p>Rebuilt with omxcode: native on Linux and the Mac (on CI Macs), and on the web it matches the original on at least <b>97 %</b> of pixels.</p></div>
   </div>
 </div></section>
 
@@ -102,7 +102,7 @@ reply = client.chat.completions.create(
     <figure class="frame"><div class="bar"><i></i><i></i><i></i><span>the omxcode console · Linux (GTK), native widgets</span></div><img src="../assets/img/console-models-gtk.png" alt="the omxcode console's My models page drawn natively on GTK"></figure>
     <ul>
       <li><b>📡 Same server, same API.</b>It polls the server's local <code>/admin/*</code> routes every 3 seconds and draws the replies.</li>
-      <li><b>🎯 99 % the same.</b>On the web, all 20 screens match the original JavaScript console to at least 99.2 % of pixels.</li>
+      <li><b>🎯 97 % the same.</b>On the web, all 20 screens match the original JavaScript console on at least 97 % of pixels.</li>
       <li><b>🧱 Only components.</b>A lint fails the app if it sets a colour, font or size. The 31 modules it needed went into omxcode.</li>
     </ul>
   </div>

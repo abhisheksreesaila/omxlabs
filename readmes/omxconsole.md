@@ -21,7 +21,7 @@ omxconsole puts every model behind one local URL on Modular MAX. Models wake on 
 - 💤 **Models sleep when idle.** A model starts on its first request and unloads after 5 idle minutes. Pin the ones you want kept loaded.
 - 🔑 **Safe to share.** One revocable key per app, stored as a hash. `mxc expose` puts the four `/v1` routes on your LAN over HTTPS.
 - 🧬 **MAX can't run it? Port it.** `mxc port <repo> --auto` has Claude Code write a MAX version in a sandbox, checked against Hugging Face. 8 architectures so far, text models only.
-- 🖥️ **A console written in Mojo.** Rebuilt with [omxcode](https://omxlabs.tech/omxcode/): native on Linux and the Mac (on CI Macs), and on the web it matches the original to 99.2 % of pixels.
+- 🖥️ **A console written in Mojo.** Rebuilt with [omxcode](https://omxlabs.tech/omxcode/): native on Linux and the Mac (on CI Macs), and on the web it matches the original on at least 97 % of pixels.
 
 ## 🚀 Try it
 

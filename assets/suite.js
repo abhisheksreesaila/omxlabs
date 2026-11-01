@@ -36,7 +36,7 @@ const GH = "https://github.com/abhisheksreesaila";
         <div><h4>The apps</h4><ul>${SUITE.slice(0, 2).map(p => li(href(p.k), p.name, p.k)).join("")}</ul></div>
         <div><h4>Under the hood</h4><ul>${SUITE.slice(2).map(p => li(href(p.k), p.name, p.k)).join("")}</ul></div>
         <div><h4>Their own sites</h4><ul>${li("https://abhisheksreesaila.github.io/omxcode/", "omxcode docs")}${li("https://abhisheksreesaila.github.io/omxcore/", "omxcore docs")}${li("https://abhisheksreesaila.github.io/omxqua/", "omxqua showcase")}${li("https://abhisheksreesaila.github.io/mxstudio/site/console.html", "omxconsole tour")}</ul></div>
-        <div><h4>Source</h4><ul>${li(GH + "/omxcode", "GitHub: omxcode + omxplorer")}${li(GH + "/omxcore", "GitHub: omxcore")}${li(GH + "/omxqua", "GitHub: omxqua")}${li(GH + "/mxstudio", "GitHub: omxconsole")}${li("https://www.youtube.com/@mojomondayai", "Mojo Monday")}</ul></div>
+        <div><h4>Source</h4><ul>${li(GH + "/omxcode", "GitHub: omxcode + omxplorer")}${li(GH + "/omxcore", "GitHub: omxcore")}${li(GH + "/omxqua", "GitHub: omxqua")}${li(GH + "/mxstudio", "GitHub: omxconsole")}${li("https://www.youtube.com/@mojomondayai", "Mojo Monday")}${li("https://x.com/ablearn23", "X: @ablearn23")}</ul></div>
       </div>
       <div class="fine"><span>${me ? me.name + " · " : ""}omxlabs · built in Mojo, 2026 · styled with <a href="${href("qua")}">omxqua</a></span><a href="${GH}/omxcode/issues">Report an issue</a></div></div>`;
   }

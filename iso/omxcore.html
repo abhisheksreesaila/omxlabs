@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-style="ink">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -102,6 +102,26 @@ footer[hidden]{display:none}
   #legend{display:none}
 }
 </style>
+<!-- omx-chrome --><link rel="stylesheet" href="../assets/omxqua/src/fonts.css">
+<style>
+:root, :root[data-theme="dark"] { --bg:#151518; --ink:#ededef; --muted:#a9a9b1; --panel:#1d1d21; --line:#2a2a30; --chip:#1d1d21; --accent:#4aa8ff;
+  --shadow:0 8px 30px #00000066; --r:999px; --font:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif; }
+header, #legend, #styleSel, #bLive, #bTheme, #bFit, #bFold, #bSvg, #bPng { display:none !important; }
+body { grid-template-rows:1fr auto; background:var(--bg); }
+footer { border-top:1px solid #202025; padding:10px 14px; gap:8px; }
+footer button, footer select { height:36px; padding:0 14px; border:0; border-radius:999px; background:var(--chip); color:var(--ink);
+  box-shadow:inset 0 0 0 1px var(--line); font:500 13px var(--font); transition:background .15s, transform .15s; }
+footer button:hover, footer select:hover { background:#25252a; }
+footer button:active { transform:scale(.96); }
+footer button:focus-visible, footer select:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+#bPlay { background:var(--accent); color:#0b0b0d; box-shadow:none; font-weight:600; padding:0 18px; }
+#bPlay:hover { background:var(--accent); filter:brightness(1.08); }
+#caption { font:14px/1.45 var(--font); color:var(--ink); }
+#caption b { color:var(--accent); }
+#dots i.on { background:var(--accent); }
+#info { background:var(--panel); border:1px solid var(--line); border-radius:18px; font-family:var(--font); }
+.edge.on .line { stroke:var(--accent); } .edge.on .head { fill:var(--accent); } .edge.on .chev { stroke:var(--accent); }
+</style><!-- /omx-chrome -->
 </head>
 <body>
 <header>
@@ -133,7 +153,7 @@ footer[hidden]{display:none}
   <div id="caption"></div>
   <div id="dots"></div>
 </footer>
-<script type="application/json" id="spec">{"title": "omxcore: a file, a planner, CPU or GPU kernels", "subtitle": "SQL over the files you already have; the planner picks the device, and says why", "style": "ink", "live": true, "nodes": [{"id": "cli", "label": "mx", "kind": "client", "at": [0, -6], "hue": 211, "sat": 55, "tech": "a terminal · JSON out", "desc": "One native program, no Python: mx sql \"SELECT …\" prints rows, the time, the device and notes as JSON."}, {"id": "py", "label": "Python", "kind": "client", "at": [0, 0], "hue": 211, "sat": 55, "tech": "0.6.0 on PyPI", "desc": "Lazy frames: nothing runs until compute(). Published as mxframe."}, {"id": "app", "label": "Your app", "kind": "client", "at": [0, 6], "hue": 141, "sat": 55, "tech": "Mojo · like SQLite", "desc": "Apps link the engine like SQLite. omxplorer runs every query through it, in the same process."}, {"id": "parse", "label": "Parser", "kind": "service", "at": [7, -3], "hue": 211, "sat": 70, "tech": "SQL · errors with hints", "desc": "Joins, CTEs, subqueries, windows, QUALIFY. A typo comes back with a line, a column and 'did you mean'."}, {"id": "plan", "label": "Planner", "kind": "service", "at": [13, 0], "size": [2.4, 2.4], "hue": 211, "sat": 90, "tech": "AUTO: CPU or GPU", "desc": "Prices the CPU and the GPU for this query on this machine, copies included, and picks one. The answer names where it ran.", "notes": "Informal: 2.7× GPU over CPU on a 2-core budget; with 12 cores AUTO keeps the CPU."}, {"id": "cpu", "label": "CPU kernels", "kind": "service", "shape": "chip", "at": [20, -4], "hue": 211, "sat": 60, "tech": "Mojo · all cores", "desc": "Parallel Mojo kernels. All 22 TPC-H queries at SF10 in 3.15 s (DuckDB 5.08 s)."}, {"id": "gpu", "label": "GPU kernels", "kind": "service", "shape": "chip", "at": [20, 4], "hue": 211, "sat": 60, "tech": "NVIDIA · Metal on CI Macs", "desc": "The same queries as GPU kernels, written in Mojo too. NVIDIA on Linux; Apple's Metal on GitHub's macOS runners."}, {"id": "files", "label": "Your files", "kind": "storage", "at": [27, 0], "hue": 230, "sat": 8, "tech": "CSV · Parquet", "desc": "No import, no new format. Files bigger than memory stream a row group at a time: a 1.6 GB file in 72 MB."}], "edges": [{"from": "cli", "to": "parse", "label": "SQL"}, {"from": "py", "to": "parse", "label": "mx.sql"}, {"from": "app", "to": "plan", "label": "Query builder"}, {"from": "parse", "to": "plan", "label": "a plan"}, {"from": "plan", "to": "cpu", "label": "cheaper here"}, {"from": "plan", "to": "gpu", "label": "or here"}, {"from": "cpu", "to": "files", "label": "row groups", "style": "data"}, {"from": "gpu", "to": "files", "label": "columns read", "style": "data"}], "flows": [{"name": "A query from the terminal", "steps": [{"from": "cli", "to": "parse", "note": "mx sql: revenue by return flag, from lineitem.parquet."}, {"from": "parse", "to": "plan", "note": "Parsed and checked; a typo would come back with 'did you mean'."}, {"at": "plan", "note": "AUTO prices both devices, copies included, and picks the cheaper one."}, {"from": "plan", "to": "cpu", "note": "Here the CPU wins, so it runs there."}, {"from": "cpu", "to": "files", "note": "Only the columns it needs are read: 3 of 16."}, {"at": "cli", "note": "JSON back: rows, exact decimals, the time and the device it ran on."}]}, {"name": "Inside an app", "steps": [{"from": "app", "to": "plan", "note": "omxplorer asks for a group-by from Mojo, no SQL text needed."}, {"from": "plan", "to": "gpu", "note": "On a big table the GPU is cheaper, so the kernels run there."}, {"from": "gpu", "to": "files", "note": "The file streams in; nothing is copied into a new format."}, {"from": "plan", "to": "app", "note": "The totals land in the sheet, in the same process: no server, no JSON."}]}]}</script>
+<script type="application/json" id="spec">{"title": "omxcore: a file, a planner, CPU or GPU kernels", "subtitle": "SQL over the files you already have; the planner picks the device, and says why", "style": "ink", "live": true, "nodes": [{"id": "cli", "label": "mx", "kind": "client", "at": [0, -6], "hue": 211, "sat": 55, "tech": "a terminal · JSON out", "desc": "One native program, no Python: mx sql \"SELECT …\" prints rows, the time, the device and notes as JSON."}, {"id": "py", "label": "Python", "kind": "client", "at": [0, 0], "hue": 211, "sat": 55, "tech": "0.6.0 on PyPI", "desc": "Lazy frames: nothing runs until compute(). Published as mxframe."}, {"id": "app", "label": "Your app", "kind": "client", "at": [0, 6], "hue": 141, "sat": 55, "tech": "Mojo · like SQLite", "desc": "Apps link the engine like SQLite. omxplorer runs every query through it, in the same process."}, {"id": "parse", "label": "Parser", "kind": "service", "at": [7, -3], "hue": 211, "sat": 70, "tech": "SQL · errors with hints", "desc": "Joins, CTEs, subqueries, windows, QUALIFY. A typo comes back with a line, a column and 'did you mean'."}, {"id": "plan", "label": "Planner", "kind": "service", "at": [13, 0], "size": [2.4, 2.4], "hue": 211, "sat": 90, "tech": "AUTO: CPU or GPU", "desc": "Prices the CPU and the GPU for this query on this machine, copies included, and picks one. The answer names where it ran.", "notes": "Informal: 2.7× GPU over CPU on a 2-core budget; with 12 cores AUTO keeps the CPU."}, {"id": "cpu", "label": "CPU kernels", "kind": "service", "shape": "chip", "at": [20, -4], "hue": 211, "sat": 60, "tech": "Mojo · all cores", "desc": "Parallel Mojo kernels. All 22 TPC-H queries at SF10 in 3.15 s (DuckDB 5.08 s)."}, {"id": "gpu", "label": "GPU kernels", "kind": "service", "shape": "chip", "at": [20, 4], "hue": 211, "sat": 60, "tech": "NVIDIA · Metal on CI Macs", "desc": "The same queries as GPU kernels, written in Mojo too. NVIDIA on Linux; a Metal build has run on GitHub's Mac runner."}, {"id": "files", "label": "Your files", "kind": "storage", "at": [27, 0], "hue": 230, "sat": 8, "tech": "CSV · Parquet", "desc": "No import, no new format. Files bigger than memory stream a row group at a time: a 1.6 GB file in 72 MB."}], "edges": [{"from": "cli", "to": "parse", "label": "SQL"}, {"from": "py", "to": "parse", "label": "mx.sql"}, {"from": "app", "to": "plan", "label": "Query builder"}, {"from": "parse", "to": "plan", "label": "a plan"}, {"from": "plan", "to": "cpu", "label": "cheaper here"}, {"from": "plan", "to": "gpu", "label": "or here"}, {"from": "cpu", "to": "files", "label": "row groups", "style": "data"}, {"from": "gpu", "to": "files", "label": "columns read", "style": "data"}], "flows": [{"name": "A query from the terminal", "steps": [{"from": "cli", "to": "parse", "note": "mx sql: revenue by return flag, from lineitem.parquet."}, {"from": "parse", "to": "plan", "note": "Parsed and checked; a typo would come back with 'did you mean'."}, {"at": "plan", "note": "AUTO prices both devices, copies included, and picks the cheaper one."}, {"from": "plan", "to": "cpu", "note": "Here the CPU wins, so it runs there."}, {"from": "cpu", "to": "files", "note": "Only the columns it needs are read: 3 of 16."}, {"at": "cli", "note": "JSON back: rows, exact decimals, the time and the device it ran on."}]}, {"name": "Inside an app", "steps": [{"from": "app", "to": "plan", "note": "omxplorer asks for a group-by from Mojo, no SQL text needed."}, {"from": "plan", "to": "gpu", "note": "On a big table the GPU is cheaper, so the kernels run there."}, {"from": "gpu", "to": "files", "note": "The file streams in; nothing is copied into a new format."}, {"from": "plan", "to": "app", "note": "The totals land in the sheet, in the same process: no server, no JSON."}]}]}</script>
 <script>
 (() => {
 "use strict";
@@ -167,7 +187,7 @@ const FLOOR_HUES = [120, 38, 205, 280, 12, 170];
 
 /* ---------- state ---------- */
 const S = {hover:null, sel:null, floorHot:null, flow:0, step:-1, playing:false, live:!reduceMotion && spec.live !== false,
-           style:STYLES.includes(spec.style) ? spec.style : 'fieldnotes', fold:!!spec.folded, vb:null, anim:null, timer:null};
+           style:'ink', fold:!!spec.folded, vb:null, anim:null, timer:null};
 const FN = () => S.style === 'fieldnotes';
 
 function isDark(){
@@ -182,8 +202,7 @@ function theme(){
     : {bg:'#ece3d0', ink:'#201d19', muted:'#6b6152', edge:'#5e5243', grid:'#e2d7c0', halo:'#ece3d0', accent:'#b35f5a', bug:'#c8323a', pill:'#fbf8ed', pillLine:'#201d19',
        nodeInk:'#201d19', shadow:'#767e9a', shadowOp:.55, zone:.55, plinthTop:'#f3e6c9', plinthSide:'#dcc9a3', thread:'#b35f5a', ticketInk:'#201d19'};
   return d
-    ? {bg:'#14161b', ink:'#e8e9ee', muted:'#9aa0ac', edge:'#868c9c', grid:'#1f2229', halo:'#14161b', accent:'#8fa3ff', bug:'#ff6b6b', pill:'#1d2027', pillLine:'#30343f',
-       nodeInk:'#0b0c0f', shadow:'#000000', shadowOp:.09, zone:0.10, thread:'#8fa3ff', ticketInk:'#e8e9ee'}
+    ? {bg:'#151518', ink:'#ededef', muted:'#a9a9b1', edge:'#8a8a94', grid:'#1d1d21', halo:'#151518', accent:'#4aa8ff', bug:'#ff6b6b', pill:'#1d1d21', pillLine:'#2a2a30', nodeInk:'#0b0b0d', shadow:'#000000', shadowOp:.09, zone:0.10, thread:'#4aa8ff', ticketInk:'#ededef'/*omx-palette*/}
     : {bg:'#f5f3ee', ink:'#1d1f25', muted:'#6a6e78', edge:'#7c818e', grid:'#e6e2d8', halo:'#f5f3ee', accent:'#3d5bd9', bug:'#e5484d', pill:'#ffffff', pillLine:'#dcd8ce',
        nodeInk:'#24262c', shadow:'#1d1f25', shadowOp:.09, zone:0.16, thread:'#3d5bd9', ticketInk:'#1d1f25'};
 }

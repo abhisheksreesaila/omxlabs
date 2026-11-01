@@ -24,6 +24,51 @@
 .scen .nx li { --c: var(--oq-warn); }
 .road li a { color: inherit; text-underline-offset: 3px; }
 @media (max-width: 900px) { .scen, .clips { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---- not a replay, an investigation: five cards, each with a tiny visual; the links card leads, a link drawn and confirmed ---- */
+.inv { --iv: #3ccf6e; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-top: 40px; text-align: left; }
+.ivc { grid-column: span 2; min-width: 0; border-radius: 22px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.ivc.half { grid-column: span 3; }
+.ivc.wide { grid-column: span 4; grid-row: span 2; box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--iv) 55%, transparent); }
+.ivc .k { font: 600 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--iv); }
+.ivc h3 { margin: 0; font: 650 18px/1.25 var(--sans); letter-spacing: -.02em; color: var(--ink); }
+.ivc.wide h3 { font-size: 24px; }
+.ivc p { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink2); } .ivc p b { color: var(--ink); font-weight: 600; }
+.ivv { height: 92px; border-radius: 14px; background: var(--oq-surface-2); box-shadow: inset 0 0 0 1px var(--oq-line-2); position: relative; overflow: hidden; display: grid; place-items: center; font: 600 11.5px var(--mono); color: var(--ink2); }
+/* 1 · a tiny pivot */
+.ivv.piv { grid-template-columns: 64px 1fr 48px; grid-auto-rows: 1fr; place-items: stretch; gap: 3px; padding: 12px; }
+.ivv.piv i { border-radius: 4px; background: var(--oq-surface-3); font-style: normal; display: grid; place-items: center; font-size: 10.5px; color: var(--ink2); }
+.ivv.piv i.h { background: none; color: var(--ink); justify-content: start; } .ivv.piv i.h:first-child { grid-column: 1 / -1; color: var(--ink2); }
+.ivv.piv i.bar { background: var(--oq-surface-3); display: block; overflow: hidden; } .ivv.piv i.bar s { display: block; height: 100%; background: color-mix(in srgb, var(--iv) 55%, transparent); } .ivv.piv i.on { background: color-mix(in srgb, var(--iv) 30%, var(--oq-surface-3)); color: var(--ink); }
+/* 2 · question → answer → moment */
+.ivv.qm { display: flex; gap: 8px; padding: 0 12px; justify-content: center; }
+.ivv.qm span { padding: 6px 10px; border-radius: 999px; background: var(--oq-surface-3); color: var(--ink); white-space: nowrap; }
+.ivv.qm span.a { background: color-mix(in srgb, var(--iv) 22%, var(--oq-surface-3)); } .ivv.qm b { color: var(--iv); font-weight: 600; }
+/* 3 · a page, its passage marked */
+.ivv.doc { place-items: center; }
+.ivv.doc .pg { width: 120px; height: 72px; border-radius: 6px; background: var(--oq-surface-3); padding: 9px 10px; display: grid; gap: 5px; align-content: start; }
+.ivv.doc .pg i { display: block; height: 4px; border-radius: 2px; background: var(--line); } .ivv.doc .pg i.m { height: 7px; background: color-mix(in srgb, var(--iv) 70%, transparent); }
+/* 5 · one process */
+.ivv.proc { display: flex; gap: 6px; padding: 0 14px; }
+.ivv.proc span { padding: 6px 9px; border-radius: 8px; background: var(--oq-surface-3); color: var(--ink); } .ivv.proc em { font-style: normal; color: var(--iv); }
+.ivv.proc::before { content: "one process"; position: absolute; top: 8px; left: 12px; font: 600 9.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); }
+/* 4 · the links card: the real screen, a link drawn and confirmed over it */
+.ivlink { position: relative; border-radius: 14px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--oq-line-2); background: var(--oq-surface-2); aspect-ratio: 16 / 9; }
+.ivlink img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 0; opacity: .55; }
+.ivlink .ov { position: absolute; inset: 0; display: grid; place-items: center; }
+.ivlink .row { display: flex; align-items: center; gap: 0; }
+.ivlink .col { padding: 8px 12px; border-radius: 10px; background: #1d1d21; box-shadow: 0 0 0 1px var(--line), var(--oq-shadow-2); font: 600 13px var(--mono); color: var(--ink); white-space: nowrap; }
+.ivlink svg { width: 90px; height: 20px; overflow: visible; }
+.ivlink svg path { fill: none; stroke: var(--iv); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 90; stroke-dashoffset: 90; animation: ivdraw 4.2s var(--oq-ease-in, ease) infinite; }
+.ivlink .ok { position: absolute; left: 50%; top: calc(50% + 34px); translate: -50% 0; padding: 7px 14px; border-radius: 999px; background: var(--iv); color: #0b0b0d; font: 650 13px var(--sans); white-space: nowrap; opacity: 0; transform: scale(.8); animation: ivok 4.2s infinite; }
+.ivlink .ask { position: absolute; left: 50%; top: calc(50% - 52px); translate: -50% 0; font: 600 12px var(--sans); color: var(--ink); padding: 5px 11px; border-radius: 999px; background: #25252a; opacity: 0; animation: ivask 4.2s infinite; }
+@keyframes ivdraw { 0%, 12% { stroke-dashoffset: 90; } 40%, 100% { stroke-dashoffset: 0; } }
+@keyframes ivask { 0%, 38% { opacity: 0; } 46%, 62% { opacity: 1; } 70%, 100% { opacity: 0; } }
+@keyframes ivok { 0%, 62% { opacity: 0; transform: scale(.8); } 72%, 94% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+.ivlink .kinds { position: absolute; left: 12px; bottom: 10px; display: flex; gap: 6px; }
+.ivlink .kinds span { font: 600 11px var(--mono); padding: 4px 9px; border-radius: 999px; background: #1d1d21; color: var(--ink2); box-shadow: 0 0 0 1px var(--line); }
+@media (prefers-reduced-motion: reduce) { .ivlink svg path { animation: none; stroke-dashoffset: 0; } .ivlink .ok { animation: none; opacity: 1; transform: none; } .ivlink .ask { display: none; } }
+@media (max-width: 900px) { .inv { grid-template-columns: minmax(0, 1fr); } .ivc, .ivc.wide, .ivc.half { grid-column: auto; grid-row: auto; } .ivc.wide { order: -1; } .ivc.wide h3 { font-size: 21px; } .ivlink svg { width: 44px; } .ivlink .col { font-size: 11px; padding: 6px 8px; } }
 </style>
 </head>
 <body id="top">
@@ -35,7 +80,7 @@
   <div class="intro">
     <div class="eyebrow"><span class="px">omxplorer</span> by omxlabs <span class="tag live"><i></i>Live now</span></div>
     <h1 class="rise"><span>Ask</span> <span>your</span> <span>data</span> <span class="ac">in</span> <span class="ac">a</span> <span class="ac">sentence.</span></h1>
-    <p class="lede">A data workspace where <b>a million rows answer in under a millisecond</b>, on your own GPU, and <b>every button is a tool your AI agent can call</b>. Written in Mojo, from the button to the GPU kernel.</p>
+    <p class="lede">Robotics viewers replay one recording. <b>omxplorer starts from a question across the whole fleet, then shows you the moment.</b> A million rows answer in under a millisecond on your own GPU, and every button is a tool your AI agent can call.</p>
     <div class="ctas"><a class="cta" href="#slides">▶ Watch the 2-minute slides</a><a class="more" href="#robots">The robot story</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">GitHub</a></div>
     <div class="plats" aria-label="Where omxplorer runs today"><span><i></i><b>Linux</b> runs</span><span><i></i><b>Mac</b> runs on CI Macs</span><span><i></i><b>Web</b> runs</span></div>
   </div>
@@ -59,7 +104,7 @@
 <section id="robots" style="padding-top:40px"><div class="wrap center rv">
   <div class="eyebrow"><span class="tag live"><i></i>Live · real data</span></div>
   <h2>Why did the robot drop it? <span class="two">One sheet, its video, its telemetry, its paper.</span></h2>
-  <p class="lede">63,344 real episodes from 13 labs (DROID, CC-BY-4.0). <b>Link the episode key, the clip, the clock and the paper</b>, and a failure opens with its video and its telemetry on one cursor. Ask in words over all 16.8M telemetry rows.</p>
+  <p class="lede">The whole fleet is a spreadsheet you touch: 63,344 real episodes from 13 labs (DROID, CC-BY-4.0), pivots and charts from a sentence. <b>Ask in words over all 16.8M telemetry rows in about 40 ms, with no Python and no server</b>, then tap an answer: its video and telemetry open on one cursor, its documents linked.</p>
   <div class="gal">
     <figure class="gi w8"><div class="m"><img src="../assets/img/robots-06-drop-falling.jpg" alt="A failed episode's video beside four lanes of its telemetry on one cursor: the gripper opens over the box's edge and the shirt falls" loading="lazy"></div>
       <figcaption><b>The drop, on one cursor.</b>F00118: the gripper pinches the shirt at 5.3 s, opens over the box's edge at 12.7 s, and the shirt falls outside.<small>video + 244 telemetry rows, opened by links alone · goal 47</small></figcaption></figure>
@@ -79,8 +124,36 @@
   <p class="srcline">What the data doesn't support: DROID has no force or torque, so "dropped" is read from the gripper and the video; the per-episode gripper features don't predict failure across labs, so they're filters, not a detector · omxcode docs/goals/47-report.md</p>
 </div></section>
 
+<!-- not a replay, an investigation: where omxplorer is different, five cards (the links card leads) -->
+<section id="unique" class="center">
+  <div class="wrap">
+    <div class="eyebrow rv">Where omxplorer is different</div>
+    <h2 class="rv">Not a replay. <span class="two">An investigation.</span></h2>
+    <p class="lede rv">Robotics viewers replay a recording. <b>omxplorer starts from a question across the whole fleet, then shows you the moment.</b></p>
+    <div class="inv rv">
+      <div class="ivc wide"><div class="ivlink" aria-hidden="true"><img src="../assets/img/robots-05-links.jpg" alt="" loading="lazy">
+          <div class="ov"><div class="row"><span class="col">fleet.episode</span><svg viewBox="0 0 90 20"><path d="M2 10 C 30 -4, 60 24, 88 10"/></svg><span class="col">telemetry.episode</span></div></div>
+          <span class="ask">Link these?</span><span class="ok">✓ Linked by key</span>
+          <div class="kinds"><span>key</span><span>time</span><span>place</span></div></div>
+        <div class="k">4 · Links you confirm by hand</div>
+        <h3>Key, time, place: drag, confirm, done.</h3>
+        <p><b>No schema written in code.</b> Drag a column onto a card and say yes. Nothing joins until you link it, and a question uses only the links you made, so every answer can show where it came from.</p></div>
+      <div class="ivc"><div class="ivv piv" aria-hidden="true"><i class="h">success by lab</i><i class="h"></i><i class="h">PennPAL</i><i class="bar"><s style="width:95%"></s></i><i class="on">95 %</i><i class="h">RAD</i><i class="bar"><s style="width:61%"></s></i><i class="on">61 %</i></div>
+        <div class="k">1</div><h3>The fleet is a spreadsheet you touch.</h3><p>Pivots, charts from a sentence, formulas and edits, <b>over every run</b>.</p></div>
+      <div class="ivc"><div class="ivv qm" aria-hidden="true"><span>ask</span>→<span class="a"><b>2,997</b> · 40 ms</span>→<span>▶ 0:12</span></div>
+        <div class="k">2</div><h3>Question → moment, in one motion.</h3><p>Ask in words over <b>16.8M rows (~40 ms)</b>, tap an answer row, and its video and telemetry open on the same cursor.</p></div>
+      <div class="ivc half"><div class="ivv doc" aria-hidden="true"><div class="pg"><i></i><i style="width:80%"></i><i class="m"></i><i style="width:60%"></i><i></i></div></div>
+        <div class="k">3</div><h3>Documents in the same join.</h3><p>A manual or paper <b>linked by key</b>, with the passage marked.</p></div>
+      <div class="ivc half"><div class="ivv proc" aria-hidden="true"><span>sheet</span><span>query</span><span><em>GPU</em></span></div>
+        <div class="k">5</div><h3>No server for the analytics.</h3><p>The query runs <b>in the app's process</b>, on your GPU.</p></div>
+    </div>
+    <p class="srcline rv">16.8M telemetry rows · 37–42 ms in the check's runs · links, documents and the pack: omxcode docs/goals/47-report.md</p>
+  </div>
+</section>
+
 <!-- five things -->
 <section style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">What it is</div>
   <h2>Five things <span class="two">nothing else does together.</span></h2>
   <div class="five">
     <div><span class="em">💬</span><h3>The title is the chart.</h3><p><b>“Sum of revenue by product, top 5, as bars.”</b> Every coloured word is a setting. Tap one, or type “median”, and the bars move to the new answer.</p></div>
@@ -89,28 +162,6 @@
     <div><span class="em">📂</span><h3>100M rows, no warehouse.</h3><p>Open CSV and Parquet straight from disk. Big files stream in, so the first rows show in 0.2 s.</p></div>
     <div><span class="em">🖥️</span><h3>Native everywhere.</h3><p>Linux and the web run today, and the Mac runs on CI Macs (GitHub's macOS runners), from the same Mojo. Phones are next.</p></div>
   </div>
-</div></section>
-
-<!-- how it works: an interactive isometric diagram (iso/*.json, built by iso/build.sh with the isoarch skill) -->
-<section id="how" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">How it works</div>
-  <h2>One row opens <span class="two">everything linked to it.</span></h2>
-  <p class="lede">Press Play to follow a failure from the sheet to the moment the shirt falls, or click any block to read what it does.</p>
-  <div class="isoframe" data-iso="[[&quot;../iso/omxplorer.html&quot;, &quot;The fleet sheet, its video, its 16.8M telemetry rows and the DROID paper, joined only by the links you confirm; omxcore answers questions over them in the same process.&quot;]]">
-    <div class="bar"><span>Why did it drop?</span><span class="sp"></span><a class="open" href="../iso/omxplorer.html">Open full screen ›</a></div>
-    <iframe src="../iso/omxplorer.html" title="Interactive isometric diagram: Why did it drop?" loading="lazy"></iframe>
-    <p class="isocap">The fleet sheet, its video, its 16.8M telemetry rows and the DROID paper, joined only by the links you confirm; omxcore answers questions over them in the same process.</p>
-  </div>
-</div></section>
-
-<!-- slides -->
-<section id="slides" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">The slides · 18 · about two minutes</div>
-  <h2>The why, the how, <span class="two">and the code.</span></h2>
-  <p class="lede">Click the slides, then use the arrow keys. Code steps line by line; the architecture moves as a tap runs.</p>
-  <div class="deck"><div class="bar"><span class="dot"></span><span>omxplorer · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
-    <iframe src="deck.html" title="omxplorer, the slides" loading="lazy" allowfullscreen></iframe></div>
-  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">The sentence</button><button data-slide="5">Architecture</button><button data-slide="7">The code</button><button data-slide="9">Speed</button><button data-slide="11">Agents</button><button data-slide="13">Video</button><button data-slide="16">Roadmap</button></div>
 </div></section>
 
 <!-- the idea -->
@@ -141,16 +192,6 @@
       <span class="cmd">scripts/agent.sh omxplorer<button data-copy="scripts/agent.sh omxplorer">Copy</button></span>
       <a class="more" href="https://github.com/abhisheksreesaila/omxcode/blob/main/docs/agent.md">Read the agent docs</a>
       <div class="srcline" style="margin:0">the session is from the omxcode README · docs/agent.md</div></div>
-  </div>
-</div></section>
-
-<!-- now · next · later -->
-<section id="try"><div class="wrap center rv">
-  <h2>Live now, <span class="two">and what's next.</span></h2>
-  <div class="road">
-    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Sheets, pivots, charts and reports</li><li>The sentence chart, with Undo</li><li>100M-row files, streamed</li><li>The agent host: <code>scripts/agent.sh</code></li><li><a href="#rows">Video becomes rows: the reel, the drone's flight plan</a></li><li><a href="#claims">The claim: a video, a sheet and paperwork, linked</a></li><li><a href="#robots">The robot story: 63,344 real episodes, video, telemetry and the paper</a></li></ul></div>
-    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>Try it in your browser</b> <span class="tbd">(hosting not set up yet)</span></li><li>Ask, answered by omxconsole on your GPU</li><li><a href="#rows">Real-world footage, audio</a></li></ul></div>
-    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Apple GPUs on real Macs (the Metal build runs on CI Macs today)</li></ul></div>
   </div>
 </div></section>
 
@@ -209,6 +250,41 @@
   </div>
 </div></section>
 
+<!-- how it works: an interactive isometric diagram (iso/*.json, built by iso/build.sh with the isoarch skill) -->
+<section id="how" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">How it works</div>
+  <h2>One row opens <span class="two">everything linked to it.</span></h2>
+  <p class="lede">Press Play to follow a failure from the sheet to the moment the shirt falls, or click any block to read what it does.</p>
+  <div class="isoframe" data-iso="[[&quot;../iso/omxplorer.html&quot;, &quot;The fleet sheet, its video, its 16.8M telemetry rows and the DROID paper, joined only by the links you confirm; omxcore answers questions over them in the same process.&quot;]]">
+    <div class="bar"><span>Why did it drop?</span><span class="sp"></span><a class="open" href="../iso/omxplorer.html">Open full screen ›</a></div>
+    <iframe src="../iso/omxplorer.html" title="Interactive isometric diagram: Why did it drop?" loading="lazy"></iframe>
+    <p class="isocap">The fleet sheet, its video, its 16.8M telemetry rows and the DROID paper, joined only by the links you confirm; omxcore answers questions over them in the same process.</p>
+  </div>
+</div></section>
+
+<!-- roadmap as direction (the omxcode cover's): stops on one line -->
+<section id="try"><div class="wrap center rv">
+  <div class="eyebrow">Roadmap</div>
+  <h2>Where it's going. <span class="two">From the fleet to the moment.</span></h2>
+  <p class="lede">Data and robotics first, then every screen. <b>Each step ships when its checks pass.</b></p>
+  <div class="dir" style="--n:4">
+      <div class="stop now"><span class="when">Now</span><div class="scard"><h3>Data, video and documents, linked</h3><p>Sheets, pivots, charts from a sentence over 100M-row files; <a href="#rows">video becomes rows</a>; <a href="#claims">the claim</a>; <a href="#robots">the robot story</a>. Linux, the web, CI Macs.</p><span class="tag live"><i></i>runs today</span></div></div>
+      <div class="stop"><span class="when">Next</span><div class="scard"><h3>More of a recording</h3><p>3D scenes, MCAP and ROS bags, more cameras per episode, beside the fleet sheet.</p><span class="tag builds"><i></i>next</span></div></div>
+      <div class="stop"><span class="when">Next</span><div class="scard"><h3>In your browser, models in the app</h3><p>omxplorer live on omxlabs.tech <span class="tbd">(hosting not set up yet)</span>; OWLv2 and SAM 2.1 inside omxplorer; Ask answered by <a href="../omxconsole/">omxconsole</a> on your GPU.</p><span class="tag builds"><i></i>next</span></div></div>
+      <div class="stop"><span class="when">Then</span><div class="scard"><h3>Teams, audio, real footage</h3><p>Share an investigation with a team; audio becomes rows; real-world footage at scale; Apple GPUs on real Macs (CI Macs today).</p><span class="tag plan"><i></i>planned</span></div></div>
+  </div>
+</div></section>
+
+<!-- slides -->
+<section id="slides" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">The slides · 18 · about two minutes</div>
+  <h2>The why, the how, <span class="two">and the code.</span></h2>
+  <p class="lede">Click the slides, then use the arrow keys. Code steps line by line; the architecture moves as a tap runs.</p>
+  <div class="deck"><div class="bar"><span class="dot"></span><span>omxplorer · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
+    <iframe src="deck.html" title="omxplorer, the slides" loading="lazy" allowfullscreen></iframe></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">The sentence</button><button data-slide="5">Architecture</button><button data-slide="7">The code</button><button data-slide="9">Speed</button><button data-slide="11">Agents</button><button data-slide="13">Video</button><button data-slide="16">Roadmap</button></div>
+</div></section>
+
 <!-- powered by: the four technologies under omxplorer, each in its own colour -->
 <section style="padding-top:40px"><div class="wrap center rv">
   <div class="eyebrow">Under omxplorer</div>
@@ -218,6 +294,7 @@
 </div></section>
 
 <div class="band"><h2>See a million rows answer <span class="two">in under a millisecond.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">Run it from GitHub</a></div></div>
+
 <footer data-suite></footer>
 <script src="../assets/suite.js"></script>
 </body></html>

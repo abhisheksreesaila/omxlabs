@@ -100,7 +100,7 @@
    "hue": 211,
    "sat": 60,
    "tech": "NVIDIA · Metal on CI Macs",
-   "desc": "The same queries as GPU kernels, written in Mojo too. NVIDIA on Linux; Apple's Metal on GitHub's macOS runners."
+   "desc": "The same queries as GPU kernels, written in Mojo too. NVIDIA on Linux; a Metal build has run on GitHub's Mac runner."
   },
   {
    "id": "files",

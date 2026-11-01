@@ -392,7 +392,7 @@ html { scroll-padding-top: 76px; }
 .isoframe { margin-top: 36px; border-radius: 24px; overflow: hidden; background: var(--oq-surface-1); box-shadow: var(--oq-shadow-2), 0 0 0 1px var(--line); text-align: left; }
 .isoframe .bar { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--oq-line-2); flex-wrap: wrap; font: 12.5px var(--mono); color: var(--ink2); }
 .isoframe .bar .sp { flex: 1; } .isoframe .bar a { font: 500 13px var(--mono); color: var(--ink2); text-decoration: none; min-height: 32px; display: inline-flex; align-items: center; } .isoframe .bar a:hover { color: var(--ink); }
-.isoframe iframe { display: block; width: 100%; height: 620px; border: 0; background: #14161b; }
+.isoframe iframe { display: block; width: 100%; height: 620px; border: 0; background: #151518; }
 .isocap { font: 12.5px/1.5 var(--mono); color: var(--ink2); padding: 12px 16px; border-top: 1px solid var(--oq-line-2); margin: 0; }
 .seg2 { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--bg); box-shadow: 0 0 0 1px var(--line); position: relative; }
 .seg2 button { all: unset; cursor: pointer; position: relative; z-index: 1; font: 500 12.5px var(--sans); color: var(--ink2); padding: 0 14px; min-height: 32px; display: inline-flex; align-items: center; border-radius: 999px; transition: color .2s; }
@@ -421,4 +421,22 @@ footer[data-suite] .fine { margin-top: 48px; padding-top: 22px; border-top: 1px 
   .gi, .gi.w6, .gi.w8, .gi.w12 { grid-column: auto; scroll-snap-align: start; }
   .isoframe iframe { height: 520px; }
   footer .cols { grid-template-columns: 1fr 1fr; }
+}
+
+/* roadmap as direction (the omxcode cover's): stops on one line, the first one lit; on a phone they swipe, the next one peeking */
+.dir { position: relative; display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 12px; margin-top: 44px; text-align: left; }
+.dir::before { content: ""; position: absolute; left: 10px; right: 10px; top: 9px; height: 2px; background: linear-gradient(90deg, var(--oq-ok) 0 calc(100% / var(--n, 4)), var(--line) calc(100% / var(--n, 4))); }
+.stop { position: relative; padding-top: 30px; display: flex; flex-direction: column; min-width: 0; }
+.stop::before { content: ""; position: absolute; top: 3px; left: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 2px var(--line); }
+.stop.now::before { background: var(--oq-ok); box-shadow: 0 0 0 4px color-mix(in srgb, var(--oq-ok) 25%, transparent); }
+.stop .when { font: 600 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); }
+.stop.now .when { color: var(--oq-ok); }
+.scard { margin-top: 10px; flex: 1; border-radius: 20px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); padding: 16px 16px 16px; display: flex; flex-direction: column; gap: 8px; color: inherit; text-decoration: none; }
+.now .scard { box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--oq-ok) 55%, transparent); }
+.scard h3 { font-size: 17.5px; } .scard p { margin: 0; font-size: 14px; line-height: 1.45; color: var(--ink2); }
+.scard p a { color: var(--ink); text-underline-offset: 3px; }
+.scard .tag { align-self: flex-start; margin-top: auto; }
+@media (max-width: 1000px) {
+  .dir { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(250px, 72%); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 10px; margin-right: -20px; padding-right: 20px; }
+  .dir::before { right: 0; } .stop { scroll-snap-align: start; }
 }

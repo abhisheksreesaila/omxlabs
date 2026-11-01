@@ -85,13 +85,14 @@
     <div class="pf"><b>30<small>ms</small></b><span>a filter change over 100M rows, from input to pixels on screen</span><em>median · p95 49 ms vs Rust + Polars 131 ms · measured at 856a7e9, before the release build · docs/data-benchmark.md</em></div>
     <div class="pf"><b>17<small>ms</small></b><span>the longest gap between frames while a 1.5 s job ran</span><em>examples/jobwake on Linux · 90 frames during the job · docs/ui-threads.md</em></div>
     <div class="pf"><b>2–25×</b><span>cheaper for an agent to see what changed: a call answers in words, 60–650 tokens, against ~1,600 for a screenshot</span><em>MCP calls in omxplorer · a full screen read costs 2,800 · docs/agent.md</em></div>
-    <div class="pf"><b>4.0<small>s</small></b><span>cold start over 100M rows, the fastest of four builds</span><em>file not cached · Rust + Polars 6.7 s · at 856a7e9 · docs/data-benchmark.md</em></div>
+    <div class="pf"><b>4.0<small>s</small></b><span>cold start over 100M rows, the fastest of four builds</span><em>file not cached · Rust + Polars 6.7 s · measured at 856a7e9, before the release build · docs/data-benchmark.md</em></div>
   </div>
   <p class="srcline" style="text-align:left">NVIDIA RTX 3090 · the same numbers as <a href="https://abhisheksreesaila.github.io/omxcode/#numbers">the omxcode site</a> · honest edge: Rust + Polars uses less memory at 100M rows; native Rust + wgpu draws 1M particles faster (0.34 vs 1.23 ms)</p>
 </div></section>
 
 <!-- five things -->
 <section style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">What it is</div>
   <h2>Five things <span class="two">in one language.</span></h2>
   <div class="five">
     <div><span class="em">🧩</span><h3>Two functions, every screen.</h3><p><code>view()</code> draws the screen from your state; <code>update()</code> changes it. Each host patches <b>only what changed</b>.</p></div>
@@ -100,28 +101,6 @@
     <div><span class="em">🤖</span><h3>Every app is an MCP server.</h3><p>A button's tag is its tool's name. A disabled button is <b>no tool</b>.</p></div>
     <div><span class="em">🪄</span><h3>Agents build UI as data.</h3><p>Over AG-UI an agent sends a UI as JSON. It is checked, then drawn natively, or <b>refused with a reason</b>.</p></div>
   </div>
-</div></section>
-
-<!-- how it works: an interactive isometric diagram (iso/*.json, built by iso/build.sh with the isoarch skill) -->
-<section id="how" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">How it works</div>
-  <h2>One program. <span class="two">The window never waits.</span></h2>
-  <p class="lede">The same two diagrams as the omxcode site. Press Play to follow a tap, or click any block to read what it does.</p>
-  <div class="isoframe" data-iso="[[&quot;../iso/omxcode-one-app.html&quot;, &quot;One app.mojo, one process: native screens on each platform, MCP tools and AG-UI screens for agents, jobs and the GPU underneath.&quot;], [&quot;../iso/omxcode-smooth-tap.html&quot;, &quot;update() and view() decide on the UI thread; queries, video and documents run on job threads and come back as events. Measured: a 1.5 s job, longest frame gap 17 ms.&quot;]]">
-    <div class="bar"><div class="seg2"><span class="knob"></span><button type="button" class="on">One app, every screen</button><button type="button">How a tap stays smooth</button></div><span class="sp"></span><a class="open" href="../iso/omxcode-one-app.html">Open full screen ›</a></div>
-    <iframe src="../iso/omxcode-one-app.html" title="Interactive isometric diagram: One app, every screen" loading="lazy"></iframe>
-    <p class="isocap">One app.mojo, one process: native screens on each platform, MCP tools and AG-UI screens for agents, jobs and the GPU underneath.</p>
-  </div>
-</div></section>
-
-<!-- slides -->
-<section id="slides" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">The slides · 16 · about three minutes</div>
-  <h2>How you'd code it, <span class="two">line by line.</span></h2>
-  <p class="lede">Click the slides, then use the arrow keys. Code steps line by line; the architecture moves as a tap runs.</p>
-  <div class="deck"><div class="bar"><span class="dot"></span><span>omxcode · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
-    <iframe src="deck.html" title="omxcode, the slides" loading="lazy" allowfullscreen></iframe></div>
-  <div class="chapters"><button data-slide="1">Why</button><button data-slide="2">An app</button><button data-slide="3">Architecture</button><button data-slide="5">A tap</button><button data-slide="7">Never freezes</button><button data-slide="10">Build it</button><button data-slide="11">The GPU</button><button data-slide="12">Speed</button><button data-slide="14">Agents</button><button data-slide="16">Honest edges</button><button data-slide="17">Roadmap</button></div>
 </div></section>
 
 <!-- the code -->
@@ -229,14 +208,40 @@
   <div class="ctas" style="justify-content:center"><a class="more" href="https://abhisheksreesaila.github.io/omxcode/gallery/">The full gallery on the omxcode site</a></div>
 </div></section>
 
-<!-- now · next · later -->
-<section id="try"><div class="wrap center rv">
-  <h2>Runs today, <span class="two">and what's next.</span></h2>
-  <div class="road">
-    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>Linux, the web, Android (emulator)</li><li>Mac: omxplorer runs on GitHub's Macs</li><li>GPU kernels in the same file (NVIDIA)</li><li>The agent host: <code>scripts/agent.sh</code></li><li>AG-UI and validated generated UI</li></ul></div>
-    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>iPhone on a real phone</b> <span class="two">(builds and signs today)</span></li><li>Android's newer components</li><li>Apple GPUs (a Metal build ran on GitHub's Mac)</li><li>Mac checks counted in the component matrix</li><li>A debug warning when <code>update()</code> takes longer than a frame</li><li>Job threads on the iPhone</li></ul></div>
-    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>A coding agent writes an app from one sentence</li><li>Drop a Mojo app into a FastHTML site</li><li>Windows, once Mojo ships for it</li></ul></div>
+<!-- how it works: an interactive isometric diagram (iso/*.json, built by iso/build.sh with the isoarch skill) -->
+<section id="how" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">How it works</div>
+  <h2>One program. <span class="two">The window never waits.</span></h2>
+  <p class="lede">The same two diagrams as the omxcode site. Press Play to follow a tap, or click any block to read what it does.</p>
+  <div class="isoframe" data-iso="[[&quot;../iso/omxcode-one-app.html&quot;, &quot;One app.mojo, one process: native screens on each platform, MCP tools and AG-UI screens for agents, jobs and the GPU underneath.&quot;], [&quot;../iso/omxcode-smooth-tap.html&quot;, &quot;update() and view() decide on the UI thread; queries, video and documents run on job threads and come back as events. Measured: a 1.5 s job, longest frame gap 17 ms.&quot;]]">
+    <div class="bar"><div class="seg2"><span class="knob"></span><button type="button" class="on">One app, every screen</button><button type="button">How a tap stays smooth</button></div><span class="sp"></span><a class="open" href="../iso/omxcode-one-app.html">Open full screen ›</a></div>
+    <iframe src="../iso/omxcode-one-app.html" title="Interactive isometric diagram: One app, every screen" loading="lazy"></iframe>
+    <p class="isocap">One app.mojo, one process: native screens on each platform, MCP tools and AG-UI screens for agents, jobs and the GPU underneath.</p>
   </div>
+</div></section>
+
+<!-- roadmap as direction (the omxcode cover's): stops on one line -->
+<section id="try"><div class="wrap center rv">
+  <div class="eyebrow">Roadmap</div>
+  <h2>Where it's going. <span class="two">One step at a time.</span></h2>
+  <p class="lede">The same direction as <a href="https://abhisheksreesaila.github.io/omxcode/#roadmap" style="color:inherit">the omxcode site</a>: data apps first, then every screen, then every kind of app.</p>
+  <div class="dir" style="--n:5">
+      <div class="stop now"><span class="when">Now</span><div class="scard"><h3>Data apps</h3><p>GPU tables, charts, video and documents, linked by key, time and place. Linux and Mac (CI Macs). The UI thread never blocks.</p><span class="tag live"><i></i>runs today</span></div></div>
+      <div class="stop"><span class="when">Next</span><div class="scard"><h3>The web, on WebGPU</h3><p>Today the web host draws the app as real HTML. Next, its GPU work moves into the browser with WebGPU.</p><span class="tag builds"><i></i>next</span></div></div>
+      <div class="stop"><span class="when">Then</span><div class="scard"><h3>Android and iPhone</h3><p>The same app.mojo with each phone's own widgets. Runs on the Android emulator today; iPhone builds.</p><span class="tag builds"><i></i>next</span></div></div>
+      <div class="stop"><span class="when">Then</span><div class="scard"><h3>SaaS apps</h3><p>Sign-in, accounts and payments as components, so a whole product is one Mojo program.</p><span class="tag plan"><i></i>planned</span></div></div>
+      <div class="stop"><span class="when">By year end</span><div class="scard"><h3>The full collection</h3><p>Every component on every platform above, each one tested by a script.</p><span class="tag plan"><i></i>planned</span></div></div>
+  </div>
+</div></section>
+
+<!-- slides -->
+<section id="slides" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">The slides · 16 · about three minutes</div>
+  <h2>How you'd code it, <span class="two">line by line.</span></h2>
+  <p class="lede">Click the slides, then use the arrow keys. Code steps line by line; the architecture moves as a tap runs.</p>
+  <div class="deck"><div class="bar"><span class="dot"></span><span>omxcode · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
+    <iframe src="deck.html" title="omxcode, the slides" loading="lazy" allowfullscreen></iframe></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="2">An app</button><button data-slide="3">Architecture</button><button data-slide="5">A tap</button><button data-slide="7">Never freezes</button><button data-slide="10">Build it</button><button data-slide="11">The GPU</button><button data-slide="12">Speed</button><button data-slide="14">Agents</button><button data-slide="16">Honest edges</button><button data-slide="17">Roadmap</button></div>
 </div></section>
 
 <!-- the suite -->
@@ -247,6 +252,7 @@
 </div></section>
 
 <div class="band"><h2>One Mojo file. <span class="two">Every screen, and the GPU.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://github.com/abhisheksreesaila/omxcode">Build hello from GitHub</a></div></div>
+
 <footer data-suite></footer>
 <script src="../assets/suite.js"></script>
 </body></html>

@@ -51,6 +51,7 @@
 
 <!-- five things -->
 <section style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">What it is</div>
   <h2>Five things <span class="two">it does on purpose.</span></h2>
   <div class="five">
     <div><span class="em">🧱</span><h3>Solid, not glass.</h3><p>Opaque tonal surfaces and <b>one soft shadow scale</b>, from Google. Only the nav pill is frosted; every card, menu and dialog stays solid and readable.</p></div>
@@ -59,28 +60,6 @@
     <div><span class="em">🤖</span><h3>Agents read it.</h3><p>A skill and a Claude Code plugin. Ask for <b>“a trip planner in omxqua”</b> and it uses the real parts.</p></div>
     <div><span class="em">📦</span><h3>Three files, no build.</h3><p><code>tokens.css</code>, <code>components.css</code>, <code>omxqua.js</code>. Plain HTML, CSS and JS.</p></div>
   </div>
-</div></section>
-
-<!-- how it works: an interactive isometric diagram (iso/*.json, built by iso/build.sh with the isoarch skill) -->
-<section id="how" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">How it works</div>
-  <h2>Tokens, components, <span class="two">every page.</span></h2>
-  <p class="lede">Press Play to see one root class repaint everything, or click any block to read what it does.</p>
-  <div class="isoframe" data-iso="[[&quot;../iso/omxqua.html&quot;, &quot;tokens.css feeds components.css; omxqua.js adds the springs; the skill makes an agent use the real parts. Native omxcode apps on the same tokens are an idea, not built.&quot;]]">
-    <div class="bar"><span>Tokens to pages</span><span class="sp"></span><a class="open" href="../iso/omxqua.html">Open full screen ›</a></div>
-    <iframe src="../iso/omxqua.html" title="Interactive isometric diagram: Tokens to pages" loading="lazy"></iframe>
-    <p class="isocap">tokens.css feeds components.css; omxqua.js adds the springs; the skill makes an agent use the real parts. Native omxcode apps on the same tokens are an idea, not built.</p>
-  </div>
-</div></section>
-
-<!-- slides -->
-<section id="slides" style="padding-top:40px"><div class="wrap center rv">
-  <div class="eyebrow">The slides · 16 · a few you can press</div>
-  <h2>The why, the how, <span class="two">and the feel.</span></h2>
-  <p class="lede">Click the slides, then use the arrow keys. Code steps line by line, the architecture moves, and the buttons, switches and Beacon are the real thing.</p>
-  <div class="deck"><div class="bar"><span class="dot"></span><span>omxqua · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
-    <iframe src="deck.html" title="omxqua, the slides" loading="lazy" allowfullscreen></iframe></div>
-  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">Architecture</button><button data-slide="6">How to use it</button><button data-slide="9">Feel it</button><button data-slide="10">Families</button><button data-slide="11">Agents</button><button data-slide="13">Honest edges</button><button data-slide="14">Roadmap</button></div>
 </div></section>
 
 <!-- families -->
@@ -120,14 +99,39 @@
   </div>
 </div></section>
 
-<!-- now · next · later -->
-<section id="try"><div class="wrap center rv">
-  <h2>Live now, <span class="two">and what's next.</span></h2>
-  <div class="road">
-    <div><h3><span class="tag live"><i></i>Now</span></h3><ul><li>4 families, 4 skins, <b>v0.1.5</b></li><li>tokens, components, <code>omxqua.js</code></li><li>The skill and the Claude Code plugin</li><li>The omxlabs site, drawn in it</li></ul></div>
-    <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li>v0.1.6: the new cover, chips, coloured icons</li><li>The Notes family into tokens.css</li><li>Dialog and sheet glue packaged</li></ul></div>
-    <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>A Health family</li><li>omxplorer drawn in omxqua</li><li>omxcode apps on the same tokens (an idea)</li></ul></div>
+<!-- how it works: an interactive isometric diagram (iso/*.json, built by iso/build.sh with the isoarch skill) -->
+<section id="how" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">How it works</div>
+  <h2>Tokens, components, <span class="two">every page.</span></h2>
+  <p class="lede">Press Play to see one root class repaint everything, or click any block to read what it does.</p>
+  <div class="isoframe" data-iso="[[&quot;../iso/omxqua.html&quot;, &quot;tokens.css feeds components.css; omxqua.js adds the springs; the skill makes an agent use the real parts. Native omxcode apps on the same tokens are an idea, not built.&quot;]]">
+    <div class="bar"><span>Tokens to pages</span><span class="sp"></span><a class="open" href="../iso/omxqua.html">Open full screen ›</a></div>
+    <iframe src="../iso/omxqua.html" title="Interactive isometric diagram: Tokens to pages" loading="lazy"></iframe>
+    <p class="isocap">tokens.css feeds components.css; omxqua.js adds the springs; the skill makes an agent use the real parts. Native omxcode apps on the same tokens are an idea, not built.</p>
   </div>
+</div></section>
+
+<!-- roadmap as direction (the omxcode cover's): stops on one line -->
+<section id="try"><div class="wrap center rv">
+  <div class="eyebrow">Roadmap</div>
+  <h2>Where it's going. <span class="two">One look, more families.</span></h2>
+  <p class="lede">The web first, then more families, then native apps. <b>Each step ships when its checks pass.</b></p>
+  <div class="dir" style="--n:4">
+      <div class="stop now"><span class="when">Now</span><div class="scard"><h3>Three files and a skill</h3><p>4 families, 4 skins, <b>v0.1.5</b>: tokens, components, <code>omxqua.js</code>; the skill and the Claude Code plugin; this site, drawn in it.</p><span class="tag live"><i></i>runs today</span></div></div>
+      <div class="stop"><span class="when">Next</span><div class="scard"><h3>v0.1.6</h3><p>The new cover, chips and coloured icons; the Notes family into tokens.css; dialog and sheet glue packaged.</p><span class="tag builds"><i></i>next</span></div></div>
+      <div class="stop"><span class="when">Then</span><div class="scard"><h3>A Health family</h3><p>A fifth family, with its own accent and contrast checks.</p><span class="tag plan"><i></i>planned</span></div></div>
+      <div class="stop"><span class="when">Later</span><div class="scard"><h3>Native apps on the same tokens</h3><p>omxplorer drawn in omxqua; omxcode apps on the same tokens.</p><span class="tag plan"><i></i>an idea</span></div></div>
+  </div>
+</div></section>
+
+<!-- slides -->
+<section id="slides" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">The slides · 16 · a few you can press</div>
+  <h2>The why, the how, <span class="two">and the feel.</span></h2>
+  <p class="lede">Click the slides, then use the arrow keys. Code steps line by line, the architecture moves, and the buttons, switches and Beacon are the real thing.</p>
+  <div class="deck"><div class="bar"><span class="dot"></span><span>omxqua · the slides</span><span class="sp"></span><a href="deck.html" target="_blank">Full screen ↗</a></div>
+    <iframe src="deck.html" title="omxqua, the slides" loading="lazy" allowfullscreen></iframe></div>
+  <div class="chapters"><button data-slide="1">Why</button><button data-slide="3">Architecture</button><button data-slide="6">How to use it</button><button data-slide="9">Feel it</button><button data-slide="10">Families</button><button data-slide="11">Agents</button><button data-slide="13">Honest edges</button><button data-slide="14">Roadmap</button></div>
 </div></section>
 
 <!-- the suite -->
@@ -138,6 +142,7 @@
 </div></section>
 
 <div class="band"><h2>Press a button <span class="two">and feel it press back.</span></h2><div class="ctas center" style="justify-content:center"><a class="cta" href="#slides">▶ Watch the slides</a><a class="more" href="https://abhisheksreesaila.github.io/omxqua/">Try the live site</a></div></div>
+
 <footer data-suite></footer>
 <script src="../assets/suite.js"></script>
 </body></html>

@@ -26,7 +26,7 @@
    ],
    "hue": 145,
    "tech": "AppKit · runs",
-   "desc": "Runs on GitHub's macOS runners (scripts/mac-ci); omxplorer ships as a Mac app with its queries on Metal."
+   "desc": "Runs on GitHub's macOS runners (scripts/mac-ci); omxplorer downloads as a Mac app (not notarised); a Metal build has run on GitHub's Mac runner."
   },
   {
    "id": "web",
@@ -141,7 +141,7 @@
    ],
    "hue": 95,
    "tech": "Mojo kernels",
-   "desc": "The same language as the buttons: Mojo kernels on NVIDIA (CUDA-class) and Apple (Metal)."
+   "desc": "The same language as the buttons: Mojo kernels on NVIDIA (CUDA-class); a Metal build has run on GitHub's Mac runner."
   }
  ],
  "edges": [

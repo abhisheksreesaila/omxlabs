@@ -326,8 +326,9 @@ section { padding: 96px 24px; }
 body { font-size: 17px; }
 .lede { max-width: 680px; }
 
-/* top nav: omxlabs left · a pill of the five products centre (each in its colour) · one CTA right */
-.top { grid-template-columns: 1fr auto; background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 0 var(--line); border: 0; }
+/* top nav: omxlabs left · one CTA right. Nothing to switch, so it stays out of the way: translucent, no line under it,
+   fading into the page so the whole site reads as one scroll (owner, 2026-11-01). */
+.top { grid-template-columns: 1fr auto; background: linear-gradient(rgb(0 0 0 / .62), rgb(0 0 0 / .28)); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); box-shadow: none; border: 0; }
 .top .brand { display: flex; align-items: center; gap: 9px; font: 700 16px var(--sans); letter-spacing: -.02em; text-decoration: none; color: var(--ink); min-height: 44px; }
 .top .brand .mark { --s: 26px; }
 .top .pill { display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); overflow-x: auto; scrollbar-width: none; max-width: 100%; }
@@ -344,7 +345,7 @@ body { font-size: 17px; }
   .top .pill a { padding: 0 11px 0 6px; font-size: 13px; }
 }
 html { scroll-padding-top: 76px; }
-@media (max-width: 900px) { html { scroll-padding-top: 116px; } }
+@media (max-width: 900px) { html { scroll-padding-top: 72px; } }
 
 /* hero: the words left, the live product right; proofs under both */
 .hero { padding: 64px 24px 40px; }

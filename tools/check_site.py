@@ -3,14 +3,13 @@
 # Run from a pixi env that has playwright, e.g.:
 #   (cd ~/Projects/mxapp/mojo-ui-omxcode && pixi run python ~/Projects/omxlabs/tools/check_site.py)
 # Shots land in build/shots/ (ignored by git).
-import http.server, socketserver, threading, sys, os, functools, urllib.parse
+import re, http.server, socketserver, threading, sys, os, functools, urllib.parse
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
 SHOTS = ROOT / "build" / "shots"
-PAGES = ["", "omxplorer/", "omxconsole/", "omxcore/", "omxcode/", "omxqua/",
-         "deck.html", "omxplorer/deck.html", "omxconsole/deck.html", "omxcore/deck.html", "omxcode/deck.html", "omxqua/deck.html"]
+PAGES = ["", "omxplorer/", "deck.html", "omxplorer/deck.html"]   # the other products forward to their own sites
 WIDTHS = [1440, 390]
 
 class Quiet(http.server.SimpleHTTPRequestHandler):
@@ -65,8 +64,12 @@ def main():
                             links.add((name, urllib.parse.urljoin(here, v)))
                     ctx.close()
             b.close()
+        # no self-awarded praise in the copy: say what it does and the number, let readers judge (owner, 2026-11-01)
+        HYPE = re.compile(r"\b(breakthrough|revolutionary|game[- ]chang\w*|world[- ]class|cutting[- ]edge|best[- ]in[- ]class|unparalleled)\b", re.I)
+        for f in sorted(ROOT.glob("*.html")) + sorted(ROOT.glob("omx*/*.html")):
+            for m in HYPE.finditer(f.read_text()):
+                problems.append(f"{f.relative_to(ROOT)} self-praise: '{m.group(0)}'")
         # one name per @keyframes across the shared styles: a second definition silently replaces the first everywhere
-        import re
         seen = {}
         for css in sorted((ROOT / "assets").glob("*.css")):
             for k in re.findall(r"@keyframes\s+([\w-]+)", css.read_text()):

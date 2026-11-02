@@ -1,30 +1,27 @@
-// omxlabs suite: one list of products draws every page's top bar (no product switcher: pages lead on by scrolling) and suite row, so the five covers can't drift apart.
+// omxlabs suite: omxlabs.tech is omxplorer's site; the other products live on their own sites (site:), and the cards and footer link out to them.
 // A page says who it is with <html data-here="plorer" data-root="..">; it marks <nav class="top"> and <div class="fam"> to fill.
 // Every product has one colour and one mark (suite.css .px-* and .pm), like an Office icon: <i class="pm px-core"></i> anywhere.
 // <div class="fam" data-only="tech"> lists only the three technologies (data-only="apps": the two apps); data-to="anchor" links cards to #omx<k> on the same page.
 const SUITE = [
-  { k: "plorer",  name: "omxplorer",  role: "app · data and robotics",     home: "https://github.com/abhisheksreesaila/omxcode", line: "Ask your data in a sentence: sheets, charts, video and documents on one GPU, joined by links you confirm. Every button is a tool an agent can call." },
-  { k: "console", name: "omxconsole", role: "app · local AI",              home: "https://github.com/abhisheksreesaila/mxstudio", line: "One command turns your GPU into a private, OpenAI-compatible model server: the AI supplier for every app." },
-  { k: "core",    name: "omxcore",    role: "technology · the engine",    home: "https://abhisheksreesaila.github.io/omxcore/", line: "SQL on your CPU and your GPU, over the files you already have. All 22 TPC-H queries at SF10 in 3.15 s (DuckDB 5.08 s)." },
-  { k: "code",    name: "omxcode",    role: "technology · the framework", home: "https://abhisheksreesaila.github.io/omxcode/", line: "Write an app once in Mojo: native on Linux and the Mac, the web host today, phones next, and an agent can drive it." },
-  { k: "qua",     name: "omxqua",     role: "technology · the look",      home: "https://abhisheksreesaila.github.io/omxqua/", line: "The design language this site is drawn in: Google's solid surfaces, Apple's springs, one colour per product." },
+  { k: "plorer",  name: "omxplorer",  role: "app · data and robotics",     site: "", home: "https://github.com/abhisheksreesaila/omxcode", line: "Ask your data in a sentence: sheets, charts, video and documents on one GPU, joined by links you confirm. Every button is a tool an agent can call." },
+  { k: "console", name: "omxconsole", role: "app · local AI",              site: "https://abhisheksreesaila.github.io/mxstudio/site/console.html", home: "https://github.com/abhisheksreesaila/mxstudio", line: "One command turns your GPU into a private, OpenAI-compatible model server: the AI supplier for every app." },
+  { k: "core",    name: "omxcore",    role: "technology · the engine",    site: "https://abhisheksreesaila.github.io/omxcore/", home: "https://abhisheksreesaila.github.io/omxcore/", line: "SQL on your CPU and your GPU, over the files you already have. All 22 TPC-H queries at SF10 in 3.15 s (DuckDB 5.08 s)." },
+  { k: "code",    name: "omxcode",    role: "technology · the framework", site: "https://abhisheksreesaila.github.io/omxcode/", home: "https://abhisheksreesaila.github.io/omxcode/", line: "Write an app once in Mojo: native on Linux and the Mac, the web host today, phones next, and an agent can drive it." },
+  { k: "qua",     name: "omxqua",     role: "technology · the look",      site: "https://abhisheksreesaila.github.io/omxqua/", home: "https://abhisheksreesaila.github.io/omxqua/", line: "The design language this site is drawn in: Google's solid surfaces, Apple's springs, one colour per product." },
 ];
 const GH = "https://github.com/abhisheksreesaila";
 (() => {
   const html = document.documentElement, here = html.dataset.here || "labs", root = html.dataset.root || ".";
-  const href = k => `${root}/${k === "labs" ? "" : "omx" + k + "/"}`;
+  const href = k => { const p = SUITE.find(q => q.k === k); return p && p.site ? p.site : `${root}/${k === "labs" ? "" : "omx" + k + "/"}`; };
   const me = SUITE.find(p => p.k === here);
 
-  // the top nav, the same on every page: omxlabs · the five products (this one lit in its colour) · GitHub · one CTA
+  // the top nav: omxlabs, then GitHub and one call to action (no product switcher: this site is omxplorer's)
   const top = document.querySelector("nav.top");
   if (top) {
     const cta = top.dataset.cta || "Meet omxplorer", ctaHref = top.dataset.ctaHref || href("plorer"), gh = top.dataset.gh;
     top.innerHTML =
       `<a class="brand" href="${href("labs")}"><span class="mark"></span>omxlabs</a>` +
-      `<div class="pill">${SUITE.map(p => `<a class="px-${p.k}${p.k === here ? " on" : ""}" href="${p.k === here ? "#top" : href(p.k)}"${p.k === here ? ' aria-current="page"' : ""}><i class="pm"></i>${p.name}</a>`).join("")}</div>` +
       `<div class="right">${gh ? `<a class="gh" href="${gh}">GitHub</a>` : ""}<a class="cta" href="${ctaHref}">${cta}</a></div>`;
-    const pill = top.querySelector(".pill"), on = pill.querySelector("a.on");   // on a phone the pill scrolls: show this page's product
-    if (on) requestAnimationFrame(() => pill.scrollLeft = on.offsetLeft - (pill.clientWidth - on.offsetWidth) / 2);
   }
   // the footer, the same on every page
   const foot = document.querySelector("footer[data-suite]");
@@ -33,10 +30,10 @@ const GH = "https://github.com/abhisheksreesaila";
     foot.innerHTML = `<div class="wrap">
       <p class="note">Every number here comes from a script, on one Linux machine with an NVIDIA RTX 3090; Mac results come from GitHub's macOS runners ("runs on CI Macs"). "Runs" means a script drives the app on that platform today. Each number names its source.</p>
       <div class="cols">
-        <div><h4>The apps</h4><ul>${SUITE.slice(0, 2).map(p => li(href(p.k), p.name, p.k)).join("")}</ul></div>
-        <div><h4>Under the hood</h4><ul>${SUITE.slice(2).map(p => li(href(p.k), p.name, p.k)).join("")}</ul></div>
-        <div><h4>Their own sites</h4><ul>${li("https://abhisheksreesaila.github.io/omxcode/", "omxcode docs")}${li("https://abhisheksreesaila.github.io/omxcore/", "omxcore docs")}${li("https://abhisheksreesaila.github.io/omxqua/", "omxqua showcase")}${li("https://abhisheksreesaila.github.io/mxstudio/site/console.html", "omxconsole tour")}</ul></div>
-        <div><h4>Source</h4><ul>${li(GH + "/omxcode", "GitHub: omxcode + omxplorer")}${li(GH + "/omxcore", "GitHub: omxcore")}${li(GH + "/omxqua", "GitHub: omxqua")}${li(GH + "/mxstudio", "GitHub: omxconsole")}${li("https://www.youtube.com/@mojomondayai", "Mojo Monday")}${li("https://x.com/ablearn23", "X: @ablearn23")}</ul></div>
+        <div><h4>omxplorer</h4><ul>${li(href("labs"), "Home")}${li(`${root}/omxplorer/`, "The full story")}${li(`${root}/omxplorer/#slides`, "The slides")}${li(GH + "/omxcode", "GitHub")}</ul></div>
+        <div><h4>Under the hood</h4><ul>${SUITE.filter(p => p.role.startsWith("technology")).map(p => li(p.site, p.name + " ↗", p.k)).join("")}</ul></div>
+        <div><h4>Also from omxlabs</h4><ul>${li(href("console"), "omxconsole ↗", "console")}</ul></div>
+        <div><h4>Follow along</h4><ul>${li("https://x.com/ablearn23", "X: @ablearn23")}${li("https://www.youtube.com/@mojomondayai", "Mojo Monday")}${li(GH, "GitHub")}</ul></div>
       </div>
       <div class="fine"><span>${me ? me.name + " · " : ""}omxlabs · built in Mojo, 2026 · styled with <a href="${href("qua")}">omxqua</a></span><a href="${GH}/omxcode/issues">Report an issue</a></div></div>`;
   }
@@ -45,7 +42,7 @@ const GH = "https://github.com/abhisheksreesaila";
     fam.classList.toggle("four", list.length === 4); fam.classList.toggle("three", list.length === 3); fam.classList.toggle("two", list.length === 2);
     fam.innerHTML = list.map(p => {
       const on = p.k === here;
-      return `<a class="px-${p.k}${on ? " here" : ""}" href="${on ? "#top" : anchor ? "#omx" + p.k : href(p.k)}"><i class="pm"></i><span class="role">${p.role}</span><b>${p.name}</b><p>${p.line}</p><span class="go">${on ? "You are here" : "Open"}</span></a>`;
+      return `<a class="px-${p.k}${on ? " here" : ""}" href="${on ? "#top" : anchor ? "#omx" + p.k : href(p.k)}"><i class="pm"></i><span class="role">${p.role}</span><b>${p.name}</b><p>${p.line}</p><span class="go">${on ? "You are here" : p.site ? "Visit its site" : "Open"}</span></a>`;
     }).join("");
   });
 

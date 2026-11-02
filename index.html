@@ -112,9 +112,9 @@
     <div class="pills"><a href="#gpu"><span class="ic i-zap" style="--s:18px"></span>GPU native</a><a href="#agent"><span class="ic i-bot" style="--s:18px"></span>Agent native</a><a href="#multi"><span class="ic i-film" style="--s:18px"></span>Multimodal</a></div>
   </div>
   <div class="rv">
-    <a class="bframe tease" href="#story" data-film-play aria-label="Watch the story: why did the robot drop it? 56 seconds">
+    <a class="bframe tease" href="#story" data-film-open aria-haspopup="dialog" aria-label="Watch the story: why did the robot drop it? 56 seconds">
       <div class="bar"><i></i><i></i><i></i><span>omxplorer · Linux · why did the robot drop it?</span></div>
-      <img src="assets/img/clip-robots.jpg" alt="The frozen moment: the gripper opens at 12.7 s and the shirt falls" loading="eager">
+      <video src="assets/img/clip-robots.mp4" poster="assets/img/clip-robots.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
       <span class="tplay"><b>▶</b><span>Watch the story <em>56 s</em></span></span>
     </a>
     <p class="hcap"><b>Why did the robot drop it?</b> 63,344 real robot runs from 13 labs, their video and 16.8M telemetry rows, in one app. Watch the fault get found.<br>↳ DROID (CC-BY-4.0) · omxcode docs/goals/47-report.md</p>
@@ -130,46 +130,6 @@
 </div></section>
 
 <!-- 1 · GPU native -->
-<!-- the story as a film: big, chaptered, scrubbable; it ends on the punchline -->
-<section id="story" class="px-plorer" style="padding-top:56px"><div class="wrap center rv">
-  <div class="eyebrow">The story · 56 seconds · a real failure</div>
-  <h2>Why did the robot <span class="two">drop it?</span></h2>
-  <div class="film">
-    <div class="screen">
-      <video src="assets/img/clip-robots.mp4" poster="assets/img/clip-robots.jpg" muted playsinline preload="metadata" aria-label="omxplorer opens 63,344 real DROID robot runs as a sheet, picks failure F00118, plays its camera beside its telemetry on one cursor, freezes where the gripper opens at 12.7 s, asks in words over 16.8 million rows, links the DROID paper and exports the evidence"></video>
-      <button class="fs" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
-      <button class="big" aria-label="Play the story"><b>▶</b><span>Play the story</span></button>
-      <div class="punch" hidden>
-        <div class="k">That's the story</div>
-        <h3>Fault found. <span class="ac">One app, one GPU.</span></h3>
-        <div class="nums">
-          <div><b>16.8<small>M</small></b><span>telemetry rows on one sheet: every joint, 15 times a second, across 63,344 runs</span></div>
-          <div><b>312<small>h</small></b><span>of robot runs behind those rows, searched without leaving the app</span></div>
-          <div><b>12.7<small>s</small></b><span>the moment the gripper opened, found by scrubbing video and telemetry on one cursor</span></div>
-          <div><b>~40<small>ms</small></b><span>to ask in words for every run like it: 2,997 of them</span></div>
-        </div>
-        <p class="tag2"><b>GPU native:</b> one Mojo process on your GPU, nothing exported. <b>Agent native:</b> an agent drove every step you just watched.</p>
-        <div class="acts"><button class="cta" data-replay>↺ Watch again</button><a class="more" href="omxplorer/">Meet omxplorer</a></div>
-      </div>
-    </div>
-    <div class="chap" role="group" aria-label="Chapters"></div>
-    <script type="application/json">[
-      {"t": 0,     "title": "The question"},
-      {"t": 5.4,   "title": "63,344 runs"},
-      {"t": 9.47,  "title": "One failure"},
-      {"t": 12.97, "title": "Its camera"},
-      {"t": 16.03, "title": "Its telemetry"},
-      {"t": 19.9,  "title": "Scrub"},
-      {"t": 24.4,  "title": "Wait. There."},
-      {"t": 33.77, "title": "Ask in words"},
-      {"t": 38.17, "title": "2,997 like it"},
-      {"t": 41.63, "title": "The paper"},
-      {"t": 44.43, "title": "Export"},
-      {"t": 48.83, "title": "The point"}
-    ]</script>
-    <p class="srcline">A real recording: DROID (CC-BY-4.0), 16,847,616 telemetry rows at 15 Hz (= 312 hours of runs), driven through omxplorer's agent tools · omxcode docs/goals/47-report.md</p>
-  </div>
-</div></section>
 
 <section id="gpu" class="pillar px-plorer" style="padding-top:60px"><div class="wrap center rv">
   <div class="eyebrow"><b>1 · GPU native</b></div>
@@ -297,6 +257,45 @@
 
 <div class="band"><h2>Every kind of data. <span class="two">One GPU. Ask it anything.</span></h2><div class="ctas" style="justify-content:center"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="omxplorer/#slides">Watch the slides</a></div></div>
 <footer data-suite></footer>
+<!-- the story as a film, in a lightbox: the hero clip opens it; a click outside or Esc closes it -->
+<dialog id="story" class="lightbox px-plorer" aria-label="The story: why did the robot drop it?">
+  <div class="film">
+    <div class="fhead"><span><b>Why did the robot drop it?</b> A real failure, found in 56 seconds</span><button class="x" data-film-close aria-label="Close" title="Close (Esc)">✕</button></div>
+    <div class="screen">
+      <video src="assets/img/clip-robots.mp4" poster="assets/img/clip-robots.jpg" muted playsinline preload="metadata" aria-label="omxplorer opens 63,344 real DROID robot runs as a sheet, picks failure F00118, plays its camera beside its telemetry on one cursor, freezes where the gripper opens at 12.7 s, asks in words over 16.8 million rows, links the DROID paper and exports the evidence"></video>
+      <button class="fs" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      <button class="big" aria-label="Play the story"><b>▶</b><span>Play the story</span></button>
+      <div class="punch" hidden>
+        <div class="k">That's the story</div>
+        <h3>Fault found. <span class="ac">One app, one GPU.</span></h3>
+        <div class="nums">
+          <div><b>16.8<small>M</small></b><span>telemetry rows on one sheet: every joint, 15 times a second, across 63,344 runs</span></div>
+          <div><b>312<small>h</small></b><span>of robot runs behind those rows, searched without leaving the app</span></div>
+          <div><b>12.7<small>s</small></b><span>the moment the gripper opened, found by scrubbing video and telemetry on one cursor</span></div>
+          <div><b>~40<small>ms</small></b><span>to ask in words for every run like it: 2,997 of them</span></div>
+        </div>
+        <p class="tag2"><b>GPU native:</b> one Mojo process on your GPU, nothing exported. <b>Agent native:</b> an agent drove every step you just watched.</p>
+        <div class="acts"><button class="cta" data-replay>↺ Watch again</button><a class="more" href="omxplorer/">Meet omxplorer</a></div>
+      </div>
+    </div>
+    <div class="chap" role="group" aria-label="Chapters"></div>
+    <script type="application/json">[
+      {"t": 0,     "title": "The question"},
+      {"t": 5.4,   "title": "63,344 runs"},
+      {"t": 9.47,  "title": "One failure"},
+      {"t": 12.97, "title": "Its camera"},
+      {"t": 16.03, "title": "Its telemetry"},
+      {"t": 19.9,  "title": "Scrub"},
+      {"t": 24.4,  "title": "Wait. There."},
+      {"t": 33.77, "title": "Ask in words"},
+      {"t": 38.17, "title": "2,997 like it"},
+      {"t": 41.63, "title": "The paper"},
+      {"t": 44.43, "title": "Export"},
+      {"t": 48.83, "title": "The point"}
+    ]</script>
+    <p class="srcline">A real recording: DROID (CC-BY-4.0), 16,847,616 telemetry rows at 15 Hz (= 312 hours of runs), driven through omxplorer's agent tools · omxcode docs/goals/47-report.md</p>
+  </div>
+</dialog>
 <script src="assets/suite.js"></script>
 <script src="assets/marks.js"></script>
 </body></html>

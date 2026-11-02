@@ -56,7 +56,8 @@ const GH = "https://github.com/abhisheksreesaila";
     hits.forEach(t => { const f = document.createElement("span"); f.innerHTML = t.data.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/omx(labs|plorer|code|core|qua|console)/g, '<span class="nm">$&</span>'); t.replaceWith(...f.childNodes); });
   });
   // films: a directed clip shown big, with a chapter rail you can click or scrub, ending on a punchline card (.punch).
-  // It plays muted when it comes on screen, pauses when it leaves, and anything with data-film-play starts it from the top.
+  // A film inside <dialog class="lightbox"> waits off the page: anything with data-film-open opens it, grown from that element,
+  // and plays it from the top; a click outside it, its ✕ or Esc closes it and pauses. A film on the page plays when it comes on screen.
   document.querySelectorAll(".film").forEach(f => {
     const v = f.querySelector("video"), scr = f.querySelector(".screen"), big = f.querySelector(".big"), punch = f.querySelector(".punch");
     const ch = JSON.parse(f.querySelector("script[type='application/json']").textContent), rail = f.querySelector(".chap");
@@ -91,9 +92,20 @@ const GH = "https://github.com/abhisheksreesaila";
     v.addEventListener("click", () => v.paused ? play() : v.pause());
     v.addEventListener("ended", () => { f.classList.add("ended"); punch.hidden = false; });
     punch.addEventListener("click", e => { if (e.target.closest("[data-replay]")) play(0); });
-    document.querySelectorAll("[data-film-play]").forEach(a => a.addEventListener("click", e => {
-      e.preventDefault(); scr.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => play(0), 450); }));
-    new IntersectionObserver(es => es.forEach(e => {
+    const box = f.closest("dialog.lightbox");
+    if (box) {
+      const open = src => {
+        box.showModal(); play(0);
+        const a = src.getBoundingClientRect(), b = box.getBoundingClientRect();   // grow from the clip that was clicked
+        if (!matchMedia("(prefers-reduced-motion: reduce)").matches && a.width) box.animate([
+          { transform: `translate(${a.left + a.width / 2 - b.left - b.width / 2}px, ${a.top + a.height / 2 - b.top - b.height / 2}px) scale(${a.width / b.width})`, opacity: .4 },
+          { transform: "none", opacity: 1 }], { duration: 520, easing: "cubic-bezier(.34,1.3,.64,1)" });
+      };
+      document.querySelectorAll("[data-film-open]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); open(a); }));
+      box.addEventListener("click", e => { if (e.target === box || e.target.closest("[data-film-close]")) box.close(); });  // the dimmed backdrop is the dialog itself
+      box.addEventListener("close", () => { v.pause(); if (document.fullscreenElement) document.exitFullscreen(); });
+      if (location.hash === "#story") open(document.querySelector("[data-film-open]") || box);
+    } else new IntersectionObserver(es => es.forEach(e => {
       if (!e.isIntersecting) v.pause();
       else if (!f.classList.contains("ended") && !matchMedia("(prefers-reduced-motion: reduce)").matches) play();
     }), { threshold: .6 }).observe(scr);

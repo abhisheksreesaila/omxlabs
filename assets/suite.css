@@ -495,3 +495,62 @@ footer[data-suite] .fine { margin-top: 48px; padding-top: 22px; border-top: 1px 
 @keyframes bob { 50% { transform: translateY(10px); } }
 @keyframes brewRise { 0% { opacity: 0; transform: translateY(0) scale(.5); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-150px) scale(1.1); } }
 @media (prefers-reduced-motion: reduce) { .brew .wave, .brew .level, .brew .bubbles circle { animation: none; } .brew .bubbles circle { opacity: .8; } }
+
+/* the hero's teaser: the frozen drop, a big play pill; it opens the film below */
+.bframe.tease { display: block; position: relative; text-decoration: none; color: inherit; cursor: pointer; }
+.bframe.tease img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; transition: transform .6s var(--oq-spring), filter .4s; }
+.bframe.tease:hover img { transform: scale(1.025); filter: brightness(.8); }
+.tplay { position: absolute; left: 50%; top: 55%; transform: translate(-50%, -50%); display: inline-flex; align-items: center; gap: 12px; padding: 10px 22px 10px 10px; border-radius: 999px;
+  background: rgb(0 0 0 / .66); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 0 0 1px rgb(255 255 255 / .14); font: 650 16px var(--sans); color: #fff; white-space: nowrap; transition: transform .35s var(--oq-spring); }
+.tplay b { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--px); color: #04130a; font-size: 16px; padding-left: 3px; box-sizing: border-box; }
+.tplay em { font: 500 13px var(--mono); color: rgb(255 255 255 / .7); font-style: normal; margin-left: 6px; }
+.bframe.tease:hover .tplay { transform: translate(-50%, -50%) scale(1.06); }
+/* the film: big, letterboxed, a chapter rail under it, a punchline card at the end */
+.film { margin: 30px auto 0; width: min(100%, 1240px, calc((100vh - 200px) * 16 / 9)); text-align: left; }
+.film .screen { position: relative; border-radius: 22px; overflow: hidden; background: #000; aspect-ratio: 16 / 9;
+  box-shadow: 0 30px 120px -30px color-mix(in srgb, var(--px) 45%, transparent), 0 0 0 1px var(--line); }
+.film video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; cursor: pointer; }
+.film .big { all: unset; position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; cursor: pointer; background: radial-gradient(closest-side, rgb(0 0 0 / .1), rgb(0 0 0 / .55)); color: #fff; font: 650 18px var(--sans); }
+.film .big b { display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; background: var(--px); color: #04130a; font-size: 28px; padding-left: 6px; box-sizing: border-box; box-shadow: 0 0 0 10px color-mix(in srgb, var(--px) 22%, transparent); transition: transform .35s var(--oq-spring); }
+.film .big:hover b { transform: scale(1.08); }
+.film .big[hidden], .film .punch[hidden] { display: none; }
+.film .chap { margin-top: 14px; }
+.film .chap .bar { display: flex; gap: 3px; height: 14px; align-items: center; cursor: pointer; touch-action: none; }
+.film .chap .bar button { all: unset; height: 6px; border-radius: 3px; background: rgb(255 255 255 / .14); position: relative; overflow: hidden; transition: height .2s; min-width: 4px; }
+.film .chap .bar button i { position: absolute; inset: 0; background: var(--px); transform-origin: 0 50%; transform: scaleX(var(--f, 0)); }
+.film .chap .bar:hover button { height: 10px; }
+.film .chap .names { display: flex; gap: 6px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; }
+.film .chap .names::-webkit-scrollbar { display: none; }
+.film .chap .names button { all: unset; flex: none; cursor: pointer; font: 500 13px var(--sans); color: var(--ink2); padding: 6px 12px; border-radius: 999px; box-shadow: 0 0 0 1px var(--line); transition: color .15s, background .15s; }
+.film .chap .names button:hover { color: var(--ink); }
+.film .chap .names button.on { color: #04130a; background: var(--px); box-shadow: none; font-weight: 650; }
+.film .srcline { margin-top: 14px; }
+.film .punch { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(10px, 2vw, 22px); padding: clamp(18px, 5vw, 64px);
+  background: radial-gradient(120% 90% at 20% 0%, color-mix(in srgb, var(--px) 22%, #000) 0%, #000 70%); animation: punchIn .7s var(--oq-spring) both; }
+.film .punch .k { font: 600 12.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--px); }
+.film .punch h3 { margin: 0; font: 800 clamp(26px, 4.4vw, 58px)/1 var(--sans); letter-spacing: -.045em; color: #fff; }
+.film .punch h3 .ac { color: var(--px); }
+.film .punch .nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 2vw, 22px); }
+.film .punch .nums div { display: flex; flex-direction: column; gap: 6px; opacity: 0; animation: punchIn .6s var(--oq-spring) both; }
+.film .punch .nums div:nth-child(1) { animation-delay: .25s; } .film .punch .nums div:nth-child(2) { animation-delay: .4s; } .film .punch .nums div:nth-child(3) { animation-delay: .55s; } .film .punch .nums div:nth-child(4) { animation-delay: .7s; }
+.film .punch .nums b { font: 800 clamp(26px, 4vw, 52px)/1 var(--sans); letter-spacing: -.04em; color: #fff; }
+.film .punch .nums b small { font-size: .45em; color: var(--px); margin-left: 2px; }
+.film .punch .nums span { font-size: clamp(12px, 1.2vw, 15px); line-height: 1.4; color: rgb(255 255 255 / .72); }
+.film .punch .tag2 { margin: 0; font-size: clamp(13px, 1.4vw, 17px); color: rgb(255 255 255 / .8); max-width: 62ch; }
+.film .punch .tag2 b { color: #fff; }
+.film .punch .acts { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+@keyframes punchIn { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
+@media (max-width: 900px) {
+  .film .punch .nums { grid-template-columns: 1fr 1fr; }
+  .film .punch .tag2 { display: none; }
+  .film .screen { border-radius: 14px; }
+}
+@media (max-width: 560px) {   /* on a phone the punchline card is taller than the video: it sits under it instead of over it */
+  .film .punch { position: relative; inset: auto; }
+  .film.ended .screen { aspect-ratio: auto; } .film.ended video { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .film .punch, .film .punch .nums div { animation: none; opacity: 1; } }
+.film .fs { all: unset; position: absolute; top: 12px; right: 12px; z-index: 3; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; color: #fff;
+  background: rgb(0 0 0 / .5); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 0 0 1px rgb(255 255 255 / .14); opacity: .75; transition: opacity .2s, transform .3s var(--oq-spring); }
+.film .fs:hover { opacity: 1; transform: scale(1.06); }
+.film .screen:fullscreen { border-radius: 0; aspect-ratio: auto; width: 100vw; height: 100vh; }

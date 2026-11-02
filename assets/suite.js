@@ -55,6 +55,50 @@ const GH = "https://github.com/abhisheksreesaila";
     while (w.nextNode()) if (/omx(labs|plorer|code|core|qua|console)/.test(w.currentNode.data) && !w.currentNode.parentElement.closest(".nm")) hits.push(w.currentNode);
     hits.forEach(t => { const f = document.createElement("span"); f.innerHTML = t.data.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/omx(labs|plorer|code|core|qua|console)/g, '<span class="nm">$&</span>'); t.replaceWith(...f.childNodes); });
   });
+  // films: a directed clip shown big, with a chapter rail you can click or scrub, ending on a punchline card (.punch).
+  // It plays muted when it comes on screen, pauses when it leaves, and anything with data-film-play starts it from the top.
+  document.querySelectorAll(".film").forEach(f => {
+    const v = f.querySelector("video"), scr = f.querySelector(".screen"), big = f.querySelector(".big"), punch = f.querySelector(".punch");
+    const ch = JSON.parse(f.querySelector("script[type='application/json']").textContent), rail = f.querySelector(".chap");
+    let dur = 0, started = false;
+    const build = () => {
+      dur = v.duration || 56;
+      rail.innerHTML = '<div class="bar">' + ch.map((c, i) => { const end = i + 1 < ch.length ? ch[i + 1].t : dur;
+        return `<button style="flex:${(end - c.t).toFixed(2)}" aria-label="${c.title}"><i></i></button>`; }).join("") + '</div>' +
+        '<div class="names">' + ch.map(c => `<button>${c.title}</button>`).join("") + '</div>';
+      const seeks = [...rail.querySelectorAll(".bar button")], names = [...rail.querySelectorAll(".names button")];
+      [seeks, names].forEach(list => list.forEach((b, i) => b.onclick = () => play(ch[i].t)));
+      rail.querySelector(".bar").addEventListener("pointerdown", e => {       // drag along the bar to scrub
+        const r = e.currentTarget.getBoundingClientRect(), at = x => Math.max(0, Math.min(dur - .1, (x - r.left) / r.width * dur));
+        const mv = ev => { v.currentTime = at(ev.clientX); }, up = () => { removeEventListener("pointermove", mv); removeEventListener("pointerup", up); };
+        mv(e); addEventListener("pointermove", mv); addEventListener("pointerup", up);
+      });
+      const paint = () => {
+        const tt = v.currentTime; let cur = 0; ch.forEach((c, i) => { if (tt >= c.t) cur = i; });
+        seeks.forEach((b, i) => { const end = i + 1 < ch.length ? ch[i + 1].t : dur;
+          b.style.setProperty("--f", Math.max(0, Math.min(1, (tt - ch[i].t) / (end - ch[i].t)))); b.classList.toggle("on", i === cur); });
+        names.forEach((b, i) => b.classList.toggle("on", i === cur));
+        const on = names[cur]; if (on && rail.querySelector(".names").scrollWidth > rail.clientWidth) rail.querySelector(".names").scrollLeft = on.offsetLeft - rail.clientWidth / 2 + on.offsetWidth / 2;
+      };
+      v.addEventListener("timeupdate", paint); paint();
+    };
+    const play = t => { started = true; punch.hidden = true; f.classList.remove("ended"); big.hidden = true;
+      if (t != null) v.currentTime = t; v.play().catch(() => {}); };
+    if (v.readyState >= 1) build(); else v.addEventListener("loadedmetadata", build, { once: true });
+    big.onclick = () => play(0);
+    const fsb = f.querySelector(".fs");   // full screen: the screen (video and punchline card), or the video alone where only that works (iPhone)
+    if (fsb) fsb.onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else if (scr.requestFullscreen) scr.requestFullscreen().then(() => play()).catch(() => {}); else if (v.webkitEnterFullscreen) { play(); v.webkitEnterFullscreen(); } };
+    v.addEventListener("click", () => v.paused ? play() : v.pause());
+    v.addEventListener("ended", () => { f.classList.add("ended"); punch.hidden = false; });
+    punch.addEventListener("click", e => { if (e.target.closest("[data-replay]")) play(0); });
+    document.querySelectorAll("[data-film-play]").forEach(a => a.addEventListener("click", e => {
+      e.preventDefault(); scr.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => play(0), 450); }));
+    new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) v.pause();
+      else if (!f.classList.contains("ended") && !matchMedia("(prefers-reduced-motion: reduce)").matches) play();
+    }), { threshold: .6 }).observe(scr);
+  });
+
   // walkthroughs: a recording told as a guided tour (styled in suite.css .walk). Each step plays its stretch of the video slowly,
   // zoomed gently to the part that matters, then holds with its caption so it can be read; after the last step a closing card
   // (<template class="finale">) says what it all means. The step markers sit above the video; tap one to go there.

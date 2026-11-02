@@ -35,6 +35,7 @@ const GH = "https://github.com/abhisheksreesaila";
         <div><h4>Also from omxlabs</h4><ul>${li(href("console"), "omxconsole ↗", "console")}</ul></div>
         <div><h4>Follow along</h4><ul>${li("https://x.com/ablearn23", "X: @ablearn23")}${li("https://www.youtube.com/@mojomondayai", "Mojo Monday")}${li(GH, "GitHub")}</ul></div>
       </div>
+      <p class="note tm">Mojo and MAX are products and trademarks of Modular Inc. omxlabs is an independent project, not affiliated with or endorsed by Modular.</p>
       <div class="fine"><span>${me ? me.name + " · " : ""}omxlabs · built in Mojo, 2026 · styled with <a href="${href("qua")}">omxqua</a></span><a href="${GH}/omxcode/issues">Report an issue</a></div></div>`;
   }
   document.querySelectorAll(".fam").forEach(fam => {

@@ -21,7 +21,7 @@ wherever it appears, the way Excel is always green.
 | | | |
 |---|---|---|
 | 🟩 **P** [**omxplorer**](https://omxlabs.tech/omxplorer/) | app · data | ask your data in a sentence; every button is an agent tool |
-| 🟧 **AI** [**omxconsole**](https://omxlabs.tech/omxconsole/) | app · local AI | your GPU as a private, OpenAI-compatible model server |
+| 🟧 **AI** [**omxconsole**](https://omxlabs.tech/omxconsole/) | app · local AI | a desktop app: find, download and serve models on your GPU through MAX, behind one OpenAI-compatible endpoint |
 | 🟦 **C** [**omxcore**](https://omxlabs.tech/omxcore/) | the engine | SQL on your CPU and GPU, over the files you already have |
 | 🟥 **&lt;/&gt;** [**omxcode**](https://omxlabs.tech/omxcode/) | the framework | write an app once in Mojo: native on Linux, the web and the Mac (CI Macs), Android on the emulator |
 | 🟪 **Q** [**omxqua**](https://omxlabs.tech/omxqua/) | the design language | Google's surfaces, Apple's springs |

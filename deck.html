@@ -162,12 +162,12 @@ ul.does li { line-height: 1.35; } ul.does .wip { font: 600 18px var(--mono); let
   <div class="eyebrow"><i class="pm"></i>omxconsole · local AI, the AI supplier</div>
   <h2>Your GPU, <span class="ac">a private model server.</span></h2>
   <div class="cols r2" style="align-items:start">
-    <div class="term" data-type style="min-height:0"><div class="tc"><span class="p">$</span> pixi run mxc serve qwen2.5-0.5b</div><div>endpoint  <span class="p">http://127.0.0.1:11435/v1</span></div><div class="c"># any OpenAI client works: point base_url here</div></div>
+    <div class="term" data-type style="min-height:0"><div class="tc"><span class="p">$</span> ./omxconsole</div><div>find   <span class="p">qwen2.5-0.5b</span> on Hugging Face · download · Ready</div><div>endpoint  <span class="p">http://127.0.0.1:11435/v1</span></div><div class="c"># any OpenAI client: point base_url here, with a key per app</div></div>
     <div>
       <p class="fragment rise"><b>OpenAI-compatible.</b> Your apps and agents talk to it as they would to the cloud.</p>
-      <p class="fragment rise"><b>Ports new models.</b> 8 architectures MAX couldn't run, ported and serving (text models).</p>
-      <p class="fragment rise"><b>Private.</b> Prompts stay on your machine. Linux + NVIDIA today.</p>
-      <p class="note">mxstudio · mxconsole/settings.py, docs/PORTING.md</p>
+      <p class="fragment rise"><b>Finds and downloads.</b> Search Hugging Face in the app; it checks MAX can run a model before the weights come down.</p>
+      <p class="fragment rise"><b>Private.</b> Prompts stay on your machine. A desktop app for Linux and the Mac, all omxcode; MAX runs the models.</p>
+      <p class="note">omxcode · examples/console, examples/consoled</p>
     </div>
   </div>
 </section>
@@ -207,7 +207,7 @@ ul.does li { line-height: 1.35; } ul.does .wip { font: 600 18px var(--mono); let
     <a class="card px-core" href="https://abhisheksreesaila.github.io/omxcore/" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxcore</h3><p>the engine</p></a>
     <a class="card px-code" href="https://abhisheksreesaila.github.io/omxcode/" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxcode</h3><p>the framework</p></a>
     <a class="card px-qua" href="https://abhisheksreesaila.github.io/omxqua/" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxqua</h3><p>the design language</p></a>
-    <a class="card px-console" href="https://abhisheksreesaila.github.io/mxstudio/site/console.html" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxconsole</h3><p>local AI</p></a>
+    <a class="card px-console" href="https://abhisheksreesaila.github.io/omxcode/omxconsole.html" target="_top" style="text-decoration:none"><i class="pm"></i><h3 style="color:var(--px)">omxconsole</h3><p>local AI</p></a>
   </div>
   <p class="lede" style="margin-top:40px;font-size:30px">omxlabs.tech · <a href="https://github.com/abhisheksreesaila" target="_top">GitHub</a></p>
 </section>

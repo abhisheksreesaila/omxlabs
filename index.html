@@ -17,6 +17,16 @@
 .finale .fcols .us { box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 55%, transparent); }
 .finale .fcols b { font: 650 16px var(--sans); } .finale .fcols .us b { color: var(--px); }
 .finale .fcols p { margin: 6px 0 0; color: rgb(255 255 255 / .78); font-size: 15px; }
+/* testimonials: one card per quote, a grid when there are more */
+.said { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px; max-width: 860px; margin: 28px auto 0; }
+.nod { margin: 0; padding: 26px 28px; border-radius: 22px; text-align: left; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); }
+.nod blockquote { margin: 0; font: 500 clamp(17px, 1.6vw, 21px)/1.5 var(--sans); letter-spacing: -.01em; color: var(--ink); text-wrap: pretty; }
+.nod figcaption { margin-top: 14px; font: 500 13.5px var(--sans); color: var(--ink2); }
+.nod figcaption b { color: var(--ink); font-weight: 600; }
+.nod figcaption a { color: var(--ink2); text-underline-offset: 3px; }
+#said .join { margin: 18px auto 0; font-size: 15px; color: var(--ink2); }
+#said .join a { color: var(--px); font-weight: 600; text-decoration: none; } #said .join a:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 560px) { .nod { padding: 20px 18px; } }
 @media (max-width: 900px) { .finale .fcols { grid-template-columns: 1fr; } .finale .fcols p { font-size: 13.5px; } .finale h3 { margin-bottom: 12px; } }
 .phrases > span { white-space: nowrap; }
 .pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
@@ -221,6 +231,18 @@
     <div class="nx"><h3><span class="tag prog"><i></i>Next</span></h3><ul><li><b>omxplorer in your browser</b>, live on omxlabs.tech <span class="tbd">(hosting not set up yet)</span></li><li>Models inside omxplorer: OWLv2, SAM 2.1</li><li>Any Hugging Face model, converted to MAX</li><li>Audio becomes rows</li><li>Ask, answered by a model on your own GPU</li></ul></div>
     <div class="lt"><h3><span class="tag"><i></i>Later</span></h3><ul><li>Share with a team</li><li>Apple GPUs on real Macs (the Metal build runs on CI Macs today)</li><li>Real-world footage at scale</li></ul></div>
   </div>
+</div></section>
+
+<!-- testimonials: quoted as said, each linked to where it was said -->
+<section id="said" style="padding-top:40px"><div class="wrap center rv">
+  <div class="eyebrow">What people say</div>
+  <div class="said">
+    <figure class="nod">
+      <blockquote>“This is really cool, I’d love for you to share more about the UI framework - your plans and roadmap. I bet there are a ton of people who might be interested in collaborating on that.”</blockquote>
+      <figcaption><b>Chris Lattner</b>, replying to our <a href="https://forum.modular.com/t/omxconsole-a-desktop-app-for-running-models-on-your-own-gpu-with-max-written-in-mojo/3649/5">omxconsole post</a> on the Modular forum, Nov 2026</figcaption>
+    </figure>
+  </div>
+  <p class="join">The UI framework is <b>omxcode</b>, MIT licensed and built in the open. Want to build it with us? <a href="https://github.com/abhisheksreesaila/omxcode">Start on GitHub</a></p>
 </div></section>
 
 <!-- under the hood: the three technologies, each card opens its own site -->

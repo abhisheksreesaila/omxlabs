@@ -9,7 +9,7 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
 SHOTS = ROOT / "build" / "shots"
-PAGES = ["", "omxplorer/", "deck.html", "omxplorer/deck.html"]   # the other products forward to their own sites
+PAGES = ["", "how.html", "omxplorer/", "deck.html", "omxplorer/deck.html"]   # the other products forward to their own sites
 WIDTHS = [1440, 390]
 
 class Quiet(http.server.SimpleHTTPRequestHandler):

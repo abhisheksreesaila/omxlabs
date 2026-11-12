@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en" class="oq-root oq-night oq-family-dev px-labs" data-here="labs" data-root=".">
+<head>
+<meta charset="utf-8"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How omxplorer works · omxlabs</title>
+<meta name="description" content="How omxplorer works: GPU native (data, kernels and screen in one Mojo process), agent native (every button is an MCP tool), multimodal (sheets, video, pictures, and the models that read them).">
+<meta property="og:title" content="How omxplorer works · GPU native, agent native, multimodal">
+<link rel="stylesheet" href="assets/omxqua/src/fonts.css"><link rel="stylesheet" href="assets/omxqua/src/tokens.css">
+<link rel="stylesheet" href="assets/omxqua/src/components.css"><link rel="stylesheet" href="assets/suite.css">
+<style>
+/* the homepage is omxplorer's, told as its three pillars: GPU native, agent native, multimodal */
+.finale { max-width: 860px; color: #fff; text-align: left; }
+.finale .k { font: 600 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--px); }
+.finale h3 { margin: 8px 0 20px; font: 800 clamp(26px, 3.4vw, 46px)/1.05 var(--sans); letter-spacing: -.04em; }
+.finale .fcols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
+.finale .fcols > div { padding: 18px 20px; border-radius: 18px; background: rgb(255 255 255 / .05); box-shadow: 0 0 0 1px rgb(255 255 255 / .1); }
+.finale .fcols .us { box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 55%, transparent); }
+.finale .fcols b { font: 650 16px var(--sans); } .finale .fcols .us b { color: var(--px); }
+.finale .fcols p { margin: 6px 0 0; color: rgb(255 255 255 / .78); font-size: 15px; }
+/* testimonials: one card per quote, a grid when there are more */
+.said { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px; max-width: 860px; margin: 28px auto 0; }
+.nod { margin: 0; padding: 26px 28px; border-radius: 22px; text-align: left; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); }
+.nod blockquote { margin: 0; font: 500 clamp(17px, 1.6vw, 21px)/1.5 var(--sans); letter-spacing: -.01em; color: var(--ink); text-wrap: pretty; }
+.nod figcaption { margin-top: 14px; font: 500 13.5px var(--sans); color: var(--ink2); }
+.nod figcaption b { color: var(--ink); font-weight: 600; }
+.nod figcaption a { color: var(--ink2); text-underline-offset: 3px; }
+#said .join { margin: 18px auto 0; font-size: 15px; color: var(--ink2); }
+#said .join a { color: var(--px); font-weight: 600; text-decoration: none; } #said .join a:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 560px) { .nod { padding: 20px 18px; } }
+@media (max-width: 900px) { .finale .fcols { grid-template-columns: 1fr; } .finale .fcols p { font-size: 13.5px; } .finale h3 { margin-bottom: 12px; } }
+.phrases > span { white-space: nowrap; }
+.pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+.pills a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); color: var(--ink); font: 600 15px var(--sans); text-decoration: none; transition: transform var(--oq-spring-fast-dur) var(--oq-island-spring), box-shadow .2s; }
+.pills a:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 60%, var(--line)), var(--oq-shadow-2); }
+.pills a span { font-size: 17px; }
+.pillar .eyebrow b { color: var(--px); font-weight: 600; }
+/* today vs omxplorer: two isometric drawings side by side (tools/iso.py draws them) */
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 52px; text-align: left; }
+.duo figure { margin: 0; padding: 22px 22px 18px; border-radius: 26px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.duo figure.ours { box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 45%, var(--line)), var(--oq-shadow-2); }
+.duo .who { font: 600 11.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); }
+.duo .ours .who { color: var(--px); }
+.duo figcaption { color: var(--ink2); font-size: 15px; }
+.duo figcaption b { color: var(--ink); font-weight: 600; }
+.iso { display: block; width: 100%; height: auto; max-height: 360px; font-family: var(--sans); overflow: visible; }
+.iso polygon { stroke: rgb(255 255 255 / .09); stroke-width: .8; stroke-linejoin: round; }
+.iso .grey .t { fill: #2c2c31; } .iso .grey .l { fill: #1e1e22; } .iso .grey .r { fill: #151518; }
+.iso .px .t { fill: color-mix(in srgb, var(--px) 58%, #101012); } .iso .px .l { fill: color-mix(in srgb, var(--px) 32%, #0b0b0d); } .iso .px .r { fill: color-mix(in srgb, var(--px) 20%, #0b0b0d); }
+.iso .px2 .t { fill: color-mix(in srgb, var(--px) 40%, #2c2c31); } .iso .px2 .l { fill: color-mix(in srgb, var(--px) 22%, #1a1a1e); } .iso .px2 .r { fill: color-mix(in srgb, var(--px) 14%, #121215); }
+.iso .px3 .t { fill: color-mix(in srgb, var(--px) 26%, #34343a); } .iso .px3 .l { fill: color-mix(in srgb, var(--px) 14%, #202024); } .iso .px3 .r { fill: color-mix(in srgb, var(--px) 9%, #151518); }
+.iso .pxs .t { fill: color-mix(in srgb, var(--px) 13%, #131316); } .iso .pxs .l { fill: color-mix(in srgb, var(--px) 9%, #0e0e10); } .iso .pxs .r { fill: color-mix(in srgb, var(--px) 6%, #0b0b0d); }
+.iso .pxf polygon { fill: color-mix(in srgb, var(--px) 10%, transparent); stroke: color-mix(in srgb, var(--px) 50%, transparent); stroke-dasharray: 4 4; }
+.iso .screen { fill: #18181c; stroke: rgb(255 255 255 / .16); }
+.iso .btn { fill: #303036; } .iso .btn.on { fill: var(--px); } .iso .btn.off { fill: transparent; stroke: rgb(255 255 255 / .25); stroke-dasharray: 3 3; }
+.iso .win { fill: rgb(255 255 255 / .05); stroke: color-mix(in srgb, var(--px) 70%, transparent); stroke-width: 1.4; }
+.iso text { text-anchor: middle; }
+.iso .lb { fill: var(--ink); font: 650 13px var(--sans); letter-spacing: -.01em; }
+.iso .lp { fill: var(--px); text-anchor: start; }
+.iso .sb { fill: var(--ink2); font: 11px var(--mono); }
+.iso .al { fill: var(--ink2); font: 11.5px var(--mono); }
+.iso .al.off { text-anchor: middle; }
+.iso .emo { font-size: 38px; }
+.iso .ar { stroke: var(--ink2); stroke-width: 1.5; } .iso .ar.ok { stroke: var(--px); } .iso .da { stroke-dasharray: 5 5; }
+.iso .ahp { fill: var(--ink2); }
+.iso .cross circle, .iso .cross line { fill: none; stroke: var(--oq-warn); stroke-width: 2; }
+.iso .bub rect { fill: var(--oq-surface-3); stroke: var(--line); } .iso .bub text { fill: var(--ink); font: 600 13px var(--sans); }
+.iso .bub.good rect { stroke: color-mix(in srgb, var(--px) 60%, transparent); }
+.iso .tool rect { fill: color-mix(in srgb, var(--px) 14%, #0b0b0d); stroke: color-mix(in srgb, var(--px) 60%, transparent); } .iso .tool text { fill: var(--px); font: 600 12.5px var(--mono); }
+/* three facts under a pillar */
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; text-align: left; }
+.facts > div { padding: 22px 22px 20px; border-radius: 22px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); display: flex; flex-direction: column; gap: 8px; }
+.facts b.n { font: 800 44px/1 var(--sans); letter-spacing: -.05em; color: var(--px); }
+.facts b.n small { font-size: .42em; color: var(--ink2); margin-left: 4px; letter-spacing: -.02em; }
+.facts h3 { margin: 0; font: 650 18px var(--sans); letter-spacing: -.02em; }
+.facts p { margin: 0; color: var(--ink2); font-size: 15px; }
+.facts p b { color: var(--ink); font-weight: 600; }
+.facts code { font: 600 13px var(--mono); color: var(--px); }
+/* one tap, start to finish: five steps in a row, the last one the time */
+.flow { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 18px; text-align: left; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); overflow: hidden; }
+.flow > div { padding: 22px 20px; display: flex; flex-direction: column; gap: 10px; border-left: 1px solid var(--oq-line-2); }
+.flow > div:first-child { border-left: 0; }
+.flow .n { font: 600 11.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); display: flex; align-items: center; gap: 8px; }
+.flow .n .pm { --s: 20px; }
+.flow p { margin: 0; color: var(--ink2); font-size: 15px; }
+.flow p b { color: var(--ink); font-weight: 600; }
+.flow code { font: 13px var(--mono); color: var(--ink); }
+.flow .end b.t { font: 800 44px/1 var(--sans); letter-spacing: -.05em; color: var(--px); }
+.flow .end b.t small { font-size: .42em; color: var(--ink2); margin-left: 4px; }
+.sub { margin-top: 44px; font: 600 11.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); text-align: left; }
+/* every kind of data, with what's built */
+.modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 18px; text-align: left; }
+.modes > div { padding: 22px 20px; border-radius: 22px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.modes .em { font-size: 28px; line-height: 1; }
+.modes h3 { margin: 0; font: 650 18px var(--sans); }
+.modes p { margin: 0; color: var(--ink2); font-size: 14.5px; }
+.modes .soon { background: var(--bg); }
+/* bring your own model: four steps, one of them not built yet */
+.pipe { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 18px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); overflow: hidden; text-align: left; }
+.pipe > div { position: relative; padding: 22px 22px 20px 22px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; border-left: 1px solid var(--oq-line-2); }
+.pipe > div:first-child { border-left: 0; }
+.pipe > div:not(:first-child)::before { content: "→"; position: absolute; left: -9px; top: 22px; width: 18px; text-align: center; background: var(--oq-surface-1); color: var(--px); font-weight: 700; }
+.pipe h3 { margin: 0; font: 650 17px var(--sans); }
+.pipe p { margin: 0; color: var(--ink2); font-size: 14.5px; }
+.pipe .em { font-size: 24px; line-height: 1; }
+.pipe-note { margin-top: 14px; color: var(--ink2); font-size: 14.5px; text-align: left; }
+.pipe-note b { color: var(--ink); font-weight: 600; }
+@media (max-width: 1100px) { .flow { grid-template-columns: 1fr 1fr; } .flow > div { border-left: 0; border-top: 1px solid var(--oq-line-2); } .flow > div:nth-child(-n+2) { border-top: 0; } .flow > div:nth-child(even) { border-left: 1px solid var(--oq-line-2); } .modes, .pipe { grid-template-columns: 1fr 1fr; } .pipe > div:nth-child(3) { border-left: 0; } .pipe > div:nth-child(n+3) { border-top: 1px solid var(--oq-line-2); } .pipe > div:nth-child(3)::before { display: none; } }
+@media (max-width: 900px) { .duo, .facts, .flow, .modes, .pipe { grid-template-columns: 1fr; } .flow > div, .flow > div:nth-child(even), .pipe > div { border-left: 0; } .flow > div:nth-child(2), .pipe > div:nth-child(n+2) { border-top: 1px solid var(--oq-line-2); } .pipe > div::before { display: none; } }
+</style>
+</head>
+<body id="top">
+<nav class="top" data-cta="Meet omxplorer" data-cta-href="omxplorer/" data-gh="https://github.com/abhisheksreesaila/omxcode"></nav>
+
+<section class="px-plorer" style="padding-top:120px"><div class="wrap center rv">
+  <div class="eyebrow"><a href="./" style="color:inherit">omxlabs</a> · omxplorer</div>
+  <h1 class="rise" style="font-size:clamp(36px,5vw,64px)">How omxplorer works.</h1>
+  <p class="lede">Three ideas, each with what is measured and what is not built yet.</p>
+  <div class="pills" style="justify-content:center"><a href="#gpu"><span class="ic i-zap" style="--s:18px"></span>GPU native</a><a href="#agent"><span class="ic i-bot" style="--s:18px"></span>Agent native</a><a href="#multi"><span class="ic i-film" style="--s:18px"></span>Multimodal</a></div>
+</div></section>
+
+<!-- 1 · GPU native -->
+
+<section id="gpu" class="pillar px-plorer" style="padding-top:60px"><div class="wrap center rv">
+  <div class="eyebrow"><b>1 · GPU native</b></div>
+  <h2>Your data stays <span class="two">on the GPU.</span></h2>
+  <p class="lede">In most data apps, the numbers are computed in one place and drawn in another: copied off the GPU, sent through a server, parsed by a browser, then redrawn. omxplorer is one Mojo program. Your rows stay in GPU memory, the kernels run right there, and only the answer, a few numbers, travels to the screen in the same process.</p>
+  <div class="duo">
+    <figure><span class="who">Today</span><!-- iso:gpu-today --><svg class="iso" viewBox="-122 -272 517 369" role="img" aria-label="Today: the data is computed on the GPU, copied to the CPU, serialized by a server, parsed and redrawn by a browser"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" class="ahp"/></marker></defs><g class="grey"><polygon class="l" points="-68.6,39.6 0.0,79.2 0.0,59.4 -68.6,19.8"/><polygon class="r" points="68.6,39.6 0.0,79.2 0.0,59.4 68.6,19.8"/><polygon class="t" points="0.0,-19.8 68.6,19.8 0.0,59.4 -68.6,19.8"/></g><text class="lb" x="0.0" y="13.8">GPU</text><text class="sb" x="0.0" y="31.8">computes</text><g class="grey"><polygon class="l" points="34.3,-35.2 102.9,4.4 102.9,-15.4 34.3,-55.0"/><polygon class="r" points="171.5,-35.2 102.9,4.4 102.9,-15.4 171.5,-55.0"/><polygon class="t" points="102.9,-94.6 171.5,-55.0 102.9,-15.4 34.3,-55.0"/></g><text class="lb" x="102.9" y="-61.0">CPU memory</text><text class="sb" x="102.9" y="-43.0">holds a copy</text><g class="grey"><polygon class="l" points="137.2,-110.0 205.8,-70.4 205.8,-90.2 137.2,-129.8"/><polygon class="r" points="274.4,-110.0 205.8,-70.4 205.8,-90.2 274.4,-129.8"/><polygon class="t" points="205.8,-169.4 274.4,-129.8 205.8,-90.2 137.2,-129.8"/></g><text class="lb" x="205.8" y="-135.8">Python server</text><text class="sb" x="205.8" y="-117.8">serializes</text><g class="grey"><polygon class="l" points="240.1,-184.8 308.7,-145.2 308.7,-165.0 240.1,-204.6"/><polygon class="r" points="377.2,-184.8 308.7,-145.2 308.7,-165.0 377.2,-204.6"/><polygon class="t" points="308.7,-244.2 377.2,-204.6 308.7,-165.0 240.1,-204.6"/></g><text class="lb" x="308.7" y="-210.6">browser</text><text class="sb" x="308.7" y="-192.6">parses, redraws</text><line class="ar" x1="36.2" y1="7.7" x2="66.7" y2="-23.1" marker-end="url(#ah)"/><line class="ar" x1="139.1" y1="-67.1" x2="169.6" y2="-97.9" marker-end="url(#ah)"/><line class="ar" x1="242.0" y1="-141.9" x2="272.5" y2="-172.7" marker-end="url(#ah)"/><g class="bub"><rect x="-104.1" y="-129.4" width="170.0" height="30" rx="15"/><text x="-19.1" y="-109.4">⏳ every hop waits</text></g></svg><!-- /iso:gpu-today --><figcaption>Four programs, three hand-offs. <b>Every click pays for all of them.</b></figcaption></figure>
+    <figure class="ours"><span class="who">omxplorer</span><!-- iso:gpu-ours --><svg class="iso" viewBox="-151 -134 467 372" role="img" aria-label="omxplorer: the data and the kernels live on your GPU inside one Mojo process with the screen; only the answer travels to the window"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" class="ahp"/></marker></defs><g class="pxs"><polygon class="l" points="-133.4,77.0 114.3,220.0 114.3,202.4 -133.4,59.4"/><polygon class="r" points="247.7,143.0 114.3,220.0 114.3,202.4 247.7,125.4"/><polygon class="t" points="0.0,-17.6 247.7,125.4 114.3,202.4 -133.4,59.4"/></g><text class="lb lp" x="-125.7" y="105.4">your GPU</text><g class="pxf"><polygon class="l" points="-95.3,59.4 114.3,180.4 114.3,174.9 -95.3,53.9"/><polygon class="r" points="209.6,125.4 114.3,180.4 114.3,174.9 209.6,119.9"/><polygon class="t" points="0.0,-1.1 209.6,119.9 114.3,174.9 -95.3,53.9"/></g><text class="lb lp" x="1.9" y="2.4">one Mojo process</text><g class="px"><polygon class="l" points="-64.8,53.9 -11.4,84.7 -11.4,60.5 -64.8,29.7"/><polygon class="r" points="45.7,51.7 -11.4,84.7 -11.4,60.5 45.7,27.5"/><polygon class="t" points="-7.6,-3.3 45.7,27.5 -11.4,60.5 -64.8,29.7"/></g><text class="lb" x="-9.5" y="22.6">data</text><text class="sb" x="-9.5" y="40.6">stays here</text><g class="px"><polygon class="l" points="3.8,93.5 57.2,124.3 57.2,100.1 3.8,69.3"/><polygon class="r" points="114.3,91.3 57.2,124.3 57.2,100.1 114.3,67.1"/><polygon class="t" points="61.0,36.3 114.3,67.1 57.2,100.1 3.8,69.3"/></g><text class="lb" x="59.1" y="62.2">kernels</text><text class="sb" x="59.1" y="80.2">compute</text><g class="px"><polygon class="l" points="72.4,133.1 125.7,163.9 125.7,139.7 72.4,108.9"/><polygon class="r" points="182.9,130.9 125.7,163.9 125.7,139.7 182.9,106.7"/><polygon class="t" points="129.6,75.9 182.9,106.7 125.7,139.7 72.4,108.9"/></g><text class="lb" x="127.7" y="101.8">screen</text><text class="sb" x="127.7" y="119.8">same process</text><polygon class="win" points="209.6,-15.4 297.2,35.2 297.2,-26.4 209.6,-77.0"/><text class="lb" x="253.4" y="-53.7">the window</text><line class="ar ok" x1="148.6" y1="92.4" x2="247.7" y2="8.8" marker-end="url(#ah)"/><text class="al" text-anchor="start" x="210.1" y="43.6">only the answer</text><g class="bub good"><rect x="-96.9" y="-105.2" width="270.0" height="30" rx="15"/><text x="38.1" y="-85.2">😎 nothing copied, nothing serialized</text></g></svg><!-- /iso:gpu-ours --><figcaption>One process on one GPU. <b>The rows never move; only the answer does.</b></figcaption></figure>
+  </div>
+  <div class="facts">
+    <div><b class="n">0.6<small>ms</small></b><p>a chart over <b>1 million rows</b></p></div>
+    <div><b class="n">30<small>ms</small></b><p>a dashboard click over <b>100 million rows</b>, on one workstation</p></div>
+    <div><b class="n">1<small>process</small></b><p>Data, kernels and screen in <b>one Mojo program</b>. No server, no JSON, no browser in between (on Linux, checked).</p></div>
+  </div>
+  <p class="srcline">RTX 3090 · omxcode README (chart 0.5–0.7 ms) · the 100M dashboard: goal 38's median click, measured at 856a7e9, before the release build, docs/data-benchmark.md · honest edge: a median chart over 100M rows in memory takes about 0.7 s · on the web, a server streams the screen</p>
+  <div class="sub">One tap, start to finish</div>
+  <div class="flow">
+    <div><span class="n">1 · you</span><p>Tap <b>“Sum”</b> in the chart's title and pick <b>“Median”</b>.</p></div>
+    <div class="px-code"><span class="n"><i class="pm"></i>2 · the app</span><p>The tap is a message. <code>update()</code> changes the chart's state; <code>view()</code> describes the new screen.</p></div>
+    <div class="px-core"><span class="n"><i class="pm"></i>3 · the engine</span><p>The group-by and median run as <b>GPU kernels</b> over all 1M rows, in the same process.</p></div>
+    <div class="px-qua"><span class="n"><i class="pm"></i>4 · the screen</span><p>Only what changed is redrawn, and the bars <b>spring</b> to their new heights.</p></div>
+    <div class="end"><span class="n">done</span><b class="t">6.4<small>ms</small></b><p>the median per group over 1M rows, RTX 3090</p></div>
+  </div>
+  <figure class="bframe" style="margin-top:18px"><div class="bar"><i></i><i></i><i></i><span>omxplorer · orders_1m.csv · 1,000,000 rows</span></div>
+    <video src="assets/img/clip-sentence-web.mp4" poster="assets/img/omxplorer-sentence-web.jpg" muted loop playsinline preload="none" data-play aria-label="Changing a word in a chart's sentence recomputes a million rows on the GPU"></video></figure>
+  <p class="hcap">A real recording: change a word in the chart's sentence, and a million rows are recomputed on the GPU.</p>
+</div></section>
+
+<!-- 2 · Agent native -->
+<section id="agent" class="pillar px-plorer" style="padding-top:60px"><div class="wrap center rv">
+  <div class="eyebrow"><b>2 · Agent native</b></div>
+  <h2>Agents don't click. <span class="two">They call.</span></h2>
+  <p class="lede">Today an agent uses an app like a tourist with a menu they can't read: it looks at a screenshot and points. In omxplorer, every button also describes itself: its name, what it needs, and whether it's allowed right now. The agent reads that list and calls the button directly.</p>
+  <div class="duo">
+    <figure><span class="who">Today</span><!-- iso:agent-today --><svg class="iso" viewBox="-281 -145 528 361" role="img" aria-label="Today: an agent looks at a screenshot and guesses where to click"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" class="ahp"/></marker></defs><g class="grey"><polygon class="l" points="-114.3,66.0 114.3,198.0 114.3,191.4 -114.3,59.4"/><polygon class="r" points="228.6,132.0 114.3,198.0 114.3,191.4 228.6,125.4"/><polygon class="t" points="0.0,-6.6 228.6,125.4 114.3,191.4 -114.3,59.4"/></g><polygon class="screen" points="0.0,15.4 171.5,114.4 171.5,-17.6 0.0,-116.6"/><polygon class="btn" points="19.1,-83.6 55.3,-62.7 55.3,-84.7 19.1,-105.6"/><polygon class="btn" points="68.6,-55.0 104.8,-34.1 104.8,-56.1 68.6,-77.0"/><polygon class="btn" points="118.1,-26.4 154.3,-5.5 154.3,-27.5 118.1,-48.4"/><polygon class="btn" points="19.1,-39.6 55.3,-18.7 55.3,-40.7 19.1,-61.6"/><polygon class="btn" points="68.6,-11.0 104.8,9.9 104.8,-12.1 68.6,-33.0"/><polygon class="btn" points="118.1,17.6 154.3,38.5 154.3,16.5 118.1,-4.4"/><polygon class="btn" points="19.1,4.4 55.3,25.3 55.3,3.3 19.1,-17.6"/><polygon class="btn" points="68.6,33.0 104.8,53.9 104.8,31.9 68.6,11.0"/><polygon class="btn" points="118.1,61.6 154.3,82.5 154.3,60.5 118.1,39.6"/><g class="cross"><circle cx="86.7" cy="-11.5" r="13"/><line x1="66.7" y1="-11.5" x2="106.7" y2="-11.5"/><line x1="86.7" y1="-31.5" x2="86.7" y2="8.5"/></g><line class="ar da" x1="38.1" y1="154.0" x2="85.7" y2="1.1" marker-end="url(#ah)"/><text class="emo" x="38.1" y="184.4">🤖</text><g class="bub"><rect x="-262.9" y="151.4" width="262.0" height="30" rx="15"/><text x="-131.9" y="171.4">😵 is this Export? click (812, 344)</text></g></svg><!-- /iso:agent-today --><figcaption>Screenshots, pixel coordinates, guesses. <b>Slow, and it breaks when the layout moves.</b></figcaption></figure>
+    <figure class="ours"><span class="who">omxplorer</span><!-- iso:agent-ours --><svg class="iso" viewBox="-218 -145 665 361" role="img" aria-label="omxplorer: every button also publishes a tool with a name and its arguments; the agent reads the list and calls one"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" class="ahp"/></marker></defs><g class="pxs"><polygon class="l" points="-114.3,66.0 114.3,198.0 114.3,191.4 -114.3,59.4"/><polygon class="r" points="228.6,132.0 114.3,198.0 114.3,191.4 228.6,125.4"/><polygon class="t" points="0.0,-6.6 228.6,125.4 114.3,191.4 -114.3,59.4"/></g><polygon class="screen" points="0.0,15.4 171.5,114.4 171.5,-17.6 0.0,-116.6"/><polygon class="btn" points="19.1,-83.6 55.3,-62.7 55.3,-84.7 19.1,-105.6"/><polygon class="btn on" points="68.6,-55.0 104.8,-34.1 104.8,-56.1 68.6,-77.0"/><polygon class="btn" points="118.1,-26.4 154.3,-5.5 154.3,-27.5 118.1,-48.4"/><polygon class="btn" points="19.1,-39.6 55.3,-18.7 55.3,-40.7 19.1,-61.6"/><polygon class="btn on" points="68.6,-11.0 104.8,9.9 104.8,-12.1 68.6,-33.0"/><polygon class="btn" points="118.1,17.6 154.3,38.5 154.3,16.5 118.1,-4.4"/><polygon class="btn off" points="19.1,4.4 55.3,25.3 55.3,3.3 19.1,-17.6"/><polygon class="btn" points="68.6,33.0 104.8,53.9 104.8,31.9 68.6,11.0"/><polygon class="btn on" points="118.1,61.6 154.3,82.5 154.3,60.5 118.1,39.6"/><line class="ar ok" x1="104.8" y1="-45.1" x2="251.5" y2="-70.4" marker-end="url(#ah)"/><g class="tool"><rect x="245.9" y="-85.4" width="159.2" height="30" rx="15"/><text x="325.5" y="-65.4">set_word(&quot;Median&quot;)</text></g><line class="ar ok" x1="104.8" y1="-1.1" x2="251.5" y2="-35.2" marker-end="url(#ah)"/><g class="tool"><rect x="242.2" y="-50.2" width="166.6" height="30" rx="15"/><text x="325.5" y="-30.2">split_clip(at=12.4)</text></g><line class="ar ok" x1="154.3" y1="71.5" x2="301.0" y2="28.6" marker-end="url(#ah)"/><g class="tool"><rect x="321.3" y="13.6" width="107.4" height="30" rx="15"/><text x="375.0" y="33.6">make_reel()</text></g><text class="al off" x="36.2" y="16.3">disabled: no tool</text><text class="emo" x="38.1" y="184.4">🤖</text><g class="bub good"><rect x="-199.9" y="151.4" width="196.0" height="30" rx="15"/><text x="-101.9" y="171.4">😄 I&#x27;ll call make_reel()</text></g></svg><!-- /iso:agent-ours --><figcaption>Every button is also a tool with a name and arguments. <b>A disabled button isn't on the list.</b></figcaption></figure>
+  </div>
+  <div class="sub">Connect your agent in three steps</div>
+  <div class="facts">
+    <div><h3>1 · Get the agent link</h3><p>In a copy of the omxcode repo, run this. It prints one <code>claude mcp add omxplorer …</code> line; run that once.</p><span class="cmd">scripts/agent.sh omxplorer<button data-copy="scripts/agent.sh omxplorer">Copy</button></span></div>
+    <div><h3>2 · Your agent sees the tools</h3><p>omxplorer speaks <b>MCP</b>, the standard Claude Code and other agents already use. There's nothing to set up per button: every control is a tool from the first line of code.</p></div>
+    <div><h3>3 · Talk instead of hunting</h3><p><b>“Revenue by product, largest first, top 5.”</b> Edit by talking, not by learning a thousand buttons. Or hand the agent a script and let it run.</p></div>
+  </div>
+  <div class="pair" style="margin-top:18px">
+    <div class="pane"><div class="bar">A real session: Claude Code driving omxplorer, no screenshots</div><pre><span class="k">→</span> choose-a-file  {<span class="s">"path"</span>: <span class="s">"orders_1m.csv"</span>}
+<span class="k">→</span> create-table
+<span class="k">→</span> insert-chart
+<span class="k">→</span> ask  {<span class="s">"text"</span>: <span class="s">"revenue by product, largest first, top 5"</span>}
+<span class="c">← Now: chart0: 0.6 ms</span></pre></div>
+    <div class="pane" style="display:grid;align-content:center;gap:14px;padding:24px"><b style="font-size:18px">An agent can do nothing a person couldn't.</b>
+      <p style="margin:0;color:var(--ink2)">The tools are the buttons, so the agent sees exactly what you'd see, and is bound by the same rules.</p>
+      <a class="more" href="https://github.com/abhisheksreesaila/omxcode/blob/main/docs/agent.md">Read the agent docs</a>
+      <div class="srcline" style="margin:0">omxcode README · docs/agent.md</div></div>
+  </div>
+</div></section>
+
+<!-- 3 · Multimodal -->
+<section id="multi" class="pillar px-plorer" style="padding-top:60px"><div class="wrap center rv">
+  <div class="eyebrow"><b>3 · Multimodal</b></div>
+  <h2>Every kind of data, <span class="two">in one afternoon.</span></h2>
+  <p class="lede">Today the sheet lives in Excel, the charts in Spotfire, the footage in a video editor and the model in a notebook, with exports in between. In omxplorer they're cards on one sheet, on one GPU, and they can be joined.</p>
+  <p class="srcline">The video work below is built, checked and on main (goal 39).</p>
+  <div class="duo">
+    <figure><span class="who">Today</span><!-- iso:multi-today --><svg class="iso" viewBox="-193 -87 475 338" role="img" aria-label="Today: a sheet in Excel, charts in Spotfire, footage in a video editor, a model in a notebook, with exports between them"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" class="ahp"/></marker></defs><g class="grey"><polygon class="l" points="-61.0,35.2 15.2,79.2 15.2,57.2 -61.0,13.2"/><polygon class="r" points="76.2,44.0 15.2,79.2 15.2,57.2 76.2,22.0"/><polygon class="t" points="0.0,-22.0 76.2,22.0 15.2,57.2 -61.0,13.2"/></g><text class="lb" x="7.6" y="11.6">Excel</text><text class="sb" x="7.6" y="29.6">the sheet</text><g class="grey"><polygon class="l" points="91.5,101.2 167.7,145.2 167.7,123.2 91.5,79.2"/><polygon class="r" points="228.6,110.0 167.7,145.2 167.7,123.2 228.6,88.0"/><polygon class="t" points="152.4,44.0 228.6,88.0 167.7,123.2 91.5,79.2"/></g><text class="lb" x="160.0" y="77.6">Spotfire</text><text class="sb" x="160.0" y="95.6">the charts</text><g class="grey"><polygon class="l" points="-175.3,123.2 -99.1,167.2 -99.1,145.2 -175.3,101.2"/><polygon class="r" points="-38.1,132.0 -99.1,167.2 -99.1,145.2 -38.1,110.0"/><polygon class="t" points="-114.3,66.0 -38.1,110.0 -99.1,145.2 -175.3,101.2"/></g><text class="lb" x="-106.7" y="99.6">a video editor</text><text class="sb" x="-106.7" y="117.6">the footage</text><g class="grey"><polygon class="l" points="-22.9,189.2 53.3,233.2 53.3,211.2 -22.9,167.2"/><polygon class="r" points="114.3,198.0 53.3,233.2 53.3,211.2 114.3,176.0"/><polygon class="t" points="38.1,132.0 114.3,176.0 53.3,211.2 -22.9,167.2"/></g><text class="lb" x="45.7" y="165.6">a notebook</text><text class="sb" x="45.7" y="183.6">the model</text><line class="ar da" x1="53.3" y1="44.0" x2="123.8" y2="60.5" marker-end="url(#ah)"/><text class="al" text-anchor="start" x="100.6" y="45.2">export.csv</text><line class="ar da" x1="125.7" y1="112.2" x2="76.2" y2="158.4" marker-end="url(#ah)"/><text class="al" text-anchor="start" x="113.0" y="128.3">re-import</text><line class="ar da" x1="3.8" y1="156.2" x2="-64.8" y2="138.6" marker-end="url(#ah)"/><text class="al" text-anchor="end" x="-42.5" y="140.4">upload</text><line class="ar da" x1="-80.0" y1="90.2" x2="-19.1" y2="50.6" marker-end="url(#ah)"/><text class="al" text-anchor="end" x="-61.5" y="63.4">copy, paste</text><g class="bub"><rect x="-16.2" y="-57.9" width="280.0" height="30" rx="15"/><text x="123.8" y="-37.9">😩 four apps, and copies between them</text></g></svg><!-- /iso:multi-today --><figcaption>Four apps that don't know about each other. <b>Every question is an export.</b></figcaption></figure>
+    <figure class="ours"><span class="who">omxplorer</span><!-- iso:multi-ours --><svg class="iso" viewBox="-189 -113 474 384" role="img" aria-label="omxplorer: telemetry, video, a detection model, a chart and a map on one sheet, on one GPU, joined on time"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" class="ahp"/></marker></defs><g class="pxs"><polygon class="l" points="-171.5,99.0 95.3,253.0 95.3,235.4 -171.5,81.4"/><polygon class="r" points="266.7,154.0 95.3,253.0 95.3,235.4 266.7,136.4"/><polygon class="t" points="0.0,-17.6 266.7,136.4 95.3,235.4 -171.5,81.4"/></g><text class="lb lp" x="-144.8" y="136.4">omxplorer · one GPU</text><g class="px"><polygon class="l" points="-57.2,37.4 11.4,77.0 11.4,72.2 -57.2,32.6"/><polygon class="r" points="68.6,44.0 11.4,77.0 11.4,72.2 68.6,39.2"/><polygon class="t" points="0.0,-0.4 68.6,39.2 11.4,72.2 -57.2,32.6"/></g><g class="px"><polygon class="l" points="-57.2,30.4 11.4,70.0 11.4,65.1 -57.2,25.5"/><polygon class="r" points="68.6,37.0 11.4,70.0 11.4,65.1 68.6,32.1"/><polygon class="t" points="0.0,-7.5 68.6,32.1 11.4,65.1 -57.2,25.5"/></g><g class="px"><polygon class="l" points="-57.2,23.3 11.4,62.9 11.4,58.1 -57.2,18.5"/><polygon class="r" points="68.6,29.9 11.4,62.9 11.4,58.1 68.6,25.1"/><polygon class="t" points="0.0,-14.5 68.6,25.1 11.4,58.1 -57.2,18.5"/></g><g class="px"><polygon class="l" points="-57.2,16.3 11.4,55.9 11.4,51.0 -57.2,11.4"/><polygon class="r" points="68.6,22.9 11.4,55.9 11.4,51.0 68.6,18.0"/><polygon class="t" points="0.0,-21.6 68.6,18.0 11.4,51.0 -57.2,11.4"/></g><text class="lb" x="5.7" y="6.1">telemetry</text><text class="sb" x="5.7" y="24.1">100M rows</text><g class="px2"><polygon class="l" points="38.1,92.4 106.7,132.0 106.7,96.8 38.1,57.2"/><polygon class="r" points="163.9,99.0 106.7,132.0 106.7,96.8 163.9,63.8"/><polygon class="t" points="95.3,24.2 163.9,63.8 106.7,96.8 38.1,57.2"/></g><text class="lb" x="101.0" y="54.5">video</text><text class="sb" x="101.0" y="72.5">frames → rows</text><g class="px3"><polygon class="l" points="121.9,140.8 175.3,171.6 175.3,145.2 121.9,114.4"/><polygon class="r" points="232.4,138.6 175.3,171.6 175.3,145.2 232.4,112.2"/><polygon class="t" points="179.1,81.4 232.4,112.2 175.3,145.2 121.9,114.4"/></g><text class="lb" x="177.2" y="107.3">model</text><text class="sb" x="177.2" y="125.3">next</text><g class="px2"><polygon class="l" points="-121.9,88.0 -57.2,125.4 -57.2,105.6 -121.9,68.2"/><polygon class="r" points="-7.6,96.8 -57.2,125.4 -57.2,105.6 -7.6,77.0"/><polygon class="t" points="-72.4,39.6 -7.6,77.0 -57.2,105.6 -121.9,68.2"/></g><text class="lb" x="-64.8" y="76.6">chart</text><g class="px3"><polygon class="l" points="-15.2,149.6 49.5,187.0 49.5,173.8 -15.2,136.4"/><polygon class="r" points="99.1,158.4 49.5,187.0 49.5,173.8 99.1,145.2"/><polygon class="t" points="34.3,107.8 99.1,145.2 49.5,173.8 -15.2,136.4"/></g><text class="lb" x="41.9" y="144.8">map</text><line class="ar ok" x1="40.0" y1="47.3" x2="66.7" y2="62.7" marker-end="url(#ah)"/><line class="ar ok" x1="135.3" y1="102.3" x2="150.5" y2="111.1" marker-end="url(#ah)"/><line class="ar ok" x1="-22.9" y1="52.8" x2="-41.9" y2="72.6" marker-end="url(#ah)"/><line class="ar ok" x1="72.4" y1="107.8" x2="61.0" y2="132.0" marker-end="url(#ah)"/><g class="bub good"><rect x="-58.3" y="-84.3" width="250.0" height="30" rx="15"/><text x="66.7" y="-64.3">🤩 joined on time, one afternoon</text></g></svg><!-- /iso:multi-ours --><figcaption>Numbers and video on one sheet, with models next. <b>A video's frames are just more rows.</b></figcaption></figure>
+  </div>
+  <div class="sub">Every kind of data</div>
+  <div class="modes">
+    <div><span class="ic i-sheet"></span><h3>Sheets</h3><p>Sheets, pivots and charts over CSV and Parquet. 100M-row files open in 0.2 s.</p><span class="tag live"><i></i>Live now</span></div>
+    <div><span class="ic i-film"></span><h3>Video</h3><p>Frames become rows at about 400 a second at 720p. Split, trim, and let the rows cut a reel.</p><span class="tag live"><i></i>Live now</span></div>
+    <div><span class="ic i-image"></span><h3>Pictures</h3><p>Pictures open as cards on the sheet. GPU crop, blur and captions are built underneath, not in omxplorer yet.</p><span class="tag prog"><i></i>In progress</span></div>
+    <div class="soon"><span class="ic i-mic"></span><h3>Audio</h3><p>Speech and sound as rows you can search and cut.</p><span class="tag plan"><i></i>Planned</span></div>
+  </div>
+  <div class="sub">Bring your own model</div>
+  <div class="pipe">
+    <div><span class="ic i-package"></span><h3>Pick a model</h3><p>A vision or audio model from Hugging Face. Not a chatbot: a detector, a segmenter, a classifier.</p></div>
+    <div><span class="pm px-console" style="--s:30px"></span><h3>Convert it to MAX</h3><p>MAX runs it fast on your GPU. omxconsole will do the converting.</p><span class="tag plan"><i></i>Planned</span></div>
+    <div><span class="ic i-layers"></span><h3>It runs inside omxplorer</h3><p>In the same process as your data. No server, no upload.</p><span class="tag prog"><i></i>In progress</span></div>
+    <div><span class="ic i-rows"></span><h3>Its answers are rows</h3><p>Boxes and masks land in a table you can join, chart and ask.</p><span class="tag prog"><i></i>In progress</span></div>
+  </div>
+  <p class="pipe-note"><b>Where it stands:</b> OWLv2 (find more like this, from one tapped example) and SAM 2.1 (outlines) already run in process in the framework's own tests, through PyTorch, on Linux with NVIDIA, and their answers come back as rows. <b>Next:</b> wire them into omxplorer, then any Hugging Face model, converted to MAX.</p>
+</div></section>
+
+<div class="band"><h2>Every kind of data. <span class="two">One GPU. Ask it anything.</span></h2><div class="ctas" style="justify-content:center"><a class="cta" href="omxplorer/">Meet omxplorer</a><a class="more" href="./">Back to omxlabs</a></div></div>
+<footer data-suite></footer>
+<script src="assets/suite.js"></script>
+<script src="assets/marks.js"></script>
+</body></html>

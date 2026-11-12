@@ -112,6 +112,25 @@
 .road3 .beyond { background: radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--px) 14%, var(--oq-surface-1)), var(--oq-surface-1) 70%); box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 30%, var(--line)); }
 .road3 .beyond h3 { color: var(--px); }
 .road3 .beyond li .k { font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--px); }
+.stack { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 14px; margin-top: 48px; text-align: left; }
+.layers { display: grid; gap: 8px; }
+.layer { position: relative; display: grid; grid-template-columns: 44px minmax(0, 190px) minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 20px 22px; border-radius: 20px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--line); text-decoration: none; color: inherit; overflow: hidden; transition: transform var(--oq-spring-dur) var(--oq-spring), box-shadow .2s; }
+.layer::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--px); }
+a.layer:hover { transform: translateX(4px); box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 60%, var(--line)), var(--oq-shadow-2); }
+.layer .pm { --s: 36px; }
+.layer .nm { display: grid; gap: 2px; } .layer .nm b { font: 750 19px var(--sans); letter-spacing: -.03em; } .layer .nm span { font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--px); }
+.layer p { margin: 0; font-size: 14.5px; line-height: 1.45; color: var(--ink2); } .layer p b { color: var(--ink); font-weight: 600; }
+.layer .go { font: 500 13.5px var(--sans); white-space: nowrap; } .layer .go::after { content: " ↗"; color: var(--px); }
+.layer.top { background: radial-gradient(120% 140% at 0% 50%, color-mix(in srgb, var(--px) 12%, var(--oq-surface-1)), var(--oq-surface-1) 60%); }
+.layer.base { grid-template-columns: 44px minmax(0, 1fr); background: transparent; box-shadow: none; border: 1px dashed var(--line); } .layer.base::before { display: none; }
+.layer.base .chip { width: 36px; height: 36px; border-radius: 10px; box-shadow: 0 0 0 1px var(--line) inset; display: grid; place-items: center; font: 600 11px var(--mono); color: var(--ink2); }
+.also { display: flex; flex-direction: column; gap: 10px; padding: 28px; border-radius: 26px; text-decoration: none; color: inherit; background: radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--px) 14%, var(--oq-surface-1)), var(--oq-surface-1) 70%); box-shadow: 0 0 0 1px color-mix(in srgb, var(--px) 30%, var(--line)); transition: transform var(--oq-spring-dur) var(--oq-spring); }
+.also:hover { transform: translateY(-3px); }
+.also .pm { --s: 44px; margin-bottom: 8px; } .also .role { font: 500 11.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--px); }
+.also h3 { margin: 0; font: 750 26px var(--sans); letter-spacing: -.03em; } .also p { margin: 0; color: var(--ink2); font-size: 15px; } .also p:last-of-type { flex: 1; } .also p b { color: var(--ink); font-weight: 600; }
+.also .go { font: 600 14px var(--sans); color: var(--px); } .also .go::after { content: " ↗"; }
+@media (max-width: 1100px) { .stack { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 700px) { .layer { grid-template-columns: 36px minmax(0, 1fr); gap: 6px 14px; padding: 18px; } .layer p, .layer .go { grid-column: 2; } .layer.base p { grid-column: 2; } }
 @media (max-width: 1100px) { .feat { grid-template-columns: minmax(0, 1fr); gap: 30px; } .feat.flip .words { order: 0; } .road3 { grid-template-columns: minmax(0, 1fr); } .bento { grid-template-columns: 1fr 1fr; } .bt.big { grid-column: span 2; grid-row: auto; min-height: 300px; } }
 @media (max-width: 900px) {
   .feats { margin-top: 12px; } .feat { padding: 44px 0; gap: 26px; } .feat dl { margin-top: 18px; gap: 14px; } .feat dd { font-size: 15.5px; }
@@ -215,6 +234,25 @@
     <figcaption><b>Chris Lattner</b><span>Creator of LLVM and Swift, co-founder and CEO of Modular, the company behind Mojo</span><span>Replying to our <a href="https://forum.modular.com/t/omxconsole-a-desktop-app-for-running-models-on-your-own-gpu-with-max-written-in-mojo/3649/5">omxconsole post</a> on the Modular forum, Nov 2026</span></figcaption>
   </figure>
   <p class="join">That UI framework is <b>omxcode</b>, the one omxplorer is built on: MIT licensed and built in the open. <a href="https://github.com/abhisheksreesaila/omxcode">Build it with us on GitHub</a></p>
+</div></section>
+
+<!-- 4b · under the hood: what omxplorer is made of, each layer its own product with its own site -->
+<section id="hood" class="px-plorer"><div class="wrap">
+  <div class="center rv">
+    <div class="kick">Under the hood</div>
+    <h2>Made of parts <span class="two">you can use too.</span></h2>
+    <p class="lede">omxplorer sits on three pieces we built for it. Each one works on its own, in your own project.</p>
+  </div>
+  <div class="stack rv">
+    <div class="layers">
+      <div class="layer top px-plorer"><i class="pm"></i><div class="nm"><span>The app</span><b>omxplorer</b></div><p>Sheets, video and an agent in one window. Everything below is what makes it work.</p></div>
+      <a class="layer px-qua" href="https://abhisheksreesaila.github.io/omxqua/"><i class="pm"></i><div class="nm"><span>The look</span><b>omxqua</b></div><p>The design language: solid surfaces, springy motion, one colour per product. <b>This site is drawn in it.</b></p><span class="go">Its site</span></a>
+      <a class="layer px-code" href="https://abhisheksreesaila.github.io/omxcode/"><i class="pm"></i><div class="nm"><span>The framework</span><b>omxcode</b></div><p>Write an app once in Mojo: native on Linux and the Mac, and on the web. <b>Every button becomes a tool an agent can call.</b> MIT licensed.</p><span class="go">Its site</span></a>
+      <a class="layer px-core" href="https://abhisheksreesaila.github.io/omxcore/"><i class="pm"></i><div class="nm"><span>The engine</span><b>omxcore</b></div><p>SQL on your GPU and CPU, over the files you already have. <b>All 22 TPC-H queries at SF10 in 3.15 s</b> (DuckDB: 5.08 s).</p><span class="go">Its site</span></a>
+      <div class="layer base"><span class="chip">mojo</span><p>All of it is written in <b>Mojo</b> and runs AI models with <b>MAX</b>, both from Modular.</p></div>
+    </div>
+    <a class="also px-console" href="https://abhisheksreesaila.github.io/omxcode/omxconsole.html"><i class="pm"></i><span class="role">Also from omxlabs</span><h3>omxconsole</h3><p>Run AI models on your own machine. Find one on Hugging Face, download it and serve it through MAX, <b>behind one OpenAI-compatible endpoint</b> with a key per app.</p><p>It's the app Chris Lattner replied to.</p><span class="go">Meet omxconsole</span></a>
+  </div>
 </div></section>
 
 <!-- 5 · now · next · beyond -->

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><link rel="icon" href="../assets/favicon-plorer.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>omxplorer · the slides</title>
-<meta name="description" content="omxplorer, the GPU-native workbench for robot learning data, in twenty-two slides: robot search, what an episode, a bag and LeRobot are, one GPU process, every button an agent tool, models as plugins, everything it does today, what's under the hood, what comes next, and an honest comparison.">
+<meta name="description" content="omxplorer, the GPU-native workbench for robot learning data, in twenty-three slides: robot search, what an episode, a bag and LeRobot are, one GPU process, every button an agent tool, models as plugins, everything it does today, what's under the hood, what comes next, and an honest comparison.">
 <link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
 <link rel="stylesheet" href="../assets/omxqua/src/components.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
@@ -63,6 +63,17 @@
 .hops .hf { border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px var(--oq-line), var(--oq-shadow-2); background: #fff; aspect-ratio: 16 / 9; }
 .hops .hf img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 0 0; }
 .hops h3 { font-size: 26px; margin: 10px 0 2px; } .hops p { font-size: 20px; color: var(--oq-ink-2); }
+.hops .hf { aspect-ratio: 2 / 1; }
+.pains { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 7px; }
+.pains li { font-size: 19px; line-height: 1.35; color: var(--oq-ink-2); padding-left: 22px; position: relative; }
+.pains li::before { content: ""; position: absolute; left: 2px; top: .55em; width: 9px; height: 9px; border-radius: 50%; background: var(--oq-warn); opacity: .85; }
+.pains li b { color: var(--oq-ink); font-weight: 650; }
+.walk { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 0; max-width: 1350px; }
+.walk li:not(.xp) { display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: center; padding: 13px 20px; border-radius: 14px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); font-size: 23px; line-height: 1.35; color: var(--oq-ink-2); }
+.walk li b { color: var(--oq-ink); font-weight: 650; }
+.walk .tool { font: 600 16px var(--mono); letter-spacing: .04em; color: var(--oq-ink); padding: 7px 12px; border-radius: 8px; background: var(--oq-surface-2); justify-self: start; }
+.walk .xp { font: 500 13px var(--mono); color: var(--oq-warn); padding: 3px 0 3px 128px; position: relative; }
+.walk .xp::before { content: "↓"; margin-right: 8px; }
 .hops .pain { margin-top: 16px; color: var(--oq-warn); font: 600 15px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
 /* the one line */
 .three { display: flex; gap: 18px; margin-top: 44px; }
@@ -258,12 +269,40 @@
   <h2>Each kind of data <span class="two">opens in its own tool.</span></h2>
   <div class="hops">
     <figure><div class="hf"><img src="../assets/img/tool-lerobot-viewer.jpg" alt="Hugging Face's LeRobot dataset viewer showing one SO-100 episode: two cameras, the task and joint charts"></div>
-      <div class="pain">one episode at a time</div><h3>Episodes: a dataset viewer</h3><p>Hugging Face's LeRobot viewer, in the browser. Good for watching one; not for finding the twenty like it.</p></figure>
+      <div class="pain">one episode at a time</div><h3>Episodes: a dataset viewer</h3>
+      <ul class="pains">
+        <li><b>You watch, one by one.</b> This small dataset is 50 episodes, 11 minutes of video. DROID is 63,344 episodes.</li>
+        <li><b>No "like this one".</b> You can't ask for every episode where the same thing happens.</li>
+        <li><b>What you find, you write down.</b> Episode number, the second it happened, by hand.</li>
+      </ul></figure>
     <figure><div class="hf"><img src="../assets/img/tool-notebook.jpg" alt="A Jupyter notebook loading the episode's table with pandas and plotting its six joints"></div>
-      <div class="pain">code for every question</div><h3>Telemetry: a notebook</h3><p>pandas and matplotlib over the same episode. Every new question is new code.</p></figure>
+      <div class="pain">code for every question</div><h3>Telemetry: a notebook</h3>
+      <ul class="pains">
+        <li><b>Every question is new code.</b> Load the table, filter, plot, then do it again for the next one.</li>
+        <li><b>The plot has no video.</b> A spike at 6.2 s means going back to the viewer and scrubbing to it.</li>
+        <li><b>The answer stays in the notebook.</b> Sharing it, or acting on it, is another export.</li>
+      </ul></figure>
   </div>
-  <p class="facts1">…and bags in a bag viewer, models in their own Python environment, and an export between each.</p>
-  <aside class="notes">So today, each kind of data opens in its own tool. Episodes in a dataset viewer like this one from Hugging Face: great for watching one episode, not for finding the twenty that look like it. Telemetry in a notebook, where every question is new code. Bags in a bag viewer, models in their own Python environment. And between each of them, an export. Both of these screenshots are the same episode you just saw.</aside>
+  <aside class="notes">So today, each kind of data opens in its own tool. Episodes go in a dataset viewer like this one from Hugging Face. It's good for watching an episode. But you watch them one by one: this small dataset is fifty episodes, eleven minutes of video, and DROID, a public robot dataset, is sixty-three thousand. There's no way to say "show me every episode like this one", and whatever you find, you write down by hand. Telemetry goes in a notebook, where every question is new code. The plot has no video: if you see a spike at six seconds, you go back to the viewer and scrub to it. And the answer stays in the notebook. Both screenshots are the same episode you just saw.</aside>
+</section>
+
+<!-- 2f · one question, today: the hops it takes, step by step -->
+<section id="question" class="prim">
+  <div class="eyebrow">One question, today</div>
+  <h2>"Which episodes <span class="two">dropped the cube?"</span></h2>
+  <ol class="walk">
+    <li class="fragment rise"><span class="tool">dataset viewer</span><div><b>Watch.</b> Scrub through 50 episodes, one at a time, and note the ones that look wrong.</div></li>
+    <li class="xp fragment rise">hop</li>
+    <li class="fragment rise"><span class="tool">notebook</span><div><b>Code a rule.</b> Load the joint table and write it: the gripper closed, then opened before the box.</div></li>
+    <li class="xp fragment rise">hop</li>
+    <li class="fragment rise"><span class="tool">viewer, again</span><div><b>Check by hand.</b> The plot points at a moment. Find it in the video yourself: the two don't share a cursor.</div></li>
+    <li class="xp fragment rise">hop</li>
+    <li class="fragment rise"><span class="tool">a model's own Python</span><div><b>Ask the camera.</b> "Is the cube in the gripper?" Extract frames, run a vision model, join its answers back on time.</div></li>
+    <li class="xp fragment rise">hop</li>
+    <li class="fragment rise"><span class="tool">conversion script</span><div><b>Hand off.</b> Write the good episodes out as a new LeRobot dataset to train on.</div></li>
+  </ol>
+  <p class="lede fragment rise" style="margin-top:22px">Five steps, four tools, four hops. <span class="ac">And no one has opened the bags yet.</span></p>
+  <aside class="notes">Here's what one ordinary question costs today: which episodes dropped the cube? First you watch, episode by episode, in the viewer. Then you export to a notebook and write a rule: the gripper closed on something, then opened before it reached the box. The plot gives you a moment, so you go back to the viewer and find it in the video by hand, because the two tools don't share a cursor. To ask the camera whether the cube is really in the gripper, you set up a vision model in its own Python environment, pull frames out of the video, run it, and join its answers back on the timestamps. And to train on the good episodes, you write a conversion script. Five steps, four tools, four hops, and nobody has even opened the bags yet.</aside>
 </section>
 
 <!-- 3 · the one line -->

@@ -36,6 +36,7 @@
   --oq-press-scale: 0.96;
   --oq-glass-mix: 58%;              /* nav islands: how much of surface-2 stays opaque (frosted glass, 2026-10-21) */
   --oq-glass-blur: blur(20px) saturate(170%);
+  --oq-glass-card-blur: blur(22px) saturate(170%); /* restrained glass (.oq-glass, 2026-11-15): a frosted card, only over .oq-sky */
   --oq-island-spring: linear(0, 0.023, 0.079, 0.154, 0.237, 0.322, 0.405, 0.482, 0.553, 0.617, 0.674, 0.723, 0.766, 0.803, 0.835, 0.862, 0.885, 0.905, 0.921, 0.935, 0.946, 0.955, 0.963, 0.97, 0.975, 0.98, 0.983, 0.986, 0.989, 0.991, 0.993, 0.994, 0.995, 0.996, 0.997, 0.997, 0.998, 0.998, 0.999, 0.999, 1); /* = --oq-spring (k170 c26): islands, Beacon, top nav */
 
   font-family: var(--oq-font);
@@ -49,8 +50,8 @@
 }
 .oq-root.oq-compact { --oq-radius-card: 12px; --oq-target: 34px; }
 
-/* ---- themes: depth = tone + one shadow scale; no gradients. Glass only on the nav islands (components.css) ---- */
-.oq-root.oq-night {
+/* ---- themes: depth = tone + one shadow scale; no gradients. Glass only on the nav islands and, over a sky, .oq-glass (components.css) ---- */
+.oq-root.oq-night { color-scheme: dark; /* native scrollbars, form controls and autofill match the theme */
   --oq-surface-0: #0b0b0d; --oq-surface-1: #151518; --oq-surface-2: #1d1d21; --oq-surface-3: #25252a;
   --oq-ink: #ededef; --oq-ink-2: #a9a9b1; --oq-ink-faint: #3a3a40; /* faint is never text */
   --oq-line: #2a2a30; --oq-line-2: #202025;
@@ -62,8 +63,11 @@
   --oq-ok: #3ccf6e; --oq-warn: #f5a524; --oq-bad: #f2555a; --oq-info: #52a9ff;
   --oq-data-1: #8b7bff; --oq-data-2: #3aa0ff; --oq-data-3: #2bc3ad; --oq-data-4: #ff8a3d; --oq-data-5: #f2555a; --oq-data-6: #e0b400;
   --oq-icon-mix: 100%;
+  /* the sky behind restrained glass (.oq-sky, .oq-glass): night is a step more solid, the night showed through at 60% */
+  --oq-sky-1: #0b1430; --oq-sky-2: #1d1d44; --oq-sky-3: #33203f;
+  --oq-glass-card-mix: 80%; --oq-glass-prose-mix: 92%; --oq-glass-line: rgb(255 255 255 / .10);
 }
-.oq-root.oq-light {
+.oq-root.oq-light { color-scheme: light;
   --oq-surface-0: #eeeef1; --oq-surface-1: #ffffff; --oq-surface-2: #ffffff; --oq-surface-3: #ffffff;
   --oq-ink: #0b0b0d; --oq-ink-2: #5b5b63; --oq-ink-faint: #c9c9cf;
   --oq-line: #e3e3e8; --oq-line-2: #efeff2;
@@ -75,6 +79,8 @@
   --oq-ok: #137036; --oq-warn: #8f5400; --oq-bad: #c01f25; --oq-info: #0960b5; /* 4.5:1 on surface-0 and -1 */
   --oq-data-1: #6d5cf0; --oq-data-2: #0a7fe0; --oq-data-3: #0f9483; --oq-data-4: #e0661a; --oq-data-5: #d42a2f; --oq-data-6: #a88400;
   --oq-icon-mix: 88%; /* coloured icons: this much data colour, the rest ink, so every glyph clears 3:1 (tests/contrast.test.cjs) */
+  --oq-sky-1: #c6e2f8; --oq-sky-2: #e3e5fa; --oq-sky-3: #fde5cf; /* sky blue, lilac, a warm horizon */
+  --oq-glass-card-mix: 62%; --oq-glass-prose-mix: 90%; --oq-glass-line: rgb(255 255 255 / .75);
 }
 
 /* =====================================================================
@@ -135,7 +141,8 @@
 .oq-skin-golden { --oq-radius-card: 22px; --oq-title: 34px; --oq-beacon-accent: #ffb45c; }
 /* Kids · Sticker: chunky and tactile. Buttons and tiles sit on a ledge and press down into it. Rounded type. */
 .oq-family-kids.oq-skin-sticker.oq-light { --oq-surface-0:#f7f7f5; --oq-surface-1:#ffffff; --oq-surface-2:#ffffff; --oq-surface-3:#ffffff; --oq-ink:#1f2a30; --oq-ink-2:#5f6b73; --oq-line:#e3e6e8; --oq-line-2:#eef0f1; --oq-state:31 42 48;
-  --oq-accent:#1971c2; --oq-on-accent:#ffffff; --oq-data-1:#f08c00; --oq-data-2:#2b8a3e; --oq-data-3:#fab005; --oq-data-4:#c2255c; --oq-data-5:#7048e8; --oq-data-6:#0c8599; }
+  --oq-accent:#1971c2; --oq-on-accent:#ffffff; --oq-data-1:#f08c00; --oq-data-2:#2b8a3e; --oq-data-3:#fab005; --oq-data-4:#c2255c; --oq-data-5:#7048e8; --oq-data-6:#0c8599; 
+  --oq-sky-1:#dcedfb; --oq-sky-2:#e8eafb; /* a paler sky: Sticker's ink-2 is the lightest, and it must stay 4.5:1 on the sky (tests/contrast.test.cjs) */ }
 .oq-family-kids.oq-skin-sticker.oq-night { --oq-bad:#ff8080; /* 4.67:1 on its surface-3 (the family red is 4.09 here) */ --oq-surface-0:#131f24; --oq-surface-1:#1b2b32; --oq-surface-2:#22343c; --oq-surface-3:#2a3d46; --oq-ink:#f1f7fa; --oq-ink-2:#9fb2bc; --oq-line:#37464f; --oq-line-2:#24353d; --oq-state:241 247 250;
   --oq-accent:#4fb3ff; --oq-on-accent:#062033; --oq-data-1:#ffa94d; --oq-data-2:#69db7c; --oq-data-3:#ffd43b; --oq-data-4:#f783ac; --oq-data-5:#b197fc; --oq-data-6:#66d9e8; }
 .oq-skin-sticker { --oq-beacon-accent: #4fb3ff; }
@@ -172,3 +179,10 @@
 @media (prefers-reduced-motion: reduce) {
   .oq-root *, .oq-root *::before, .oq-root *::after { transition-duration: 150ms !important; transition-timing-function: ease-out !important; animation-duration: 150ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* =====================================================================
+   READING MODE (owner, 2026-11-13): long reading gets a serif display and a reading sans.
+   Add oq-read to the root of a story page, report, grant write-up or landing copy, or to one long-reading section
+   inside an app. Apps stay on Geist: dense UI reads faster in it. Mono stays Geist Mono everywhere.
+   ===================================================================== */
+.oq-read { --oq-font-display: "Newsreader", Georgia, "Times New Roman", serif; --oq-font: "Inter", system-ui, sans-serif; --oq-text: 16px; }

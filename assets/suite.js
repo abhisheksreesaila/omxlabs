@@ -101,10 +101,11 @@ const GH = "https://github.com/abhisheksreesaila";
           { transform: `translate(${a.left + a.width / 2 - b.left - b.width / 2}px, ${a.top + a.height / 2 - b.top - b.height / 2}px) scale(${a.width / b.width})`, opacity: .4 },
           { transform: "none", opacity: 1 }], { duration: 520, easing: "cubic-bezier(.34,1.3,.64,1)" });
       };
-      document.querySelectorAll("[data-film-open]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); open(a); }));
+      const mine = a => (a.dataset.filmOpen || "story") === (box.id || "story");   // data-film-open="<dialog id>"; empty means the page's one film, #story
+      document.querySelectorAll("[data-film-open]").forEach(a => { if (mine(a)) a.addEventListener("click", e => { e.preventDefault(); open(a); }); });
       box.addEventListener("click", e => { if (e.target === box || e.target.closest("[data-film-close]")) box.close(); });  // the dimmed backdrop is the dialog itself
       box.addEventListener("close", () => { v.pause(); if (document.fullscreenElement) document.exitFullscreen(); });
-      if (location.hash === "#story") open(document.querySelector("[data-film-open]") || box);
+      if (location.hash === "#" + (box.id || "story")) open([...document.querySelectorAll("[data-film-open]")].find(mine) || box);
     } else new IntersectionObserver(es => es.forEach(e => {
       if (!e.isIntersecting) v.pause();
       else if (!f.classList.contains("ended") && !matchMedia("(prefers-reduced-motion: reduce)").matches) play();

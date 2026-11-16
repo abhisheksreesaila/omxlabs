@@ -1,0 +1,122 @@
+/* omxqua landing patterns (opt in): the parts of a product page, from omxlabs.tech (2026-11-11).
+   Load after components.css; the moving parts need omxqua.js (Omxqua.playOnView, Omxqua.lineWave).
+   Every rule is scoped :where(.oq-root) and prefixed lp-. --lp-c is the product's colour (default: the accent);
+   set it once on a section to colour everything inside. Rules and reasons: LANGUAGE.md, Pattern: Product page.
+   Never add press-squash rules here; omxqua.js presses everything. */
+:where(.oq-root) { --lp-c: var(--oq-accent); --lp-c2: var(--oq-data-2); }
+
+/* the kicker: a dot and a mono label above a title */
+:where(.oq-root) .lp-kick { display: flex; align-items: center; gap: 9px; font: 600 12px var(--oq-font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--oq-ink-2); }
+:where(.oq-root) .lp-kick::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .75; }
+
+/* 1 · hero: a tint of colour behind the words, and a faint line wave in a masked band at the bottom.
+   <section class="lp-hero"><canvas class="lp-wave" aria-hidden="true"></canvas><div class="lp-in">…</div></section>, then Omxqua.lineWave(canvas) */
+:where(.oq-root) .lp-hero { position: relative; isolation: isolate; }
+:where(.oq-root) .lp-hero::before { content: ""; position: absolute; inset: -80px 0 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(38% 52% at 18% 30%, color-mix(in srgb, var(--lp-c) 15%, transparent), transparent 70%), radial-gradient(34% 46% at 82% 28%, color-mix(in srgb, var(--lp-c2) 9%, transparent), transparent 70%); }
+:where(.oq-root) .lp-wave { position: absolute; left: 0; bottom: -40px; z-index: -1; width: 100%; height: 300px; pointer-events: none; opacity: .4; color: var(--lp-c);
+  -webkit-mask: radial-gradient(60% 70% at 50% 60%, #000 30%, transparent 100%); mask: radial-gradient(60% 70% at 50% 60%, #000 30%, transparent 100%); }
+
+/* 2 · feature rows: words on one side, a line drawing on the other; .flip swaps sides. The words end in a dl:
+   "What it means" (plain) and "The difference" (.diff, tinted). */
+:where(.oq-root) .lp-feat { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 64px; align-items: center; padding: 64px 0; border-top: 1px solid var(--oq-line-2); }
+:where(.oq-root) .lp-feat:first-child { border-top: 0; }
+:where(.oq-root) .lp-feat.flip > :first-child { order: 2; }
+:where(.oq-root) .lp-feat .k { font: 600 12px var(--oq-font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--lp-c); }
+:where(.oq-root) .lp-feat h3 { margin: 14px 0 0; font: 750 clamp(26px, 2.6vw, 36px)/1.08 var(--oq-font-display); letter-spacing: -.035em; text-wrap: balance; }
+:where(.oq-root) .lp-feat dl { margin: 26px 0 0; display: grid; gap: 18px; }
+:where(.oq-root) .lp-feat dt { font: 600 11.5px var(--oq-font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--oq-ink-2); }
+:where(.oq-root) .lp-feat dd { margin: 5px 0 0; font-size: 16.5px; line-height: 1.5; color: var(--oq-ink-2); text-wrap: pretty; } :where(.oq-root) .lp-feat dd b { color: var(--oq-ink); font-weight: 600; }
+:where(.oq-root) .lp-feat .diff { padding: 16px 18px; border-radius: var(--oq-radius-card); background: color-mix(in srgb, var(--lp-c) 9%, var(--oq-surface-1)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lp-c) 30%, transparent); }
+:where(.oq-root) .lp-feat .diff dt { color: var(--lp-c); } :where(.oq-root) .lp-feat .diff dd { color: var(--oq-ink); }
+
+/* 3 · line drawings that blend into the page: an inline SVG with no box, a soft glow behind it, one caption line.
+   <figure class="lp-gfx"><svg viewBox="…">…</svg><figcaption>…</figcaption></figure>. Omxqua.playOnView() adds .play
+   while it's on screen; without .play (reduced motion, off screen) it's a still drawing. Give the section overflow-x: clip
+   so the glow can't scroll the page sideways on a phone. Primitives below; draw the rest with your own classes on the same tokens. */
+:where(.oq-root) .lp-gfx { position: relative; margin: 0; min-width: 0; }
+:where(.oq-root) .lp-gfx::before { content: ""; position: absolute; inset: -14% -8%; pointer-events: none; background: radial-gradient(40% 46% at 55% 46%, color-mix(in srgb, var(--lp-c) 17%, transparent), transparent 72%); }
+:where(.oq-root) .lp-gfx > svg { position: relative; display: block; width: 100%; height: auto; overflow: visible; }
+:where(.oq-root) .lp-gfx svg svg { overflow: hidden; } /* a nested <svg viewBox> crops a real screenshot into a thumbnail */
+:where(.oq-root) .lp-gfx text { font: 500 12.5px var(--oq-font-mono); fill: var(--oq-ink); text-anchor: middle; dominant-baseline: central; }
+:where(.oq-root) .lp-gfx text.s { font-size: 10.5px; fill: var(--oq-ink-2); }
+:where(.oq-root) .lp-gfx .chip rect { fill: var(--oq-surface-2); stroke: var(--oq-line); }
+:where(.oq-root) .lp-gfx .ln { fill: none; stroke: var(--oq-line); stroke-width: 1.2; } :where(.oq-root) .lp-gfx .ln.da { stroke-dasharray: 4 5; }
+/* a dot travels its path: give the path pathLength="1" and style="--d:2.4s;--w:0s" (duration, delay) */
+:where(.oq-root) .lp-gfx .dot { fill: none; stroke: var(--lp-c); stroke-width: 5; stroke-linecap: round; stroke-dasharray: .001 1; opacity: 0; }
+:where(.oq-root) .lp-gfx .pill rect { fill: color-mix(in srgb, var(--lp-c) 14%, var(--oq-surface-1)); stroke: color-mix(in srgb, var(--lp-c) 55%, transparent); } :where(.oq-root) .lp-gfx .pill text { fill: var(--lp-c); }
+:where(.oq-root) .lp-gfx .pill.off rect { fill: none; stroke: var(--oq-line); stroke-dasharray: 3 4; } :where(.oq-root) .lp-gfx .pill.off text { fill: var(--oq-ink-2); }
+:where(.oq-root) .lp-gfx .bar { fill: var(--lp-c); transform-box: fill-box; transform-origin: 50% 100%; }
+:where(.oq-root) .lp-gfx .glow { fill: none; stroke: var(--lp-c); opacity: .22; }
+:where(.oq-root) .lp-gfx figcaption { position: relative; margin: 8px 0 0; font: 12.5px var(--oq-font-mono); color: var(--oq-ink-2); text-align: center; }
+:where(.oq-root) .lp-gfx figcaption b { font-weight: 600; color: var(--lp-c); }
+/* moving only while on screen; stagger with --i */
+:where(.oq-root) .lp-gfx.play .dot { animation: lp-dot var(--d, 2.4s) linear var(--w, 0s) infinite; }
+:where(.oq-root) .lp-gfx.play .bar { animation: lp-bar 2.4s var(--oq-spring) infinite alternate; animation-delay: calc(var(--i, 0) * 110ms); }
+:where(.oq-root) .lp-gfx.play .pill:not(.off) rect { animation: lp-light 3.2s ease-in-out infinite; animation-delay: calc(var(--i, 0) * 450ms); }
+:where(.oq-root) .lp-gfx.play .glow { animation: lp-pulse 2.6s ease-in-out infinite alternate; }
+@keyframes lp-dot { 0% { stroke-dashoffset: 0; opacity: 0; } 10%, 88% { opacity: 1; } 100% { stroke-dashoffset: -1; opacity: 0; } }
+@keyframes lp-bar { from { transform: scaleY(.45); } to { transform: scaleY(1); } }
+@keyframes lp-light { 0%, 100% { fill: color-mix(in srgb, var(--lp-c) 14%, var(--oq-surface-1)); } 15% { fill: color-mix(in srgb, var(--lp-c) 40%, var(--oq-surface-1)); } }
+@keyframes lp-pulse { from { opacity: .3; } to { opacity: .08; } }
+
+/* 4 · numbers: a bento, the biggest number first and tinted; a mono source line under it */
+:where(.oq-root) .lp-bento { display: grid; grid-template-columns: 1.3fr 1fr 1fr; grid-auto-rows: minmax(220px, auto); gap: 14px; text-align: left; }
+:where(.oq-root) .lp-bento > div { display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; padding: 26px; border-radius: 24px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); }
+:where(.oq-root) .lp-bento b.n { font: 800 clamp(40px, 4vw, 54px)/1 var(--oq-font-display); letter-spacing: -.05em; color: var(--oq-ink); font-variant-numeric: tabular-nums; }
+:where(.oq-root) .lp-bento b.n small { font-size: .45em; color: var(--oq-ink-2); margin-left: 4px; letter-spacing: -.02em; }
+:where(.oq-root) .lp-bento h3 { margin: 10px 0 0; font: 650 17px var(--oq-font); letter-spacing: -.01em; } :where(.oq-root) .lp-bento p { margin: 0; font-size: 14.5px; line-height: 1.45; color: var(--oq-ink-2); }
+:where(.oq-root) .lp-bento > .big { grid-row: span 2; justify-content: space-between; background: radial-gradient(120% 90% at 100% 100%, color-mix(in srgb, var(--lp-c) 22%, var(--oq-surface-1)), var(--oq-surface-1) 70%); box-shadow: 0 0 0 1px color-mix(in srgb, var(--lp-c) 35%, var(--oq-line)); }
+:where(.oq-root) .lp-bento > .big b.n { font-size: clamp(76px, 9vw, 128px); color: var(--lp-c); letter-spacing: -.06em; }
+:where(.oq-root) .lp-bento > .big p { font-size: 17px; color: var(--oq-ink); max-width: 22em; }
+:where(.oq-root) .lp-src { margin: 14px 0 0; font: 12px var(--oq-font-mono); color: var(--oq-ink-2); text-align: center; } :where(.oq-root) .lp-src::before { content: "↳ "; }
+
+/* 5 · quote: the words as said, then who said it (name, why they matter, where they said it, linked) */
+:where(.oq-root) .lp-quote { max-width: 980px; margin: 0 auto; padding: 48px 52px; border-radius: 30px; text-align: left; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); }
+:where(.oq-root) .lp-quote blockquote { margin: 0; font: italic 500 clamp(22px, 2.5vw, 33px)/1.32 var(--oq-font-display); letter-spacing: -.025em; text-wrap: pretty; }
+:where(.oq-root) .lp-quote figcaption { margin-top: 26px; display: grid; gap: 4px; font-size: 15px; color: var(--oq-ink-2); }
+:where(.oq-root) .lp-quote figcaption b { color: var(--oq-ink); font-size: 17px; font-weight: 650; } :where(.oq-root) .lp-quote figcaption a { color: inherit; text-underline-offset: 3px; }
+
+/* 6 · roadmap: Now · Next · Beyond in three columns; .beyond is tinted and says it isn't built */
+:where(.oq-root) .lp-road { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; text-align: left; }
+:where(.oq-root) .lp-road > div { display: flex; flex-direction: column; padding: 28px; border-radius: 26px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); }
+:where(.oq-root) .lp-road > div > :first-child { align-self: flex-start; } /* the status badge keeps its own width */
+:where(.oq-root) .lp-road h3 { margin: 18px 0 0; font: 800 clamp(40px, 4.4vw, 60px)/.95 var(--oq-font-display); letter-spacing: -.05em; }
+:where(.oq-root) .lp-road .means { margin: 12px 0 0; padding-bottom: 20px; border-bottom: 1px solid var(--oq-line); font-size: 15.5px; color: var(--oq-ink-2); }
+:where(.oq-root) .lp-road ul { margin: 0; padding: 0; list-style: none; display: grid; }
+:where(.oq-root) .lp-road li { padding: 16px 0; border-bottom: 1px solid var(--oq-line-2); display: grid; gap: 3px; } :where(.oq-root) .lp-road li:last-child { border-bottom: 0; padding-bottom: 0; }
+:where(.oq-root) .lp-road li b { font: 650 16.5px/1.3 var(--oq-font); letter-spacing: -.015em; } :where(.oq-root) .lp-road li span { font-size: 14.5px; line-height: 1.45; color: var(--oq-ink-2); }
+:where(.oq-root) .lp-road .beyond { background: radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--lp-c) 14%, var(--oq-surface-1)), var(--oq-surface-1) 70%); box-shadow: 0 0 0 1px color-mix(in srgb, var(--lp-c) 30%, var(--oq-line)); }
+:where(.oq-root) .lp-road .beyond h3, :where(.oq-root) .lp-road .beyond li .k { color: var(--lp-c); }
+:where(.oq-root) .lp-road .beyond li .k { font: 600 11px var(--oq-font-mono); letter-spacing: .1em; text-transform: uppercase; }
+
+/* 7 · under the hood: the product on top, the parts it's made of below (each its own product, linked out),
+   the platform dashed at the base; a sister product beside the stack (.lp-also). Each layer sets its own --lp-c. */
+:where(.oq-root) .lp-stack { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 14px; text-align: left; }
+:where(.oq-root) .lp-layers { display: grid; gap: 8px; }
+:where(.oq-root) .lp-layer { position: relative; display: grid; grid-template-columns: 44px minmax(0, 190px) minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 20px 22px; border-radius: 20px; background: var(--oq-surface-1); box-shadow: 0 0 0 1px var(--oq-line); color: inherit; text-decoration: none; overflow: hidden; transition: transform var(--oq-spring-dur) var(--oq-spring), box-shadow .2s; }
+:where(.oq-root) .lp-layer::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--lp-c); }
+:where(.oq-root) a.lp-layer:hover { transform: translateX(4px); box-shadow: 0 0 0 1px color-mix(in srgb, var(--lp-c) 60%, var(--oq-line)), var(--oq-shadow-2); }
+:where(.oq-root) .lp-layer .nm { display: grid; gap: 2px; } :where(.oq-root) .lp-layer .nm b { font: 750 19px var(--oq-font-display); letter-spacing: -.03em; }
+:where(.oq-root) .lp-layer .nm span { font: 500 11px var(--oq-font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--lp-c); }
+:where(.oq-root) .lp-layer p { margin: 0; font-size: 14.5px; line-height: 1.45; color: var(--oq-ink-2); } :where(.oq-root) .lp-layer p b { color: var(--oq-ink); font-weight: 600; }
+:where(.oq-root) .lp-layer .go { font: 500 13.5px var(--oq-font); white-space: nowrap; } :where(.oq-root) .lp-layer .go::after { content: " ↗"; color: var(--lp-c); }
+:where(.oq-root) .lp-layer.top { background: radial-gradient(120% 140% at 0% 50%, color-mix(in srgb, var(--lp-c) 12%, var(--oq-surface-1)), var(--oq-surface-1) 60%); }
+:where(.oq-root) .lp-layer.base { grid-template-columns: 44px minmax(0, 1fr); background: transparent; box-shadow: none; border: 1px dashed var(--oq-line); } :where(.oq-root) .lp-layer.base::before { display: none; }
+:where(.oq-root) .lp-also { display: flex; flex-direction: column; gap: 10px; padding: 28px; border-radius: 26px; color: inherit; text-decoration: none; background: radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--lp-c) 14%, var(--oq-surface-1)), var(--oq-surface-1) 70%); box-shadow: 0 0 0 1px color-mix(in srgb, var(--lp-c) 30%, var(--oq-line)); transition: transform var(--oq-spring-dur) var(--oq-spring); }
+:where(.oq-root) .lp-also:hover { transform: translateY(-3px); }
+:where(.oq-root) .lp-also .role { font: 500 11.5px var(--oq-font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--lp-c); }
+:where(.oq-root) .lp-also h3 { margin: 0; font: 750 26px var(--oq-font-display); letter-spacing: -.03em; } :where(.oq-root) .lp-also p { margin: 0; color: var(--oq-ink-2); font-size: 15px; } :where(.oq-root) .lp-also p:last-of-type { flex: 1; }
+:where(.oq-root) .lp-also .go { font: 600 14px var(--oq-font); color: var(--lp-c); } :where(.oq-root) .lp-also .go::after { content: " ↗"; }
+
+/* narrow: rows stack, the drawing goes under the words, the bento goes to two columns, the roadmap and stack to one */
+@container (max-width: 1100px) {
+  :where(.oq-root) .lp-feat { grid-template-columns: minmax(0, 1fr); gap: 30px; } :where(.oq-root) .lp-feat.flip > :first-child { order: 0; }
+  :where(.oq-root) .lp-road, :where(.oq-root) .lp-stack { grid-template-columns: minmax(0, 1fr); }
+  :where(.oq-root) .lp-bento { grid-template-columns: 1fr 1fr; } :where(.oq-root) .lp-bento > .big { grid-column: span 2; grid-row: auto; min-height: 300px; }
+}
+@container (max-width: 700px) {
+  :where(.oq-root) .lp-quote { padding: 26px 22px; border-radius: 24px; } :where(.oq-root) .lp-road > div { padding: 22px 20px; }
+  :where(.oq-root) .lp-layer { grid-template-columns: 36px minmax(0, 1fr); gap: 6px 14px; padding: 18px; } :where(.oq-root) .lp-layer p, :where(.oq-root) .lp-layer .go { grid-column: 2; }
+  :where(.oq-root) .lp-bento { grid-template-columns: minmax(0, 1fr); } :where(.oq-root) .lp-bento > .big { grid-column: auto; }
+}

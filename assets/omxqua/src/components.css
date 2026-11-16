@@ -132,13 +132,46 @@
 }
 /* ---- Nav islands are frosted glass (2026-10-21): the page shows through as it scrolls under. Only the nav pill and tab bar;
    cards, menus, sheets and the Beacon stay opaque. Solid again when the browser can't blur or the person asks for less transparency. ---- */
-:where(.oq-root) :is(.topnav, .tabbar) { background: color-mix(in srgb, var(--oq-surface-2) var(--oq-glass-mix), transparent) !important;
+:where(.oq-root) :is(.topnav, .tabbar, .oq-sections) { background: color-mix(in srgb, var(--oq-surface-2) var(--oq-glass-mix), transparent) !important;
   -webkit-backdrop-filter: var(--oq-glass-blur); backdrop-filter: var(--oq-glass-blur);
   box-shadow: inset 0 0 0 1px rgb(var(--oq-state) / .09), 0 8px 28px rgba(0,0,0,.14) !important; }
 .oq-root.oq-scrolled .brand-isl { background: color-mix(in srgb, var(--oq-surface-2) var(--oq-glass-mix), transparent);
   -webkit-backdrop-filter: var(--oq-glass-blur); backdrop-filter: var(--oq-glass-blur); box-shadow: inset 0 0 0 1px rgb(var(--oq-state) / .09), 0 8px 28px rgba(0,0,0,.14); }
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { :where(.oq-root) :is(.topnav, .tabbar), .oq-root.oq-scrolled .brand-isl { background: var(--oq-surface-2) !important; } }
-@media (prefers-reduced-transparency: reduce) { :where(.oq-root) :is(.topnav, .tabbar), .oq-root.oq-scrolled .brand-isl { background: var(--oq-surface-2) !important; -webkit-backdrop-filter: none; backdrop-filter: none; } }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { :where(.oq-root) :is(.topnav, .tabbar, .oq-sections), .oq-root.oq-scrolled .brand-isl { background: var(--oq-surface-2) !important; } }
+@media (prefers-reduced-transparency: reduce) { :where(.oq-root) :is(.topnav, .tabbar, .oq-sections), .oq-root.oq-scrolled .brand-isl { background: var(--oq-surface-2) !important; -webkit-backdrop-filter: none; backdrop-filter: none; } }
+/* ---- Restrained glass (2026-11-15): a frosted card, only over a sky. Never glass on glass; a card holding reading text is
+   near-opaque (.prose); text stays 4.5:1 (tests/contrast.test.cjs). Off a sky, .oq-glass is an ordinary opaque card. ---- */
+.oq-root.oq-sky, :where(.oq-root) .oq-sky { background: linear-gradient(180deg, var(--oq-sky-1), var(--oq-sky-2) 55%, var(--oq-sky-3)); }
+:where(.oq-root) .oq-glass { background: var(--oq-surface-1); border-radius: var(--oq-radius-card); box-shadow: inset 0 0 0 1px var(--oq-line), var(--oq-shadow-2); }
+.oq-root.oq-sky .oq-glass, .oq-root .oq-sky .oq-glass { background: color-mix(in srgb, var(--oq-surface-1) var(--oq-glass-card-mix), transparent); outline: 0; /* root-level: frosted wins over a skin's card */
+  -webkit-backdrop-filter: var(--oq-glass-card-blur); backdrop-filter: var(--oq-glass-card-blur); box-shadow: inset 0 0 0 1px var(--oq-glass-line), var(--oq-shadow-2); }
+.oq-root.oq-sky .oq-glass.prose, .oq-root .oq-sky .oq-glass.prose { background: color-mix(in srgb, var(--oq-surface-1) var(--oq-glass-prose-mix), transparent); }
+.oq-root :is(.oq-glass, .oq-sections) .oq-glass, .oq-root :is(.oq-glass, .oq-sections) .oq-glass.prose { background: var(--oq-surface-2); -webkit-backdrop-filter: none; backdrop-filter: none; } /* never glass on glass */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .oq-root .oq-glass { background: var(--oq-surface-1) !important; } }
+@media (prefers-reduced-transparency: reduce) { .oq-root .oq-glass { background: var(--oq-surface-1) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } }
+/* ---- Sections pill (2026-11-15): 2 to 4 main places, the current one aria-current in the accent. Centred at the top on a laptop,
+   floating at the foot of a phone. The avatar (.oq-account) sits top right and opens the account menu (omxqua.js, data-oq-menu). ---- */
+:where(.oq-root) .oq-sections { display: flex; position: fixed; z-index: 30; top: 14px; left: 50%; transform: translateX(-50%); gap: 2px; padding: 5px; border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--oq-glass-line), var(--oq-shadow-2); } /* its glass and fallbacks: the nav-island rules above */
+:where(.oq-root) .oq-sections :is(a, button) { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: max(40px, var(--oq-target)); padding: 0 18px; border: 0; border-radius: 999px;
+  background: none; color: var(--oq-ink); font: 600 14px var(--oq-font); text-decoration: none; white-space: nowrap; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color .2s, color .2s; }
+:where(.oq-root) .oq-sections :is(a, button):hover { background: rgb(var(--oq-state) / .08); }
+:where(.oq-root) .oq-sections [aria-current]:not([aria-current="false"]) { background: var(--oq-accent); color: var(--oq-on-accent); box-shadow: var(--oq-shadow-1); }
+:where(.oq-root) .oq-account { position: fixed; z-index: 36; top: 14px; right: 16px; }
+:where(.oq-root) .oq-account > button { display: grid; place-items: center; width: max(44px, var(--oq-target)); height: max(44px, var(--oq-target)); padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+:where(.oq-root) .oq-account > button .avatar { width: 36px; height: 36px; font-size: 13px; box-shadow: var(--oq-shadow-1); }
+:where(.oq-root) .oq-account .menu { top: calc(100% + 6px); right: 0; left: auto; }
+.oq-top:has(.oq-account) .beacon { right: 76px; }
+@container (max-width: 640px) {
+  :where(.oq-root) .oq-sections { top: auto; bottom: max(14px, calc(env(safe-area-inset-bottom) + 8px)); left: 0; right: 0; margin: 0 auto; width: fit-content; max-width: calc(100% - 24px); box-sizing: border-box; transform: none; }
+  :where(.oq-root) .oq-sections :is(a, button) { min-height: 48px; min-width: 48px; padding: 0 16px; flex: 0 1 auto; font-size: 15px; }
+  .oq-root:has(.oq-sections) .main { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  :where(.oq-root) .oq-account { top: 8px; right: 10px; }
+  :where(.oq-root) .oq-account > button { width: 48px; height: 48px; }
+  /* the account menu stays under the avatar on a phone and grows out of it (not the bottom action sheet) */
+  :where(.oq-root) .oq-account .menu { position: absolute; top: calc(100% + 6px) !important; left: auto !important; right: 0; bottom: auto; min-width: min(240px, calc(100cqw - 20px)); border-radius: var(--oq-radius-menu); }
+  :where(.oq-root) .oq-account .menu .mi { min-height: 48px; }
+}
 :where(.oq-root) .topnav .tb-thumb { position: absolute; top: 5px; bottom: 5px; border-radius: 999px; background: var(--oq-accent); box-shadow: var(--oq-shadow-1); transition: left var(--oq-spring-fast-dur) var(--oq-spring-fast), width var(--oq-spring-fast-dur) var(--oq-spring-fast); }
 :where(.oq-root) .topnav button { position: relative; z-index: 1; flex: none; border: 0; background: none; display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 15px; border-radius: 999px; font-size: 13.5px; font-weight: 600; color: var(--oq-ink-2); transition: color .2s, transform var(--oq-spring-fast-dur) var(--oq-spring-fast), opacity .25s; }
 :where(.oq-root) .topnav button:hover { color: var(--oq-ink); }
@@ -183,7 +216,15 @@
 .oq-root button { font: inherit; color: inherit; cursor: pointer; }
 .oq-root { -webkit-tap-highlight-color: transparent; } /* iOS grey tap flash off: our squash and state tint are the feedback */
 .oq-root :is(button, a, [data-press]) { touch-action: manipulation; } /* no double-tap zoom delay */
+/* Focus ring: the accent, 2 px, 2 px clear of the part, keyboard only (:focus-visible). Follows the part's own radius. */
+:where(.oq-root) :is(button, a, [tabindex]:not([tabindex="-1"]), input[type="range"], summary):focus-visible { outline: 2px solid var(--oq-accent); outline-offset: 2px; }
+:where(.oq-root) :is(.menu .mi, .tbl tr):focus-visible { outline-offset: -2px; } /* inside a container: drawn inside, never clipped */
+:where(.oq-root) .beacon :focus-visible { outline-color: var(--oq-beacon-accent); } /* the Beacon is near-black in both themes */
 :where(.oq-root) .mono { font-family: var(--oq-font-mono); }
+/* type: headings balance their lines, prose avoids a lone last word, numbers that change never shift sideways */
+:where(.oq-root) :is(h1, h2, h3, h4, .empty b) { text-wrap: balance; }
+:where(.oq-root) :is(p, .sub, .mf-help, .empty) { text-wrap: pretty; }
+:where(.oq-root) :is(.stats b, .delta, .badge, .beacon .big, .beacon .mono, kbd) { font-variant-numeric: tabular-nums; }
 :where(.oq-root) .ink2 { color: var(--oq-ink-2); }
 :where(.oq-root) .ico { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 .oq-family-kids .ico { width: 18px; height: 18px; stroke-width: 2; }
@@ -242,8 +283,8 @@
 :where(.oq-root) .check.on { background: var(--oq-accent); box-shadow: none; }
 :where(.oq-root) .check.on::after { content: ""; width: 9px; height: 5px; border-left: 2px solid var(--oq-on-accent); border-bottom: 2px solid var(--oq-on-accent); transform: rotate(-45deg) translate(1px,-1px); }
 :where(.oq-root) .radio { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--oq-ink-2); display: inline-grid; place-items: center; border: 0; background: none; padding: 0; flex: none; transition: transform var(--oq-spring-fast-dur) var(--oq-spring-fast); }
-:where(.oq-root) .radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--oq-accent); transform: scale(0); transition: transform var(--oq-spring-fast-dur) var(--oq-spring-fast); }
-:where(.oq-root) .radio.on { box-shadow: inset 0 0 0 1.5px var(--oq-accent); } :where(.oq-root) .radio.on::after { transform: scale(1); }
+:where(.oq-root) .radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--oq-accent); opacity: 0; transform: scale(.5); transition: transform var(--oq-spring-fast-dur) var(--oq-spring-fast), opacity .12s; } /* never from scale(0) */
+:where(.oq-root) .radio.on { box-shadow: inset 0 0 0 1.5px var(--oq-accent); } :where(.oq-root) .radio.on::after { opacity: 1; transform: scale(1); }
 :where(.oq-root) .row-ctl { display: flex; align-items: center; gap: 10px; font-size: .92em; }
 :where(.oq-root) .seg2 { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--oq-surface-0); box-shadow: inset 0 0 0 1px var(--oq-line); position: relative; }
 :where(.oq-root) .seg2 button { border: 0; background: none; height: calc(var(--oq-target) - 8px); padding: 0 14px; border-radius: 999px; font-size: .9em; font-weight: 500; color: var(--oq-ink-2); position: relative; z-index: 1; transition: color .2s; }
@@ -252,7 +293,8 @@
 :where(.oq-root) .slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: linear-gradient(var(--oq-accent), var(--oq-accent)) 0/var(--v, 40%) 100% no-repeat, var(--oq-line); }
 :where(.oq-root) .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--oq-surface-2); box-shadow: var(--oq-shadow-2), 0 0 0 1px var(--oq-line); transition: transform var(--oq-spring-fast-dur) var(--oq-spring-fast); }
 :where(.oq-root) .slider:active::-webkit-slider-thumb { transform: scale(1.15); }
-:where(.oq-root) .slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--oq-surface-2); border: 0; box-shadow: var(--oq-shadow-2); }
+:where(.oq-root) .slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--oq-surface-2); border: 0; box-shadow: var(--oq-shadow-2); transition: transform var(--oq-spring-fast-dur) var(--oq-spring-fast); }
+:where(.oq-root) .slider:active::-moz-range-thumb { transform: scale(1.15); } /* Firefox grows too */
 /* tabs */
 :where(.oq-root) .tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--oq-line); position: relative; }
 :where(.oq-root) .tabs button { border: 0; background: none; padding: 10px 12px; font-size: .92em; font-weight: 500; color: var(--oq-ink-2); }
@@ -291,7 +333,7 @@
 :where(.oq-root) .skel { height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--oq-line-2), var(--oq-line), var(--oq-line-2)); background-size: 200% 100%; animation: skel 1.6s linear infinite; }
 @keyframes skel { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 /* overlays */
-:where(.oq-root) .menu { position: absolute; z-index: 40; background: var(--oq-surface-2); border-radius: var(--oq-radius-menu); box-shadow: var(--oq-shadow-3); padding: 6px; min-width: 220px; }
+:where(.oq-root) .menu { position: absolute; z-index: 40; overscroll-behavior: contain; background: var(--oq-surface-2); border-radius: var(--oq-radius-menu); box-shadow: var(--oq-shadow-3); padding: 6px; min-width: 220px; }
 :where(.oq-root) .menu[hidden] { display: none; }
 :where(.oq-root) .menu .mi { display: flex; align-items: center; gap: 10px; width: 100%; border: 0; background: none; text-align: left; padding: 8px 10px; border-radius: 8px; font-size: .93em; }
 :where(.oq-root) .menu .mi:hover { background: rgb(var(--oq-state) / .08); }
@@ -303,13 +345,13 @@
 :where(.oq-root) .tip kbd { font: 11px var(--oq-font-mono); opacity: .7; margin-left: 6px; }
 :where(.oq-root) .toast { position: absolute; z-index: 50; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--oq-surface-3); box-shadow: var(--oq-shadow-3); border-radius: 12px; padding: 10px 10px 10px 14px; display: flex; gap: 12px; align-items: center; font-size: .92em; white-space: nowrap; }
 :where(.oq-root) .toast[hidden] { display: none; }
-:where(.oq-root) .scrim { position: absolute; inset: 0; z-index: 60; background: rgba(0,0,0,.42); display: grid; place-items: center; }
+:where(.oq-root) .scrim { position: absolute; inset: 0; z-index: 60; overscroll-behavior: contain; background: rgba(0,0,0,.42); display: grid; place-items: center; }
 :where(.oq-root) .scrim[hidden] { display: none; }
 :where(.oq-root) .dialog { box-sizing: border-box; width: min(420px, calc(100% - 32px)); background: var(--oq-surface-3); border-radius: calc(var(--oq-radius-card) + 4px); box-shadow: var(--oq-shadow-3); padding: 20px; }
 :where(.oq-root) .dialog h3 { margin: 0 0 6px; font-size: 1.15em; }
 :where(.oq-root) .dialog p { margin: 0 0 18px; color: var(--oq-ink-2); line-height: 1.5; }
 :where(.oq-root) .dialog .acts { display: flex; justify-content: flex-end; gap: 8px; }
-:where(.oq-root) .sheet { position: absolute; z-index: 61; left: 0; right: 0; bottom: 0; background: var(--oq-surface-1); border-radius: 26px 26px 0 0; box-shadow: var(--oq-shadow-3); padding: 10px 20px 24px; }
+:where(.oq-root) .sheet { position: absolute; z-index: 61; overscroll-behavior: contain; left: 0; right: 0; bottom: 0; background: var(--oq-surface-1); border-radius: 26px 26px 0 0; box-shadow: var(--oq-shadow-3); padding: 10px 20px 24px; }
 :where(.oq-root) .sheet[hidden] { display: none; }
 :where(.oq-root) .grab { width: 38px; height: 5px; border-radius: 3px; background: var(--oq-line); margin: 0 auto 14px; }
 :where(.oq-root) .empty { text-align: center; padding: 26px 16px; color: var(--oq-ink-2); }
@@ -402,3 +444,10 @@
 :where(.oq-root) .oq-flat .btn.fill, :where(.oq-root) .oq-flat .btn.tonal { box-shadow: none; }
 :where(.oq-root) .oq-flat .btn.fill:hover { box-shadow: none; transform: none; }
 :where(.oq-root) .oq-flat .btn.tonal { background: rgb(var(--oq-state) / .06); }
+
+/* Reading mode prose (.oq-read, tokens.css): serif headings at a calm weight, body at a reading measure. */
+:where(.oq-read) { font-family: var(--oq-font); font-size: var(--oq-text); line-height: 1.6; }
+:where(.oq-read) :is(h1, h2, h3) { font-family: var(--oq-font-display); font-weight: 500; letter-spacing: -.01em; line-height: 1.15; text-wrap: balance; }
+:where(.oq-read) p { max-width: 68ch; text-wrap: pretty; }
+:where(.oq-read) .oq-big { font: 400 clamp(96px, 17vw, 196px)/.85 var(--oq-font-display); letter-spacing: -.04em; font-variant-numeric: lining-nums; }
+:where(.oq-read) blockquote { font: italic 400 1.35em/1.4 var(--oq-font-display); margin: 0; }

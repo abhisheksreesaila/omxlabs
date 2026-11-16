@@ -1,15 +1,17 @@
-/* omxqua · omxqua.js (no dependencies, ~4 KB)
+/* omxqua · omxqua.js (no dependencies, ~7.5 KB gzipped)
    1. Press: every tappable thing squashes on pointer-down and springs back on release.
       The amount follows the size, so it feels the same everywhere: small 0.90 · medium 0.96 · large 0.985.
       An element (or its skin) can set --oq-press: ledge to sink 4 px instead (the Kids Sticker skin).
    2. Logo: .mark writes itself on press (its letters or icon are drawn as a stroke, then filled).
    3. Helpers on window.Omxqua for the moving parts: segmented thumbs, gentle menus, toasts,
-      the Beacon morph and the Top nav pill (see AGENTS.md).
+      the Beacon morph, the Top nav pill, and the landing drawings and line wave (see AGENTS.md).
+   4. Menus from a button (the avatar's, data-oq-menu): open, close, keys, focus; grow from the button on a phone.
    Opt out with data-nopress. Respects prefers-reduced-motion. */
 (() => {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const PRESS = "button, a.cta, a.more, [data-press], .tile, .blk, .day, .row, .row-demo, .chip, .nav, .mark, .brand-isl, .brand";
+  const PRESS = "button, a.cta, a.more, .oq-sections a, [data-press], .tile, .blk, .day, .row, .row-demo, .chip, .nav, .mark, .brand-isl, .brand";
   const spring = el => getComputedStyle(el).getPropertyValue("--oq-spring-fast").trim() || "cubic-bezier(.2,.9,.3,1.15)";
+  const springMs = el => parseFloat(getComputedStyle(el).getPropertyValue("--oq-spring-fast-dur")) || 320;
   const amount = el => { const w = el.getBoundingClientRect().width; return w <= 48 ? 0.9 : w <= 260 ? 0.96 : 0.985; };
 
   addEventListener("pointerdown", e => {
@@ -22,7 +24,7 @@
     const a = el.animate([rest, down], { duration: 110, easing: "ease-out", fill: "forwards" }); a.id = "oq-press";
     const up = () => {
       removeEventListener("pointerup", up); removeEventListener("pointercancel", up);
-      const b = el.animate([down, rest], { duration: 320, easing: spring(el) }); b.id = "oq-press"; a.cancel();
+      const b = el.animate([down, rest], { duration: springMs(el), easing: spring(el) }); b.id = "oq-press"; a.cancel();
     };
     addEventListener("pointerup", up); addEventListener("pointercancel", up);
     if (el.matches(".mark, .brand, .brand-isl")) writeLogo(el.matches(".mark") ? el : el.querySelector(".mark"));
@@ -135,13 +137,23 @@
   }
   /* Settle tier: a panel or view arrives (fade + 12px rise, 280 ms, decelerating). */
   function settle(el) { if (!reduce) el.animate([{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }], { duration: 280, easing: "cubic-bezier(.2,0,0,1)" }); }
-  /* Gentle tier: menus, popovers, tooltips ease in over 220 ms and fade out in 150 ms (then [hidden]). */
-  function gentleIn(el) { el.hidden = false; if (!reduce) el.animate([{ opacity: 0, transform: "translateY(-4px) scale(.97)" }, { opacity: 1, transform: "none" }], { duration: 220, easing: "cubic-bezier(.2,0,0,1)" }); }
+  /* Gentle tier: menus, popovers, tooltips ease in over 220 ms and fade out in 150 ms (then [hidden]).
+     Pass the trigger and the pop-up grows from it (transform-origin on the trigger's side), not from its own centre. */
+  function gentleIn(el, trigger) {
+    el.hidden = false; el.style.transformOrigin = ""; let dy = -4; /* drops in from above, or rises if it opened above its trigger */
+    if (trigger) { const t = trigger.getBoundingClientRect(), r = el.getBoundingClientRect(), below = t.top + t.height / 2 < r.top + r.height / 2;
+      el.style.transformOrigin = `${Math.max(0, Math.min(r.width, t.left + t.width / 2 - r.left))}px ${below ? 0 : r.height}px`; if (!below) dy = 4; }
+    if (!reduce) el.animate([{ opacity: 0, transform: `translateY(${dy}px) scale(.97)` }, { opacity: 1, transform: "none" }], { duration: 220, easing: "cubic-bezier(.2,0,0,1)" }); }
   function gentleOut(el) { if (el.hidden) return; if (reduce) { el.hidden = true; return; } el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: "cubic-bezier(.3,0,1,1)" }).onfinish = () => el.hidden = true; }
   /* Toast: shows msg in msgEl, rises in if it was hidden, fades out 2.6 s after the last call. */
   const toastTimers = new WeakMap();
   function toast(el, msg, msgEl = el.firstElementChild) {
-    msgEl.textContent = msg; clearTimeout(toastTimers.get(el));
+    /* read out, never stealing focus. A live region that appears already holding its text is often missed,
+       so the first time it becomes live the text lands a frame later (put role="status" in your markup to skip this). */
+    el._oqMsg = msg;
+    if (!el.hasAttribute("role")) { el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite"); msgEl.textContent = ""; requestAnimationFrame(() => msgEl.textContent = el._oqMsg); }
+    else msgEl.textContent = msg;
+    clearTimeout(toastTimers.get(el));
     if (el.hidden) { el.hidden = false; if (!reduce) el.animate([{ opacity: 0, transform: "translate(-50%, 8px)" }, { opacity: 1, transform: "translate(-50%, 0)" }], { duration: 220, easing: "cubic-bezier(.2,0,0,1)" }); }
     toastTimers.set(el, setTimeout(() => gentleOut(el), 2600));
   }
@@ -172,5 +184,90 @@
   function openTopnav(nav, on) { if (!nav) return; holdTopnav(nav); if (nav.classList.contains("open") === on) return; nav.classList.toggle("open", on); layoutTopnav(nav, true); }
   function foldTopnavLater(nav, ms = 3500) { if (!nav) return; holdTopnav(nav); navTimers.set(nav, setTimeout(() => openTopnav(nav, false), ms)); }
 
-  window.Omxqua = Object.assign(window.Omxqua || {}, { writeLogo, placeThumb, settle, gentleIn, gentleOut, toast, sizeBeacon, layoutTopnav, openTopnav, foldTopnavLater, holdTopnav });
+  /* Grow: on a phone (its .oq-root 640 px or narrower) the pop-up grows out of its trigger and folds back into it, clipped to the
+     trigger's rectangle and let out on --oq-spring (no overshoot); on a laptop it is a calm fade. Reduced motion: it just appears. */
+  const css = (el, n) => getComputedStyle(el).getPropertyValue(n).trim();
+  const ms = (el, n, d) => parseFloat(css(el, n)) || d;
+  const isPhone = el => { const r = el.closest(".oq-root"); return (r ? r.clientWidth : innerWidth) <= 640; };
+  function clipTo(el, src) { /* the trigger's rectangle as an inset() on el, in el's own px (frames may be scaled) */
+    const r = el.getBoundingClientRect(), s = src.getBoundingClientRect(), k = el.offsetWidth ? r.width / el.offsetWidth : 1, c = (v, m) => Math.max(0, Math.min(v, m - 1)) / k;
+    return `inset(${c(s.top - r.top, r.height)}px ${c(r.right - s.right, r.width)}px ${c(r.bottom - s.bottom, r.height)}px ${c(s.left - r.left, r.width)}px round ${s.height / 2 / k}px)`;
+  }
+  function grow(el, src, out) {
+    el.getAnimations().forEach(a => a.cancel());
+    if (!out) el.hidden = false;
+    const done = () => { if (out && el._oqOut) el.hidden = true; }; el._oqOut = out;
+    if (reduce || !el.animate) return done();
+    const phone = src && isPhone(el), r = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0, full = `inset(0px 0px 0px 0px round ${r}px)`;
+    const kf = phone ? [{ clipPath: clipTo(el, src), opacity: .4 }, { clipPath: full, opacity: 1 }] : [{ opacity: 0 }, { opacity: 1 }];
+    const a = el.animate(out ? kf.reverse() : kf, out ? { duration: ms(el, "--oq-gentle-out", 150), easing: css(el, "--oq-ease-out"), fill: "forwards" }
+      : phone ? { duration: ms(el, "--oq-spring-dur", 450), easing: css(el, "--oq-spring") } : { duration: ms(el, "--oq-gentle-in", 220), easing: css(el, "--oq-ease-in") });
+    a.onfinish = done;
+  }
+  /* Menus: <button data-oq-menu aria-haspopup="menu" aria-expanded="false" aria-controls="m"> opens <div class="menu" role="menu" id="m" hidden>
+     whose items are role="menuitem". Click toggles; ArrowDown or ArrowUp on the button opens it at the first or last item; inside,
+     the arrows move (and wrap), Home and End jump, Escape closes and puts focus back on the button; Tab, a pick or a tap outside closes. */
+  let menuOn = null;
+  const items = m => [...m.querySelectorAll('[role="menuitem"]:not([disabled])')];
+  function openMenu(b, last) {
+    const m = document.getElementById(b.getAttribute("aria-controls")); if (!m) return;
+    closeMenu(); menuOn = { m, b }; b.setAttribute("aria-expanded", "true"); grow(m, b);
+    const l = items(m), f = last ? l[l.length - 1] : l[0]; if (f) f.focus({ preventScroll: true });
+  }
+  function closeMenu(refocus) {
+    if (!menuOn) return; const { m, b } = menuOn; menuOn = null;
+    b.setAttribute("aria-expanded", "false"); grow(m, b, true); if (refocus) b.focus({ preventScroll: true });
+  }
+  addEventListener("click", e => {
+    const b = e.target.closest && e.target.closest("[data-oq-menu]");
+    if (b) { menuOn && menuOn.b === b ? closeMenu(true) : openMenu(b); return; }
+    if (menuOn && (!menuOn.m.contains(e.target) || e.target.closest('[role="menuitem"]'))) closeMenu(false);
+  });
+  addEventListener("keydown", e => {
+    const b = e.target.closest && e.target.closest("[data-oq-menu]");
+    if (b && !menuOn && (e.key === "ArrowDown" || e.key === "ArrowUp")) { e.preventDefault(); openMenu(b, e.key === "ArrowUp"); return; }
+    if (!menuOn) return;
+    const l = items(menuOn.m), i = l.indexOf(document.activeElement), go = j => { e.preventDefault(); if (l.length) l[(j + l.length) % l.length].focus(); };
+    if (e.key === "Escape") { e.preventDefault(); closeMenu(true); }
+    else if (e.key === "ArrowDown") go(i + 1);
+    else if (e.key === "ArrowUp") go(i < 0 ? -1 : i - 1);
+    else if (e.key === "Home") go(0);
+    else if (e.key === "End") go(-1);
+    else if (e.key === "Tab") closeMenu(false);
+  });
+
+  /* Landing (src/landing.css): playOnView gives every .lp-gfx a .play class while it's on screen, so its drawing moves only
+     then (never under reduced motion). lineWave draws a faint wave of lines on a canvas in its CSS color and --lp-c2,
+     drifting only while visible; under reduced motion it's drawn once, still. */
+  function playOnView(root = document) {
+    if (reduce) return;
+    const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("play", e.isIntersecting)), { threshold: .35 });
+    root.querySelectorAll(".lp-gfx").forEach(g => io.observe(g));
+  }
+  function lineWave(cv, lines = 34) {
+    if (!cv) return;
+    const c = cv.getContext("2d"), cs = getComputedStyle(cv), c1 = cs.color, c2 = cs.getPropertyValue("--lp-c2").trim() || c1;
+    const draw = t => {
+      const w = cv.clientWidth, h = cv.clientHeight, dpr = Math.min(2, devicePixelRatio || 1);
+      if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+      c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h);
+      const g = c.createLinearGradient(0, 0, w, 0); g.addColorStop(0, c1); g.addColorStop(1, c2);
+      c.strokeStyle = g; c.globalAlpha = .5; c.lineWidth = 1;
+      for (let i = 0; i < lines; i++) {
+        const k = i / (lines - 1); c.beginPath();
+        for (let x = 0; x <= w + 8; x += 8) {
+          const u = x / w, env = Math.sin(u * Math.PI * 2.1 + t * .22 + k * 1.7);
+          const y = h * .55 + h * .2 * Math.sin(u * Math.PI * 2.6 + t * .3 + k * .8) * env + h * .05 * Math.sin(u * Math.PI * 6 - t * .18 + k * 2.2);
+          x ? c.lineTo(x, y) : c.moveTo(x, y);
+        }
+        c.stroke();
+      }
+    };
+    if (reduce) { draw(3); addEventListener("resize", () => draw(3)); return; }
+    let on = false, raf = 0;
+    const loop = ms => { draw(ms / 1000); raf = on ? requestAnimationFrame(loop) : 0; };
+    new IntersectionObserver(es => { on = es[0].isIntersecting; if (on && !raf) raf = requestAnimationFrame(loop); }).observe(cv);
+  }
+
+  window.Omxqua = Object.assign(window.Omxqua || {}, { writeLogo, placeThumb, settle, gentleIn, gentleOut, toast, sizeBeacon, layoutTopnav, openTopnav, foldTopnavLater, holdTopnav, playOnView, lineWave, grow, openMenu, closeMenu });
 })();

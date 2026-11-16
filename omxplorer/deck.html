@@ -3,319 +3,430 @@
 <head>
 <meta charset="utf-8"><link rel="icon" href="../assets/favicon-plorer.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>omxplorer · the slides</title>
-<meta name="description" content="omxplorer in nineteen slides: why, the sentence, how it's built, the code, the speed, agents, video as rows, linked evidence, and where it's going.">
+<meta name="description" content="omxplorer, the GPU-native workbench for robot learning data, in seventeen slides: robot search, one GPU process, every button an agent tool, models as plugins, everything it does today, what's under the hood, what comes next, and an honest comparison.">
 <link rel="stylesheet" href="../assets/omxqua/src/fonts.css"><link rel="stylesheet" href="../assets/omxqua/src/tokens.css">
 <link rel="stylesheet" href="../assets/omxqua/src/components.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
 <link rel="stylesheet" href="../assets/suite.css"><link rel="stylesheet" href="../assets/deck.css">
 <style>
-/* omxplorer's own: the sentence chart, whose bars move when a word changes */
-.chart { display: flex; align-items: flex-end; gap: 22px; height: 300px; margin-top: 30px; padding: 0 10px; border-bottom: 2px solid var(--oq-line); }
-.chart div { flex: 1; background: var(--oq-accent); border-radius: 10px 10px 0 0; position: relative; }
-.chart div span { position: absolute; bottom: -42px; left: 0; right: 0; text-align: center; font: 18px var(--mono); color: var(--oq-ink-2); }
-.chart div em { position: absolute; top: -34px; left: 0; right: 0; text-align: center; font: 600 19px var(--mono); color: var(--oq-ink); font-style: normal; }
-.reveal .say { font: 650 46px/1.45 var(--sans); color: var(--oq-ink); letter-spacing: -.02em; }
-.reveal .say u { text-decoration: none; color: var(--oq-accent); background: color-mix(in srgb, var(--oq-accent) 14%, transparent); border-radius: 10px; padding: 0 8px; }
-.reveal .say u.lit { background: var(--oq-accent); color: #000; }
-.tools { width: 100%; border-collapse: collapse; font-size: 24px; }
-.tools td { padding: 14px 18px; border-top: 1px solid var(--oq-line); color: var(--oq-ink-2); }
-.tools td:nth-child(2) { font-family: var(--mono); color: var(--oq-accent); }
-.tools tr:first-child td { border-top: 0; }
-.plat { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-top: 30px; }
-.plat .card { text-align: center; padding: 30px 16px; }
-.vflow { gap: 12px; }
-.vflow .box { justify-content: flex-start; padding: 20px 22px; }
-.vflow .arrow { width: 30px; }
-.plat .card b { display: block; font-size: 30px; margin: 12px 0 14px; }
+/* omxplorer's brand deck (2026-11-15): the robot search film first, then one idea a slide. Apple-style: show three
+   things, let the bento and the wiki carry the rest. omxqua v0.1.8: the bento slide is the one sky, its tiles glass. */
+.reveal .cold { position: relative; max-width: 1180px; margin: 0 auto; border-radius: 22px; overflow: hidden; box-shadow: 0 0 0 1px var(--oq-line), var(--oq-shadow-3); }
+.reveal .cold video { display: block; width: 100%; }
+.reveal .cap { font: 650 34px/1.25 var(--sans); color: var(--oq-ink); letter-spacing: -.02em; margin: 26px auto 0; max-width: 1180px; }
+.reveal .cap span { color: var(--oq-ink-2); font-weight: 500; }
+/* the problem: five places, an export between each */
+.five { display: flex; align-items: center; gap: 0; margin-top: 56px; }
+.five .box { flex: 1; flex-direction: column; align-items: flex-start; gap: 8px; font-size: 25px; min-height: 150px; justify-content: flex-start; }
+.five .box small { font-size: 16px; }
+.five .x { flex: none; width: 64px; position: relative; text-align: center; font: 500 13px var(--mono); color: var(--oq-warn); }
+.five .x::before { content: ""; display: block; height: 0; border-top: 2px dashed color-mix(in srgb, var(--oq-warn) 70%, transparent); margin: 0 6px 8px; }
+/* the one line */
+.three { display: flex; gap: 18px; margin-top: 44px; }
+.three span { font: 600 26px var(--mono); padding: 14px 24px; border-radius: 999px; color: var(--oq-accent); background: color-mix(in srgb, var(--oq-accent) 12%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--oq-accent) 40%, transparent); }
+/* today vs with omxplorer */
+.vs { width: 100%; border-collapse: collapse; font-size: 25px; margin-top: 10px; }
+.vs th { text-align: left; font: 600 16px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--oq-ink-2); padding: 0 18px 14px; }
+.vs th.me { color: var(--oq-accent); }
+.vs td { padding: 15px 18px; border-top: 1px solid var(--oq-line); color: var(--oq-ink-2); vertical-align: top; }
+.vs td:first-child { color: var(--oq-ink); font-weight: 600; width: 27%; }
+.vs td.me { color: var(--oq-ink); background: color-mix(in srgb, var(--oq-accent) 7%, transparent); }
+/* gpu native: three programs become one */
+.prog3 { display: flex; align-items: center; gap: 14px; margin-top: 50px; }
+.prog3 .box { flex: 1; flex-direction: column; align-items: flex-start; gap: 6px; min-height: 120px; justify-content: center; }
+.prog3 .cp { flex: none; font: 500 15px var(--mono); color: var(--oq-warn); text-align: center; width: 90px; }
+.prog3 .cp::before { content: "→"; display: block; font-size: 30px; color: var(--oq-warn); }
+.one { margin-top: 50px; padding: 30px; border-radius: 28px; border: 2px dashed color-mix(in srgb, var(--oq-accent) 55%, transparent); background: color-mix(in srgb, var(--oq-accent) 5%, transparent); }
+.one .lab { font: 600 17px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--oq-accent); margin-bottom: 18px; }
+.one .flow .box { min-height: 96px; }
+.nums3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+.nums3 .card b.n { display: block; font: 800 68px/1 var(--sans); letter-spacing: -.05em; color: var(--oq-accent); }
+.nums3 .card b.n small { font-size: 28px; color: var(--oq-ink-2); margin-left: 4px; }
+.nums3 .card p { font-size: 22px; margin-top: 10px; }
+/* agent native: the arm */
+.arm { display: grid; grid-template-columns: 1.25fr 1fr; gap: 34px; align-items: start; }
+.arm pre { font-size: 18px; padding: 16px 22px; } .reveal .arm pre code { line-height: 1.42; }
+#agent h2 { font-size: 54px; margin-bottom: 18px; }
+.arm .armside { display: grid; gap: 18px; }
+.arm .armside .card { padding: 22px 24px; }
+.arm .armside .card p { font-size: 22px; }
+.fake { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+.fake .t { font: 650 22px var(--sans); color: var(--oq-ink); }
+.fake button { all: unset; align-self: flex-start; padding: 10px 20px; border-radius: 999px; font: 600 19px var(--sans); background: var(--oq-surface-2); box-shadow: 0 0 0 1px var(--oq-line); color: var(--oq-ink); }
+.fake button.p { background: var(--oq-accent); color: #04120a; box-shadow: none; }
+.toolz { font: 18px/1.65 var(--mono); color: var(--oq-ink-2); margin-top: 10px; white-space: pre; }
+.toolz b { color: var(--oq-accent); font-weight: 600; }
+.reveal .small-note { font: 16px/1.5 var(--mono); color: var(--oq-ink-2); margin-top: 18px; }
+/* models: the stopwatch */
+.watch td.rt, .watch th.rt { text-align: right; font-family: var(--mono); }
+/* the bento slide: the deck's one sky, glass tiles */
+.reveal section.skyslide { position: relative; }
+.skyfill { position: absolute; inset: -60px -120px; border-radius: 40px; z-index: -1; }
+.bxd { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-top: 26px; }
+.bxd .card { padding: 14px 16px 16px; border-radius: 20px; }
+.bxd .card h3 { font-size: 22px; margin: 8px 0 4px; } .bxd .card p { font-size: 17px; line-height: 1.35; color: var(--oq-ink-2); }
+.bxd .big { grid-column: span 2; }
+.oq-root .oq-sky .bxd .big.oq-glass { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--oq-accent) 60%, transparent), var(--oq-shadow-2); }
+.bxd .big img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: 0 0; border-radius: 10px; }
+.bxd .mid { grid-column: span 2; }
+.bxd .sm { grid-column: span 1; padding: 12px 14px; }
+.bxd .sm h3 { font-size: 18px; margin: 0; color: color-mix(in srgb, var(--oq-ink) 80%, transparent); }
+.bxd .wiki { background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .25) !important; }
+.bxd .wiki h3 { color: var(--oq-accent); }
+/* under the hood: three facts */
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+.facts .card { display: flex; flex-direction: column; gap: 12px; min-height: 380px; }
+.facts .card .k { font: 600 15px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--oq-accent); }
+.facts .card b.n { font: 800 64px/1 var(--sans); letter-spacing: -.05em; color: var(--oq-ink); }
+.facts .card b.n small { font-size: 26px; color: var(--oq-ink-2); }
+.facts .card p { font-size: 22px; }
+.facts .card .src { margin-top: auto; font: 15px/1.5 var(--mono); color: var(--oq-ink-2); }
+.facts .card .src::before { content: "↳ "; opacity: .6; }
+/* what if: a real picture, the idea, and the proof it stands on */
+.wi { display: grid; grid-template-columns: 1.35fr 1fr; gap: 50px; align-items: center; }
+.wi .eyebrow { margin-bottom: 18px; }
+.wi h2 { font-size: 60px; }
+.wi .lede { font-size: 30px; }
+.wi .proof { display: inline-flex; gap: 12px; align-items: center; margin-top: 10px; padding: 12px 18px; border-radius: 16px; font: 500 18px/1.4 var(--mono); color: var(--oq-ink); background: color-mix(in srgb, var(--oq-accent) 9%, var(--oq-surface-1)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--oq-accent) 35%, transparent); }
+.wi .proof b { color: var(--oq-accent); }
+.wi .shot { position: relative; }
+.wi .shot .concept { position: absolute; top: 14px; right: 14px; font: 600 14px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 6px 12px; border-radius: 6px; background: var(--oq-warn); color: #1a1100; }
+.wi .shot .who { position: absolute; display: flex; align-items: center; gap: 8px; font: 600 16px var(--sans); color: #fff; padding: 6px 12px 6px 6px; border-radius: 999px; box-shadow: var(--oq-shadow-2); }
+.wi .shot .who i { width: 26px; height: 26px; border-radius: 50%; background: rgb(255 255 255 / .9); display: grid; place-items: center; font: 700 12px var(--sans); font-style: normal; color: #222; }
+/* the foundation and the rooms */
+.house { display: grid; gap: 12px; margin-top: 26px; }
+.rooms { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.rooms div { padding: 16px 14px; border-radius: 14px; font: 600 19px var(--sans); color: var(--oq-ink); text-align: center; }
+.rooms .b { background: color-mix(in srgb, var(--oq-accent) 16%, var(--oq-surface-1)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--oq-accent) 45%, transparent); }
+.rooms .n { border: 2px dashed color-mix(in srgb, var(--oq-warn) 60%, transparent); color: var(--oq-ink-2); }
+.rooms .y { border: 2px dashed var(--oq-line); color: var(--oq-ink-2); opacity: .8; }
+.slab { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.slab div { padding: 18px 22px; border-radius: 14px; background: var(--oq-surface-2); box-shadow: 0 0 0 1px var(--oq-line); font-size: 20px; }
+.slab div b { display: block; font-size: 26px; margin-bottom: 2px; }
+.ground { padding: 14px 22px; border-radius: 14px; border: 1px dashed var(--oq-line); font: 500 18px var(--mono); color: var(--oq-ink-2); text-align: center; }
+.legend { display: flex; gap: 26px; font: 500 17px var(--mono); color: var(--oq-ink-2); margin-top: 14px; }
+.legend i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; margin-right: 8px; vertical-align: -1px; }
+/* the honest chart */
+.cmp { width: 100%; border-collapse: collapse; font-size: 21px; }
+.cmp th { font: 600 16px var(--mono); letter-spacing: .06em; color: var(--oq-ink-2); padding: 0 10px 12px; text-align: center; }
+.cmp th:first-child { text-align: left; }
+.cmp th.me { color: var(--oq-accent); }
+.cmp td { padding: 9px 10px; border-top: 1px solid var(--oq-line); text-align: center; color: var(--oq-ink-2); font-size: 19px; }
+.cmp td:first-child { text-align: left; color: var(--oq-ink); font-size: 21px; }
+.cmp td.me { background: color-mix(in srgb, var(--oq-accent) 8%, transparent); color: var(--oq-ink); }
+.cmp .y { color: var(--oq-ok); font-weight: 700; } .cmp .p { color: var(--oq-warn); } .cmp .no { opacity: .5; }
+/* close */
+.ctas2 { display: flex; gap: 18px; margin-top: 40px; flex-wrap: wrap; }
+.ctas2 a { display: inline-flex; align-items: center; height: 64px; padding: 0 30px; border-radius: 999px; font: 650 26px var(--sans); text-decoration: none; background: var(--oq-surface-2); color: var(--oq-ink); box-shadow: 0 0 0 1px var(--oq-line); }
+.ctas2 a.f { background: var(--oq-accent); color: #04120a; box-shadow: none; }
 </style>
 </head>
 <body>
 <a class="dk-brand" href="./"><span class="mark"></span><span>omxlabs ›</span> omxplorer</a>
 <div class="reveal"><div class="slides">
 
-<!-- 1 · title -->
-<section>
-  <div class="eyebrow">omxplorer · by omxlabs · built in Mojo</div>
-  <h1>Ask your data <span class="ac">in a sentence.</span></h1>
-  <p class="lede fragment rise">A data workspace where a million rows answer in under a millisecond, on your own GPU, and every button is a tool an AI agent can call.</p>
-  <p class="note fragment rise">arrow keys, space or swipe · 18 slides, about two minutes</p>
+<!-- 1 · the cold open: robot search, a real recording -->
+<section id="cold-open">
+  <div class="cold"><video data-autoplay muted playsinline src="../assets/img/clip-search.mp4" poster="../assets/img/clip-search.jpg" aria-label="Robot search in omxplorer: show one clip, get every episode like it, pick three, export a LeRobot dataset"></video></div>
+  <p class="cap">Robot search in omxplorer. <span>Recorded live, on one GPU.</span></p>
+  <aside class="notes">Don't talk over the first half. Let the film run: the pool, one tap, the ranking, three picks, More like these, Export. Then: "That was one app, on one graphics card, and nothing in it was exported to another tool until the very end, when we asked for a LeRobot dataset."</aside>
 </section>
 
-<!-- 2 · why -->
-<section>
-  <div class="eyebrow">Why</div>
-  <h2>Data tools make you wait, <span class="two">and make agents guess.</span></h2>
-  <div class="cols r3" style="margin-top:40px">
-    <div class="card fragment rise"><span class="em">⏳</span><h3>You wait.</h3><p>Spreadsheets choke past a million rows. Warehouses answer in seconds and send a bill.</p></div>
-    <div class="card fragment rise"><span class="em">🖱️</span><h3>Agents squint.</h3><p>AI agents drive apps through screenshots and pixel coordinates. It's slow and it breaks.</p></div>
-    <div class="card fragment rise"><span class="em">💤</span><h3>Your GPU naps.</h3><p>Most workstations have one. Data apps leave it idle while the CPU struggles.</p></div>
+<!-- 2 · the problem -->
+<section id="problem">
+  <div class="eyebrow">The problem</div>
+  <h2>Robot learning runs on data. <span class="two">The data lives in five places.</span></h2>
+  <div class="five">
+    <div class="box fragment rise" data-fragment-index="0">Episodes<small>LeRobot folders</small></div><div class="x fragment" data-fragment-index="1">export</div>
+    <div class="box fragment rise" data-fragment-index="0">Bags<small>ROS 2 tools</small></div><div class="x fragment" data-fragment-index="1">export</div>
+    <div class="box fragment rise" data-fragment-index="0">Video<small>a player</small></div><div class="x fragment" data-fragment-index="1">export</div>
+    <div class="box fragment rise" data-fragment-index="0">Telemetry<small>a notebook</small></div><div class="x fragment" data-fragment-index="1">export</div>
+    <div class="box fragment rise" data-fragment-index="0">Models<small>another script</small></div>
   </div>
+  <p class="lede fragment rise" data-fragment-index="2" style="margin-top:46px">Every question is a copy, a script and a wait.</p>
+  <aside class="notes">The people training robots spend their days moving data between tools. The episodes are in one format, the bags in another, the video plays somewhere else, the sensors are in a notebook, and the model lives in its own script. Each hop is an export.</aside>
 </section>
 
-<!-- 3 · what it is -->
-<section>
-  <div class="eyebrow">What it is</div>
-  <div class="cols" style="grid-template-columns:1.5fr 1fr;align-items:center">
-    <div class="shot"><img src="../assets/img/readme-report.jpg" alt="omxplorer's Report over a million orders"></div>
-    <div>
-      <h2 style="font-size:54px">Numbers and Power BI, <span class="ac">on the GPU.</span></h2>
-      <p class="fragment rise">Sheets, pivots, charts and reports over your CSV and Parquet files.</p>
-      <p class="fragment rise">About 2,100 lines of Mojo, built from omxcode's components, run by omxcore.</p>
-      <p class="note fragment rise">a million orders, every tile recomputed in 0.3 ms · RTX 3090</p>
+<!-- 3 · the one line -->
+<section id="one-line">
+  <div class="eyebrow">omxlabs presents</div>
+  <h1>omxplorer.</h1>
+  <p class="lede">The GPU-native workbench <span class="ac">for robot learning data.</span></p>
+  <div class="three"><span class="fragment rise">GPU native</span><span class="fragment rise">agent native</span><span class="fragment rise">multimodal</span></div>
+  <aside class="notes">One app. It runs on your own graphics card, an AI agent can use every part of it, and it holds every kind of robot data side by side.</aside>
+</section>
+
+<!-- 4 · today vs with omxplorer -->
+<section id="today">
+  <div class="eyebrow">What changes</div>
+  <h2>Same questions. <span class="two">Fewer hops.</span></h2>
+  <table class="vs">
+    <tr><th></th><th>Usually</th><th class="me">In omxplorer</th></tr>
+    <tr class="fragment rise"><td>Find episodes like this one</td><td>Embed every clip, stand up a vector search</td><td class="me">Tap the clip</td></tr>
+    <tr class="fragment rise"><td>Open a ROS 2 bag</td><td>A bag viewer, then a converter for analysis</td><td class="me">Open it: topics become rows, cameras video</td></tr>
+    <tr class="fragment rise"><td>Video beside its sensors</td><td>Two tools, lined up by hand</td><td class="me">One cursor</td></tr>
+    <tr class="fragment rise"><td>Try a model</td><td>A Python environment and a script</td><td class="me">Paste its name; answers land as a column</td></tr>
+    <tr class="fragment rise"><td>Let an agent help</td><td>Screenshots, or an API someone wrote</td><td class="me">Every button is already a tool</td></tr>
+    <tr class="fragment rise"><td>Hand off a training set</td><td>A conversion script</td><td class="me">Export LeRobot v3</td></tr>
+  </table>
+  <aside class="notes">"Usually" is the common do-it-yourself path, not any one product. Other tools do some of these well; the comparison slide near the end is honest about who does what.</aside>
+</section>
+
+<!-- 5a · GPU native: today, three programs -->
+<section id="gpu" data-auto-animate>
+  <div class="eyebrow">01 · GPU native</div>
+  <h2>Usually, three programs <span class="two">and copies between them.</span></h2>
+  <div class="prog3">
+    <div class="box" data-id="dec">Decode<small>a video library</small></div><div class="cp" data-id="c1">copy</div>
+    <div class="box" data-id="srch">Search<small>a vector database</small></div><div class="cp" data-id="c2">copy</div>
+    <div class="box" data-id="scr">Screen<small>a viewer</small></div>
+  </div>
+  <aside class="notes">A frame is decoded in one program, copied to another to be searched, and copied again to be drawn.</aside>
+</section>
+
+<!-- 5b · GPU native: one process -->
+<section data-auto-animate>
+  <div class="eyebrow">01 · GPU native</div>
+  <h2>One process, <span class="ac">on one GPU.</span></h2>
+  <div class="one">
+    <div class="lab">one Mojo process · your graphics card</div>
+    <div class="flow">
+      <div class="box hot" data-id="dec">Decode<small>NVDEC, on the card</small></div><div class="arrow"></div>
+      <div class="box hot" data-id="srch">Search<small>on the card</small></div><div class="arrow"></div>
+      <div class="box hot" data-id="mdl">Models<small>plugins, in process</small></div><div class="arrow"></div>
+      <div class="box hot" data-id="scr">Screen<small>drawn by the same program</small></div>
     </div>
   </div>
+  <div class="nums3">
+    <div class="card fragment rise"><b class="n">0.10<small>ms</small></b><p>a search by example, warm, over 1,851 episodes</p></div>
+    <div class="card fragment rise"><b class="n">537<small>ms</small></b><p>24 clips decoded on the GPU, cold, ready as posters</p></div>
+    <div class="card fragment rise"><b class="n">0.6<small>ms</small></b><p>a chart over a million rows, redrawn</p></div>
+  </div>
+  <p class="note">RTX 3090, Linux · omxcode docs/goals/71-report.md (M1, M2) · README (chart)</p>
+  <aside class="notes">Here it's one program. The frames are decoded on the card, searched on the card, read by models in the same process, and drawn by the same program. Nothing is exported. These are small-collection numbers, 1,851 episodes; they're real, and the scale tests are ahead.</aside>
 </section>
 
-<!-- 4 · the sentence: Sum -->
-<section data-auto-animate>
-  <div class="eyebrow">The big idea</div>
-  <h2 data-id="h">The title <span class="ac">is</span> the chart.</h2>
-  <p class="say" data-id="say"><u>Sum</u> of <u>revenue</u> by <u>product</u>, <u>largest first</u>, as <u>bars</u></p>
-  <div class="chart" data-id="chart">
-    <div data-id="b1" style="height:92%"><em>41.2M</em><span>Laptop</span></div><div data-id="b2" style="height:74%"><em>33.0M</em><span>Phone</span></div>
-    <div data-id="b3" style="height:51%"><em>22.8M</em><span>Monitor</span></div><div data-id="b4" style="height:30%"><em>13.4M</em><span>Tablet</span></div><div data-id="b5" style="height:8%"><em>3.6M</em><span>Cable</span></div>
-  </div>
-  <aside class="notes">Illustrative bars; the real app recomputes from the data on every word.</aside>
-</section>
+<!-- 6 · agent native: the robot arm -->
+<section id="agent">
+  <div class="eyebrow">02 · Agent native</div>
+  <h2>The human gets a button. <span class="two">The agent gets a tool.</span></h2>
+  <div class="arm">
+    <div>
+      <div class="file">panel.mojo · an example written for this slide</div>
+<pre><code class="language-python" data-trim data-noescape data-line-numbers="|17-19|9-13|17-18">
+from mojoui import App, Event, View, VStack, Text, Button
+from robot import Arm          # your robot's driver
 
-<!-- 5 · the sentence: Median -->
-<section data-auto-animate>
-  <div class="eyebrow">Tap a word. Or type it.</div>
-  <h2 data-id="h">Tap <span class="ac">Sum</span>, pick Median.</h2>
-  <p class="say" data-id="say"><u class="lit">Median</u> of <u>revenue</u> by <u>product</u>, <u>largest first</u>, as <u>bars</u></p>
-  <div class="chart" data-id="chart">
-    <div data-id="b1" style="height:58%"><em>1,240</em><span>Laptop</span></div><div data-id="b2" style="height:44%"><em>940</em><span>Monitor</span></div>
-    <div data-id="b3" style="height:36%"><em>780</em><span>Phone</span></div><div data-id="b4" style="height:26%"><em>560</em><span>Tablet</span></div><div data-id="b5" style="height:4%"><em>12</em><span>Cable</span></div>
-  </div>
-  <p class="note" style="margin-top:56px">a median per group over 1M rows: 6.4 ms on the GPU · omxcode README</p>
-</section>
+comptime HOME = 1
+comptime GRIP = 2
 
-<!-- 6 · architecture: the stack -->
-<section data-auto-animate>
-  <div class="eyebrow">How it's built</div>
-  <h2 data-id="h">One language, <span class="two">from the button to the GPU kernel.</span></h2>
-  <div class="layers" style="margin-top:30px">
-    <div class="box" data-id="l1">omxplorer <small>the app · app.mojo · view() and update()</small></div>
-    <div class="box" data-id="l2">omxcode <small>components, the sentence, five hosts</small></div>
-    <div class="box" data-id="l3">omxcore <small>GPU dataframes and SQL</small></div>
-    <div class="box" data-id="l4">Your GPU <small>NVIDIA today · CPU fallback</small></div>
-  </div>
-  <p class="note fragment rise" style="margin-top:26px">all Mojo: no Python, no JavaScript framework, no C++ in the middle</p>
-</section>
-
-<!-- 7 · architecture: a tap travels -->
-<section data-auto-animate>
-  <div class="eyebrow">A tap, as it runs</div>
-  <h2 data-id="h">You tap “Median”. <span class="two">6.4 ms later, new bars.</span></h2>
-  <div class="flow" style="margin-top:40px">
-    <div class="box hot" data-id="l1">omxplorer<small>update(): the word changes</small></div><span class="arrow"></span>
-    <div class="box hot" data-id="l3">omxcore<small>median by product</small></div><span class="arrow"></span>
-    <div class="box hot" data-id="l4">GPU<small>one kernel, 1M rows</small></div><span class="arrow"></span>
-    <div class="box hot" data-id="l2">omxcode<small>view(): only what changed is redrawn</small></div>
-  </div>
-  <div class="cols r3" style="margin-top:44px">
-    <p class="fragment rise"><b>No round trip.</b> The engine is linked into the app, like SQLite.</p>
-    <p class="fragment rise"><b>No copy, on Linux.</b> GPU frames go straight to the window (saves 4–5 ms a frame).</p>
-    <p class="fragment rise"><b>Just the diff.</b> The host patches the native widgets that changed.</p>
-  </div>
-</section>
-
-<!-- 8 · the code: an app -->
-<section>
-  <div class="eyebrow">How you'd write one</div>
-  <h2 style="font-size:52px">An app is a struct: <span class="ac">state, update, view.</span></h2>
-  <div class="file">examples/hello/app.mojo · real code, trimmed</div>
-  <pre><code class="language-python" data-trim data-line-numbers="1-3|5-8|10-12|14-20">struct Main(App):
-    var name: String
-    var clicks: Int
-
+struct Panel(App):
+    var arm: Arm
     def update(mut self, event: Event):
-        if event.message == GREET:
-            self.clicks += 1
+        if event.message == HOME:
+            self.arm.home()
+        elif event.message == GRIP:
+            self.arm.toggle_grip()
 
     def view(self) -> View:
-        var greeting = "Hello, " + self.name + "! (click " + String(self.clicks) + ")"
-        return VStack(
-            Text(greeting, style=TITLE),
-            Button("Greet", on_tap=GREET, style=PROMINENT),
-            spacing=20,
-        )</code></pre>
-  <p class="note" style="margin-top:18px">the same file opens on Linux (GTK) and the web, and on CI Macs; Android on the emulator; iPhone builds</p>
-</section>
-
-<!-- 9 · the code: the sentence -->
-<section>
-  <div class="eyebrow">How the sentence works</div>
-  <h2 style="font-size:52px">Words are buttons. <span class="two">Buttons are tools.</span></h2>
-  <div class="file">mojoui/sentence.mojo · real code, trimmed</div>
-  <pre class="small"><code class="language-python" data-trim data-line-numbers="1|3-6|7-9">Sentence([Word("Sum", ASK_COMBINE, "word-combine"), Word(" of "), Word("amount", ASK_VALUE, "word-value")])
-
-for w in words:
-    if w.msg != NO_MSG:      # a token: tap it to see its choices
-        line.append(Button(w.text, w.msg, TOKEN).tag(w.tag))
-    else:                    # plain words: " of ", ", "
-        line.append(Text(w.text, style))
-# a tag names the button; the agent host turns every tagged button into an MCP tool,
-# so "word-combine" is something a person taps and an agent calls</code></pre>
-</section>
-
-<!-- 10 · speed -->
-<section>
-  <div class="eyebrow">The numbers</div>
-  <h2>Fast enough <span class="two">that you stop waiting.</span></h2>
-  <div class="cols r4" style="margin-top:40px">
-    <div class="fragment rise"><div class="num">0.6<small>ms</small></div><p>a chart over 1M rows</p></div>
-    <div class="fragment rise"><div class="num">0.8<small>ms</small></div><p>a frame, scrolling a 1M-row grid (p95)</p></div>
-    <div class="fragment rise"><div class="num">1.5<small>ms</small></div><p>20M points in one frame</p></div>
-    <div class="fragment rise"><div class="num">0.2<small>s</small></div><p>to open a 100M-row file, streamed</p></div>
-  </div>
-  <p class="note" style="margin-top:30px">RTX 3090 · the repo's own checks re-run each one · honest edge: a 100M-row median chart takes about 0.7 s</p>
-</section>
-
-<!-- 11 · big data -->
-<section>
-  <div class="eyebrow">100 million rows</div>
-  <h2>A dashboard over 100M rows: <span class="ac">30 ms a click.</span></h2>
-  <p class="note">median, measured at 856a7e9, before the release build · docs/data-benchmark.md</p>
-  <div class="bars">
-    <div class="bar"><span class="name">omxplorer</span><div class="track"><div class="fill me" style="--w:29%"></div></div><span class="val">30.3 ms</span></div>
-    <div class="bar"><span class="name">Rust + Polars</span><div class="track"><div class="fill" style="--w:35%"></div></div><span class="val">37.0 ms</span></div>
-    <div class="bar"><span class="name">JS + Polars</span><div class="track"><div class="fill" style="--w:42%"></div></div><span class="val">44.2 ms</span></div>
-    <div class="bar"><span class="name">JS + DuckDB</span><div class="track"><div class="fill" style="--w:100%"></div></div><span class="val">104.9 ms</span></div>
-  </div>
-  <p class="note" style="margin-top:30px">goal 38 · median of medians, p95 49.1 ms · Rust + Polars + egui · JS + FastAPI + Polars · JS + DuckDB-WASM · docs/data-benchmark.md</p>
-</section>
-
-<!-- 12 · agents -->
-<section>
-  <div class="eyebrow">Built for agents</div>
-  <h2>Every button <span class="ac">is a tool.</span></h2>
-  <div class="cols" style="grid-template-columns:1.15fr 1fr;align-items:start;margin-top:20px">
-    <div class="term" data-type>
-      <div class="tc"><span class="p">$</span> scripts/agent.sh omxplorer</div>
-      <div class="c">claude mcp add omxplorer -- …agent.py build/omxplorer/web</div>
-      <div><span class="p">→</span> choose-a-file {"path": "orders_1m.csv"}</div>
-      <div><span class="p">→</span> create-table</div>
-      <div><span class="p">→</span> insert-chart</div>
-      <div><span class="p">→</span> ask {"text": "revenue by product, largest first, top 5"}</div>
-      <div class="ok">← Now: chart0: 0.6 ms</div>
+        return VStack(Text("SO-100 · " + self.arm.state()),
+            Button("Home the arm", on_tap=HOME)
+                .tooltip("Move every joint to its rest pose"),
+            Button("Grip", on_tap=GRIP),
+            Text("Every line is Mojo."))
+</code></pre>
     </div>
+    <div class="armside">
+      <div class="card fragment rise" data-fragment-index="0"><h3>You get a button</h3><div class="fake"><span class="t">SO-100 · ready</span><button class="p">Home the arm</button><button>Grip</button></div></div>
+      <div class="card fragment rise" data-fragment-index="1"><h3>Pressing it runs update</h3><p>One message, one place it's handled.</p></div>
+      <div class="card fragment rise" data-fragment-index="2"><h3>Your agent gets a tool</h3><div class="toolz">Button "Home the arm" → <b>home-the-arm</b>
+  Move every joint to its rest pose
+Button "Grip" → <b>grip</b></div></div>
+    </div>
+  </div>
+  <p class="small-note fragment" data-fragment-index="2">No second API to keep in step. The tool's name is the button's text; its description, the tooltip. That's omxcode, the framework under omxplorer.</p>
+  <aside class="notes">Here's a small panel for a robot arm. One button homes the arm. Step: that's what the human sees. Step: pressing it sends one message to update. Step: and the very same line is what the agent sees, a tool called home-the-arm, described by the tooltip. Nobody wrote an agent API. A disabled button isn't on the agent's list, so it can't do anything you couldn't. Every button in omxplorer works this way. Other robotics tools ship agent servers too; ours is how the framework was built from day one, not a second layer.</aside>
+</section>
+
+<!-- 7 · models as plugins -->
+<section id="models">
+  <div class="eyebrow">03 · Models as plugins</div>
+  <h2>Paste a model's name. <span class="two">Its answers land as a column.</span></h2>
+  <table class="vs watch">
+    <tr><th>Model</th><th>Kind</th><th class="rt">Its first answer, after the download</th></tr>
+    <tr class="fragment rise"><td>stops (XGBoost file)</td><td>tabular</td><td class="me rt">0.0 s</td></tr>
+    <tr class="fragment rise"><td>google/vit-base-patch16-224</td><td>picture classifier</td><td class="me rt">2.7 s</td></tr>
+    <tr class="fragment rise"><td>hustvl/yolos-tiny</td><td>detector</td><td class="me rt">2.6 s</td></tr>
+    <tr class="fragment rise"><td>BAAI/bge-small-en-v1.5</td><td>text embedder</td><td class="me rt">2.9 s</td></tr>
+  </table>
+  <p class="note">Four models the app had never seen · omxcode docs/goals/68-report.md (M2) · a pickle, a ../ path and a file holding eval are refused</p>
+  <aside class="notes">Models are plugins. A dropped file, or a Hugging Face name pasted in. omxplorer says what the model is, asks before downloading, and its answers fill a column you can sort, filter and chart. The agent can add a model too, but the yes to download is yours alone: the agent has no tool for it.</aside>
+</section>
+
+<!-- 8 · the bento: everything, today -->
+<section id="all" class="skyslide">
+  <div class="skyfill oq-sky"></div>
+  <div class="oq-sky" style="background:none">
+    <div class="eyebrow">And all this, today</div>
+    <h2 style="margin-bottom:0">Built for robot data. <span class="two">Ready for any data.</span></h2>
+    <div class="bxd">
+      <div class="card oq-glass big"><img src="../assets/img/bento-robots.jpg" alt=""><h3>Robot search</h3><p>Tap a clip, get every episode like it</p></div>
+      <div class="card oq-glass big"><img src="../assets/img/bento-bags.jpg" alt=""><h3>ROS 2 bags</h3><p>MCAP and rosbag2: topics become rows</p></div>
+      <div class="card oq-glass big"><img src="../assets/img/robots-04-telemetry-17m.jpg" alt=""><h3>Video + telemetry</h3><p>A run's camera and sensors, one cursor</p></div>
+      <div class="card oq-glass mid"><h3>Any table</h3><p>CSV and Parquet, 100M rows in one sheet</p></div>
+      <div class="card oq-glass mid"><h3>Models as plugins</h3><p>Answers land as a column</p></div>
+      <div class="card oq-glass mid"><h3>Agent tools</h3><p>Every button, over MCP</p></div>
+      <div class="card oq-glass sm"><h3>LeRobot export</h3></div>
+      <div class="card oq-glass sm"><h3>Learn from labels</h3></div>
+      <div class="card oq-glass sm"><h3>Links</h3></div>
+      <div class="card oq-glass sm"><h3>SQL</h3></div>
+      <div class="card oq-glass sm"><h3>Sentence charts</h3></div>
+      <div class="card oq-glass sm wiki"><h3>Plenty more ›</h3></div>
+    </div>
+  </div>
+  <aside class="notes">This is everything it does today, on Linux. Three for robotics, three that make it yours, and a long tail: pivots, reels, PDFs, blurring faces, undo. Each has a page in the wiki, with a picture and an honest line on what isn't there yet.</aside>
+</section>
+
+<!-- 9 · under the hood -->
+<section id="hood">
+  <div class="eyebrow">Under the hood</div>
+  <h2>Three parts we built. <span class="two">One language.</span></h2>
+  <div class="facts">
+    <div class="card fragment rise"><span class="k">omxcore · the engine</span><b class="n">3.15<small> s</small></b><p>All 22 TPC-H queries at SF10, on the GPU and CPU. DuckDB on the same machine: 5.08 s.</p><span class="src">omxcore benchmarks</span></div>
+    <div class="card fragment rise"><span class="k">Mojo · the compiler</span><b class="n">1<small> language</small></b><p>The GPU kernel, the SIMD loops and the button are the same language, compiled together into one program.</p><span class="src">every file in omxcode and omxcore</span></div>
+    <div class="card fragment rise"><span class="k">omxcode · the framework</span><b class="n">1<small> codebase</small></b><p>Native on Linux and the web today, Mac builds on CI Macs, Android on the emulator. Same Mojo file.</p><span class="src">omxcode docs/components.md</span></div>
+  </div>
+  <aside class="notes">Three facts for the technical folks. The engine, omxcore, runs the standard TPC-H benchmark faster than DuckDB on the same machine. Mojo is a compiler that does GPU kernels and vectorized CPU code in the same language as the app, so there's no C++ here, no CUDA C++, no Python glue. And omxcode, the framework, draws the same app with each platform's own toolkit. omxplorer is built on all three.</aside>
+</section>
+
+<!-- 10 · what if: 3D -->
+<section id="whatif-3d">
+  <div class="wi">
+    <div class="shot"><img src="../assets/img/omxcode-lens.jpg" alt="omxcode's Data Lens: 20 million points drawn on the GPU"></div>
     <div>
-      <p class="fragment rise"><b>No screenshots, no coordinates.</b> A button's tag is its tool's name.</p>
-      <p class="fragment rise"><b>The screen is the permission model.</b> A disabled button is no tool. A dialog's buttons exist only while it's open.</p>
-      <p class="fragment rise"><b>One sentence for both.</b> The words you tap are the words the agent asks.</p>
-      <p class="note">a real session · omxcode README, docs/agent.md</p>
+      <div class="eyebrow">What if · 3D</div>
+      <h2>Point clouds, <span class="two">beside the run that made them.</span></h2>
+      <p class="lede">Lidar and depth drawn on the GPU, on the same cursor as the camera.</p>
+      <div class="proof"><b>Runs in omxcode today</b> 20M points, 1.6 ms a frame</div>
+      <p class="note" style="margin-top:22px">Next in omxplorer · omxcode docs/goals/06-report.md</p>
     </div>
   </div>
+  <aside class="notes">What if your point clouds sat beside the camera and the joints? The framework already draws twenty million points in under two milliseconds a frame. Bringing it into omxplorer is a room on a foundation that's built. Others are ahead on 3D today; we're honest about that on the comparison slide.</aside>
 </section>
 
-<!-- 13 · runs everywhere -->
-<section>
-  <div class="eyebrow">Where it runs</div>
-  <h2>Written once. <span class="two">Native everywhere.</span></h2>
-  <div class="plat">
-    <div class="card fragment rise"><span class="em">🐧</span><b>Linux</b><span class="tag live"><i></i>runs</span></div>
-    <div class="card fragment rise"><span class="em">🌐</span><b>Web</b><span class="tag live"><i></i>runs</span></div>
-    <div class="card fragment rise"><span class="em">🤖</span><b>Android</b><span class="tag prog"><i></i>emulator</span></div>
-    <div class="card fragment rise"><span class="em">🍎</span><b>Mac</b><span class="tag live"><i></i>runs on CI Macs</span></div>
-    <div class="card fragment rise"><span class="em">📱</span><b>iPhone</b><span class="tag builds"><i></i>builds</span></div>
-  </div>
-  <p class="note" style="margin-top:28px">Mac: GitHub's macOS runners · Android: the emulator · iPhone compiles and signs, hasn't run on a phone yet · the GPU: NVIDIA on Linux, Metal on CI Macs</p>
-</section>
-
-<!-- 14 · video becomes rows: the clips -->
-<section data-auto-animate>
-  <div class="eyebrow">Every kind of data <span class="tag live"><i></i>live</span></div>
-  <h2 data-id="h">A video <span class="ac">becomes rows,</span> <span class="two">400 frames a second.</span></h2>
-  <div class="cols" style="grid-template-columns:1.2fr 1fr;margin-top:0">
-    <div><div class="shot"><video data-src="../assets/img/clip-warehouse.mp4" data-autoplay muted loop playsinline poster="../assets/img/clip-warehouse.jpg"></video></div>
-      <p class="note" style="margin-top:14px">the warehouse: rows → a reel, faces blurred, ID burned in</p></div>
-    <div><div class="shot"><video data-src="../assets/img/clip-drone.mp4" data-autoplay muted loop playsinline poster="../assets/img/clip-drone.jpg"></video></div>
-      <p class="note" style="margin-top:14px">the drone: what got worse → the next flight plan</p></div>
-  </div>
-  <aside class="notes">Real recordings of omxplorer on the headless display, driven by its agent tools. The footage is generated, so every frame's truth is known; real-world footage hasn't been tried, and the drone's severity scale is calibrated to how the footage was drawn.</aside>
-</section>
-
-<!-- 15 · video becomes rows: the flow -->
-<section data-auto-animate>
-  <div class="eyebrow">How a video becomes rows</div>
-  <h2 data-id="h">Frames in, <span class="ac">rows out.</span> <span class="two">Then it's just data.</span></h2>
-  <div class="flow vflow" style="margin-top:44px;align-items:stretch">
-    <div class="box" data-id="v1">VideoSource<small>ffmpeg decodes; frames go to the GPU</small></div><span class="arrow" style="align-self:center"></span>
-    <div style="flex:1.2;display:flex;flex-direction:column;gap:12px">
-      <div class="box hot" data-id="v2" style="flex:1;flex-direction:column;align-items:flex-start;gap:6px">GPU kernels<small>colour, motion, printed codes</small></div>
-      <div class="box" data-id="vm" style="flex:1;flex-direction:column;align-items:flex-start;gap:6px">VisionModel slot<small>OWLv2, SAM 2.1, in process</small></div>
-    </div><span class="arrow" style="align-self:center"></span>
-    <div class="box hot" data-id="v3">Rows<small>frame, track, code, damaged, face box</small></div><span class="arrow" style="align-self:center"></span>
-    <div class="box" data-id="v4">SQL · the sentence<small>join with shipments.csv</small></div><span class="arrow" style="align-self:center"></span>
-    <div class="box hot" data-id="v5">The reel<small>blur, burn in, H.264</small></div>
-  </div>
-  <div class="cols r3" style="margin-top:44px">
-    <p class="fragment rise"><b>One slot, two engines.</b> Classic GPU vision today; a model plugs into the same place and gives the same rows.</p>
-    <p class="fragment rise"><b>Rows are rows.</b> "Delivered, but the label never shows on camera" is one SQL join.</p>
-    <p class="fragment rise"><b>Every step is a tool.</b> Analyze, Make a reel, Cut it: an agent calls what you tap.</p>
-  </div>
-</section>
-
-<!-- 15b · the claim: three kinds of evidence, one question -->
-<section data-auto-animate>
-  <div class="eyebrow">Linked evidence <span class="tag live"><i></i>live</span></div>
-  <h2 data-id="h">A video, a sheet and the paperwork <span class="ac">answer one question.</span></h2>
-  <div class="cols" style="grid-template-columns:1.6fr 1fr;gap:36px;margin-top:0;align-items:center">
-    <div><div class="shot"><video data-src="../assets/img/clip-claims.mp4" data-autoplay muted loop playsinline poster="../assets/img/clip-claims.jpg"></video></div>
-      <p class="note" style="margin-top:14px">which damaged pallets does the carrier owe for?</p></div>
-    <div style="text-align:left">
-      <p class="fragment rise"><b>You make the links.</b> Drag a column onto a card and confirm. Nothing joins until you do.</p>
-      <p class="fragment rise"><b>Documents become rows.</b> The OCR runs locally, inside the app.</p>
-      <p class="fragment rise"><b>Every answer shows its proof:</b> the frame with the damage, and the page with "Exceptions: None".</p>
+<!-- 11 · what if: live robots -->
+<section id="whatif-live">
+  <div class="wi">
+    <div class="shot"><img src="../assets/img/robots-04-telemetry-17m.jpg" alt="A robot run's camera and its telemetry on one cursor"></div>
+    <div>
+      <div class="eyebrow">What if · live robots</div>
+      <h2>Watch the robot <span class="two">while it runs.</span></h2>
+      <p class="lede">The camera and sensors streaming into the sheet, searched as they arrive.</p>
+      <div class="proof"><b>Today</b> a run's video and 16.8M telemetry rows share one cursor</div>
+      <p class="note" style="margin-top:22px">Next in omxplorer · omxcode docs/goals/47-report.md</p>
     </div>
   </div>
-  <aside class="notes">A real recording of omxplorer driven by its agent tools (the two drags and the hold are real pointer input). Real functionality on generated data that can be rebuilt byte for byte. Not yet: real warehouse footage, scanned or handwritten documents, uploading a folder on the web.</aside>
+  <aside class="notes">Today we open recordings. The next step is the robot itself, live: the same one-cursor view, filling as it runs.</aside>
 </section>
 
-<!-- 16 · find more like this -->
-<section data-auto-animate>
-  <div class="eyebrow">Find more like this</div>
-  <h2 data-id="h">Tap one example. <span class="ac">It finds the rest.</span></h2>
-  <div class="cols" style="grid-template-columns:1.1fr 1.2fr;gap:40px;margin-top:30px;align-items:center">
-    <div class="layers">
-      <div class="box" data-id="v1">One tapped crop<small>a damaged pallet</small></div>
-      <div class="down"></div>
-      <div class="box hot" data-id="vm">VisionModel: OWLv2<small>image-guided, in process</small></div>
-      <div class="down"></div>
-      <div class="box" data-id="v3">Rows: every frame with a hit<small>no colour rules, no labels</small></div>
-    </div>
-    <div class="cols r3">
-      <div class="fragment rise"><div class="num" style="font-size:96px">1.000</div><p>recall on the damaged frames</p></div>
-      <div class="fragment rise"><div class="num" style="font-size:96px">0.886</div><p>precision</p></div>
-      <div class="fragment rise"><div class="num" style="font-size:96px">8.4<small>s</small></div><p>to scan the 1,140-frame warehouse</p></div>
+<!-- 12 · what if: labelling -->
+<section id="whatif-labels">
+  <div class="wi">
+    <div class="shot"><img src="../assets/img/whatif-labels.jpg" alt="omxplorer's Learn: 20 labels became a rule, right on 19 of 20 rows it never saw"></div>
+    <div>
+      <div class="eyebrow">What if · labelling</div>
+      <h2>Tag a moment. <span class="two">Train the next model.</span></h2>
+      <p class="lede">Label clips where you watch them; the labels flow into training.</p>
+      <div class="proof"><b>Today</b> 20 labels become a rule, right on 19 of 20 rows it never saw</div>
+      <p class="note" style="margin-top:22px">Next in omxplorer · omxcode docs/goals/68-report.md (M1)</p>
     </div>
   </div>
-  <p class="note" style="margin-top:34px">on our generated footage, scored against its truth · RTX 3090 · models run on Linux + NVIDIA only, for now</p>
+  <aside class="notes">Learn already turns a handful of labels into a rule you can read. Labelling clips is the next room.</aside>
 </section>
 
-<!-- 17 · roadmap -->
-<section>
-  <div class="eyebrow">Where it's going</div>
-  <h2>From tables <span class="ac">to every kind of data.</span></h2>
-  <div class="road3">
-    <div><span class="tag live"><i></i>Now</span><ul><li>Sheets, pivots, charts, reports</li><li>The sentence chart</li><li>100M-row files, streamed</li><li>Agent host (MCP)</li><li>Video becomes rows; the reel; the drone</li><li>Linked evidence: video, sheet, paperwork</li><li>The robot story: 63,344 DROID episodes, 13 labs, 16.8M telemetry rows, a question in ~40 ms</li></ul></div>
-    <div class="nx"><span class="tag prog"><i></i>Next</span><ul><li>Try it in the browser</li><li>Ask, answered by omxconsole</li><li>Real-world footage, audio</li></ul></div>
-    <div class="lt"><span class="tag"><i></i>Later</span><ul><li>Share with a team</li><li>Apple GPUs on real Macs (CI Macs today)</li></ul></div>
+<!-- 13 · what if: a team, a cloud -->
+<section id="whatif-team">
+  <div class="wi">
+    <div class="shot"><img src="../assets/img/bento-robots.jpg" alt="Robot search, with two teammates drawn in as a concept">
+      <span class="concept">Concept</span>
+      <span class="who" style="left:52%;top:38%;background:#7c5cff"><i>MA</i>Maya picked 3</span>
+      <span class="who" style="left:18%;top:70%;background:#d9480f"><i>JO</i>Jon is labelling</span></div>
+    <div>
+      <div class="eyebrow">What if · a team, a cloud</div>
+      <h2>One dataset, <span class="two">many hands.</span></h2>
+      <p class="lede">Picks and labels shared as you make them. Your laptop for a day's runs, a cloud GPU for a year's.</p>
+      <div class="proof"><b>Same engine</b> on any NVIDIA GPU: no rewrite to scale up</div>
+      <p class="note" style="margin-top:22px">Beyond: not built. The picture is a concept.</p>
+    </div>
   </div>
+  <aside class="notes">This one is further out, and the picture is a mock-up, labelled as one. The point: the same program runs on a bigger GPU, so scaling up is a deployment question, not a rewrite.</aside>
 </section>
 
-<!-- 18 · the lab + read on -->
-<section>
-  <div class="eyebrow">omxlabs</div>
-  <h2>One app. <span class="two">Three technologies under it, local AI beside it.</span></h2>
-  <div class="cols r4" style="margin-top:30px">
-    <div class="card px-core"><h3 style="color:var(--px)">omxcore</h3><p>powers it: the GPU engine</p></div>
-    <div class="card px-code"><h3 style="color:var(--px)">omxcode</h3><p>builds it: write once, native everywhere</p></div>
-    <div class="card px-console"><h3 style="color:var(--px)">omxconsole</h3><p>local AI, on the same GPU</p></div>
-    <div class="card px-qua"><h3 style="color:var(--px)">omxqua</h3><p>the look: springs and solid surfaces (this site; omxplorer next)</p></div>
+<!-- 14 · what if: the Mac -->
+<section id="whatif-mac">
+  <div class="wi">
+    <div class="shot"><img src="../assets/img/omxplorer-sheet-mac.png" alt="An earlier omxplorer build on a Mac"></div>
+    <div>
+      <div class="eyebrow">What if · the Mac</div>
+      <h2>The same code, <span class="two">a native Mac app.</span></h2>
+      <p class="lede">omxcode apps build and run on CI Macs. Robot search on the Mac is next.</p>
+      <div class="proof"><b>Ran in October</b> an earlier omxplorer test build, on a Mac</div>
+      <p class="note" style="margin-top:22px">Next · the current build is being re-linked for the Mac</p>
+    </div>
   </div>
-  <p class="lede" style="margin-top:40px;font-size:30px">Read on: <a href="https://github.com/abhisheksreesaila/omxcode" target="_top">GitHub</a> · <a href="https://github.com/abhisheksreesaila/omxcode/blob/main/docs/agent.md" target="_top">the agent docs</a> · <a href="../" target="_top">omxlabs</a></p>
+  <aside class="notes">The framework is cross-platform by design; omxplorer ran as a Mac test build in October. The current build, with robot search, needs its Mac link fixed and the Mac's own video decoder. That's next.</aside>
+</section>
+
+<!-- 15 · the foundation and the rooms -->
+<section id="foundation">
+  <div class="eyebrow">The shape of it</div>
+  <h2>The foundation is built. <span class="two">Every feature is a room.</span></h2>
+  <div class="house">
+    <div class="rooms">
+      <div class="y">A team</div><div class="y">Cloud scale</div><div class="n">3D</div><div class="n">Live robots</div><div class="n">Labelling</div><div class="n">Mac</div>
+      <div class="b">Robot search</div><div class="b">ROS 2 bags</div><div class="b">Video + telemetry</div><div class="b">Any table</div><div class="b">Models</div><div class="b">Agent tools</div>
+    </div>
+    <div class="slab"><div><b>omxcore</b>the engine: SQL and search on the GPU</div><div><b>omxcode</b>the framework: one app, every screen, agent tools</div><div><b>omxqua</b>the look: one design language</div></div>
+    <div class="ground">Mojo · GPU, SIMD and the app in one compiled language</div>
+  </div>
+  <div class="legend"><span><i style="background:color-mix(in srgb,var(--oq-accent) 40%,transparent)"></i>today</span><span><i style="border:2px dashed var(--oq-warn)"></i>next</span><span><i style="border:2px dashed var(--oq-line)"></i>beyond</span></div>
+  <aside class="notes">The hard part is underneath: the engine, the framework, the look. Every feature on top reuses it. That's why 3D, live robots and labelling are rooms, not rebuilds.</aside>
+</section>
+
+<!-- 16 · the honest chart -->
+<section id="compare">
+  <div class="eyebrow">Who does what · November 2026</div>
+  <h2 style="font-size:54px;margin-bottom:18px">Where others are ahead, <span class="two">we say so.</span></h2>
+  <table class="cmp">
+    <tr><th></th><th>Foxglove</th><th>Rerun</th><th>FiftyOne</th><th>Roboto</th><th class="me">omxplorer</th></tr>
+    <tr><td>ROS 2 bags (MCAP and .db3)</td><td class="y">✓</td><td class="p">MCAP</td><td class="p">MCAP</td><td class="y">✓</td><td class="me y">✓</td></tr>
+    <tr><td>Opens LeRobot datasets</td><td class="p">via bridge</td><td class="y">✓</td><td class="y">✓</td><td class="p">export</td><td class="me y">✓</td></tr>
+    <tr><td>Search by example</td><td class="p">cloud, beta</td><td class="no">–</td><td class="y">✓</td><td class="p">cloud</td><td class="me y">✓ local GPU</td></tr>
+    <tr><td>Export a LeRobot dataset</td><td class="no">–</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="me y">✓</td></tr>
+    <tr><td>Agent tools (MCP)</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="me y">✓ every button</td></tr>
+    <tr><td>Models in the app</td><td class="p">hosted</td><td class="no">–</td><td class="y">✓</td><td class="p">cloud</td><td class="me y">✓ plugins</td></tr>
+    <tr><td>Decode, search and draw in one GPU process</td><td class="no">–</td><td class="no">–</td><td class="no">–</td><td class="no">–</td><td class="me y">✓</td></tr>
+    <tr><td>3D and point clouds</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="no">?</td><td class="me p">next</td></tr>
+    <tr><td>Live robots</td><td class="y">✓</td><td class="y">✓</td><td class="no">–</td><td class="no">–</td><td class="me p">next</td></tr>
+    <tr><td>Teams and cloud scale</td><td class="y">✓</td><td class="p">Hub</td><td class="p">Enterprise</td><td class="y">✓</td><td class="me no">–</td></tr>
+    <tr><td>Mac</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">web</td><td class="me p">next</td></tr>
+  </table>
+  <p class="note">From each tool's own docs, read 2026-11-15; "–" means we found nothing documented · omxcode docs/research/robotics-landscape.md</p>
+  <aside class="notes">This is the slide to be straight on. Foxglove and Rerun are mature and ahead on 3D, live connections and teams. FiftyOne has similarity search and LeRobot export. Everyone has agent servers now. What's different here is the combination: decode, search, models and the screen in one process on your own GPU, free and offline, with every button a tool.</aside>
+</section>
+
+<!-- 17 · close -->
+<section id="close">
+  <div class="eyebrow">omxplorer · by omxlabs</div>
+  <h1>Bring your <span class="ac">robot data.</span></h1>
+  <p class="lede">It runs on the GPU you already have. Send us a dataset you'd like to search, and we'll show you.</p>
+  <div class="ctas2">
+    <a class="f" href="https://github.com/abhisheksreesaila/omxcode/releases/tag/linux-app" target="_top">Download for Linux</a>
+    <a href="https://github.com/abhisheksreesaila/omxcode/issues/new" target="_top">Send us your robot data</a>
+    <a href="../" target="_top">omxlabs.tech</a>
+  </div>
+  <p class="note" style="margin-top:34px">Linux x86_64 with an NVIDIA GPU · MIT licensed · the wiki: github.com/abhisheksreesaila/omxcode/wiki</p>
+  <aside class="notes">Close on the ask: download it, or send us a dataset. Robotics teams have the data; we have a fast way to look at it.</aside>
 </section>
 
 </div></div>
